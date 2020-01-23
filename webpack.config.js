@@ -5,12 +5,24 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
   mode: 'development',
   entry: {
-    app: './src/index.js',
+    app: './src/app/index.js',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+        ],
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: 'GGJ20',
+      filename: 'index.html',
+      template: 'src/views/index.html',
     }),
   ],
   output: {
