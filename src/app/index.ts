@@ -1,14 +1,14 @@
 import './style.css';
 
-console.log("Hello, world!");
-
 
 var gl : WebGL2RenderingContext;
 
 function main() {
-    var canvas = <any>document.querySelector("#glCanvas");
+    var canvas = <any>document.getElementById("glCanvas");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
     gl = canvas.getContext("webgl2");
-  
     if (gl === null) {
       alert("Unable to initialize WebGL. Your browser or machine may not support it.");
       return;
@@ -18,6 +18,13 @@ function main() {
   
     requestAnimationFrame(renderLoop)
 }   
+
+function resize() {
+    var canvas = <any>document.getElementById("glCanvas");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    gl.viewport(0, 0,  window.innerWidth, window.innerHeight);
+}
 
 
 let oldTimeMS = 0;
@@ -101,9 +108,11 @@ function start() {
 }
 
 function render(deltaTime : number) {
+
     // draw the triangle
     gl.drawArrays(gl.TRIANGLES, 0, 3); 
 }
 
 
+window.onresize = resize;
 window.onload = main;
