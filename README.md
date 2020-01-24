@@ -33,8 +33,8 @@ As a side note, be sure to only push source and assets to this repository, keep 
 ## Building
 Building and testing is achieved through simple commands. Before you do anything however, make sure you have `npm` installed. Then run `npm install` in this repository and you should be fine.
 
+- **Development server** : `npm run start`
 - **Building** : `npm run build`
-- **Testing** : `npm run test`
 
 ## Authors
 - [Timo Strating](https://github.com/timostrating)
