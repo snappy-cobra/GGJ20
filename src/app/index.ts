@@ -52,7 +52,7 @@ function start() {
 
     let vertexCode : string = "#version 300 es\n"+
         "layout (location=0) in vec3 a_pos;" +
-                    
+        
         "void main(void) {" +
             "gl_Position = vec4(a_pos, 1.0);" +
         "}";
@@ -67,11 +67,15 @@ function start() {
     let shader = new ShaderProgram(gl, vertexCode, fragmentCode);
     shader.use(gl);
 
+    let odt = 1 / Math.sqrt(3);
     let vertices = new Float32Array([
         // x   y    z
-        -0.6, -0.6, 0.0,
-        0.6, -0.6, 0.0,
-        0.0,  0.6, 0.0,
+        0.0,  1.0, 0.0,   1.0,  odt, 0.0,    0.0, 0.0, 0.0,
+        1.0,  odt, 0.0,   1.0, -odt, 0.0,    0.0, 0.0, 0.0,
+        1.0, -odt, 0.0,   0.0, -1.0, 0.0,    0.0, 0.0, 0.0,
+        0.0, -1.0, 0.0,  -1.0, -odt, 0.0,    0.0, 0.0, 0.0,
+       -1.0, -odt, 0.0,  -1.0,  odt, 0.0,    0.0, 0.0, 0.0,
+       -1.0,  odt, 0.0,   0.0,  1.0, 0.0,    0.0, 0.0, 0.0,
     ]);
 
     let vbo : WebGLBuffer = gl.createBuffer();
@@ -86,9 +90,9 @@ function start() {
 function render(deltaTime : number) {
 
     // draw the triangle
-    gl.drawArrays(gl.TRIANGLES, 0, 3); 
+    gl.drawArrays(gl.TRIANGLES, 0, 3*6); 
 }
 
 
-window.onresize = resize;
+// window.onresize = resize;
 window.onload = main;
