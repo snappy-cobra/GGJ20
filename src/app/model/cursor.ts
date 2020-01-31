@@ -1,4 +1,4 @@
-import {HexPos} from "./model";
+import {HexPos} from "./HexPos";
 
 export function add_cursor() {
     return new Cursor(new HexPos(10,10));
