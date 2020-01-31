@@ -1,8 +1,18 @@
 import './style.css';
 import {model_main} from './model/model';
 import {add_cursor} from './model/cursor';
+import {ShaderProgram} from './util/shaderprogram';
+import * as Model from './model/model2';
+import {Texture} from './util/texture';
 
 var gl : WebGL2RenderingContext;
+
+import vertexCode from './shaders/tile.vert'
+import fragmentCode from './shaders/tile.frag'
+import main_texture_path from '../images/texture.png'
+
+let defaultShader : ShaderProgram;
+
 
 function main() {
     var canvas = <any>document.getElementById("glCanvas");
@@ -19,7 +29,6 @@ function main() {
 
     model_main()
     add_cursor()
-    return;
     requestAnimationFrame(renderLoop)
 }   
 
@@ -52,69 +61,77 @@ function renderLoop(timeMS : number) {
 
 
 function start() {   
-    var vertexCode : string = "#version 300 es\n"+
-        "layout (location=0) in vec3 a_pos;" +
-                    
-        "void main(void) {" +
-            "gl_Position = vec4(a_pos, 1.0);" +
-        "}";
-
-    var vertexShader : WebGLShader = gl.createShader(gl.VERTEX_SHADER);
-    gl.shaderSource(vertexShader, vertexCode);
-    gl.compileShader(vertexShader);
-    
-    var fragmentCode : string = "#version 300 es\n"+
-        "precision mediump float;"+
-        "out vec4 fragColor;"+
-        "void main() {"+
-            "fragColor = vec4(1.0, 0.0, 1.0, 1.0);"+
-        "}";
-
-    var fragmentShader : WebGLShader = gl.createShader(gl.FRAGMENT_SHADER);
-    gl.shaderSource(fragmentShader, fragmentCode);
-    gl.compileShader(fragmentShader);
-
-    var shaderProgram = gl.createProgram();
-    gl.attachShader(shaderProgram, vertexShader);   
-    gl.attachShader(shaderProgram, fragmentShader);   
-    gl.linkProgram(shaderProgram);
-    gl.detachShader(shaderProgram, vertexShader);
-    gl.detachShader(shaderProgram, fragmentShader);
-    gl.deleteShader(vertexShader);
-    gl.deleteShader(fragmentShader);
-
-    // if something in our 2 shaders is incorrect it will not link
-    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-        console.error([
-            gl.getProgramInfoLog(shaderProgram), 
-            gl.getShaderInfoLog(vertexShader), 
-            gl.getShaderInfoLog(fragmentShader)
-        ]);
-    }
-
-    gl.useProgram(shaderProgram);
-
-
-    var vertices = new Float32Array([
+    defaultShader = new ShaderProgram(gl, vertexCode, fragmentCode);
+    // Design desission
+    let a = 1/Math.sqrt(3);
+    let b = 0.5;
+    let c = a*0.5;
+    let vertices = new Float32Array([
         // x   y    z
-        -0.6, -0.6, 0.0,
-        0.6, -0.6, 0.0,
-        0.0,  0.6, 0.0,
+        0.0, 0.0, 0.0,
+        0.0,  a, 0.0,
+          b,  c, 0.0,
+          b, -c, 0.0,
+        0.0, -a, 0.0,
+         -b, -c, 0.0,
+         -b,  c, 0.0,
     ]);
 
-    var vbo : WebGLBuffer = gl.createBuffer();
+    let indicies = new Int16Array([
+        // x   y    z
+        1, 2, 0, 
+        2, 3, 0, 
+        3, 4, 0, 
+        4, 5, 0,
+        5, 6, 0,
+        6, 1, 0 
+    ]);
+
+    let vbo : WebGLBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+    
+    let ibo : WebGLBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indicies, gl.STATIC_DRAW);
 
     gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(0);
 
+    var main_texture : Texture = new Texture(gl, main_texture_path);
 }
 
+const s : number = 0.1;
+function drawHex(x : number, y : number, type : Model.Tile) {
+    
+    if (Math.abs(y) % 2 == 1)
+        x += 0.5
+    y *= Math.sqrt(3/4);
+    
+    let MVP = new Float32Array([
+        s,0,0,0,
+        0,s,0,0,
+        0,0,s,0,
+        x*s,y*s,0,1,
+    ]);
+
+    
+    gl.uniformMatrix4fv(defaultShader.unformLocation(gl, "MVP"), false, MVP);
+    gl.uniform1f(defaultShader.unformLocation(gl, "u_tile"), type.type);
+    gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
+}
+
+
+var model : Model.MooieCode = new Model.MooieCode(); 
 function render(deltaTime : number) {
 
-    // draw the triangle
-    gl.drawArrays(gl.TRIANGLES, 0, 3); 
+    defaultShader.use(gl);
+
+    for(let x=0; x<model.width; x++) {
+        for(let y=0; y<model.height; y++) {
+            drawHex(x-0.5*model.width, y-0.5*model.height, model.tiles[x][y]);
+        }
+    }
 }
 
 

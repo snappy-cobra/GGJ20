@@ -28,6 +28,23 @@ module.exports = {
           'css-loader',
         ],
       },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          'file-loader'
+        ],
+      },
+      {
+        test: /\.(frag|vert)$/i,
+        use: [
+          {
+            loader: 'raw-loader',
+            options: {
+              esModule: false,
+            },
+          },
+        ],
+      }
     ],
   },
   resolve: {
