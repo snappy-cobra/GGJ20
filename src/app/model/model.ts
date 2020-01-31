@@ -9,6 +9,13 @@ export function modelmain() {
     for (let neighbour of a.get_neighbours()){
         console.log(neighbour, a.direction_score(neighbour, b))
     }
+    
+    let map = new GameMap();
+    let street = new HexPos(0, 0);
+    while (street.hash() != b.hash()){
+        console.log(street);
+        street = map.next_tile(street, b);
+    }
 }
 
 
@@ -81,18 +88,49 @@ function distmod1(a: number, b: number) {
 
 class Tile {
     name: string;
-    constructor(name: string){
+    accessibility: number;
+    constructor(name: string, accessibility: number){
         this.name = name;
+        this.accessibility = accessibility;
     }
 }
 
-// class GameMap {
-//     cells: Map<string, Tile>
-//     
-//     constructor(){
-//         this.cells = new Map();
-//         this.cells.set(
-// }
+var Grass = new Tile("grass", 1);
+var Forest = new Tile("forest", 0.5);
+var Mountain = new Tile("mountain", 0);
+
+class GameMap {
+    ground: Tile[][];
+    
+    constructor(){
+        this.ground = [];
+        for (let x=0; x<10; ++x){
+            this.ground[x] = []
+            for (let y=0; y<10; ++y){
+                this.ground[x][y] = Grass;
+            }
+        }
+    }
+    
+    get_tile(place: HexPos){
+        return (this.ground[place.x] || [])[place.y] // Yes, I know...
+    }
+    
+    next_tile(place: HexPos, target: HexPos){
+        let neighbours = place.get_neighbours();
+        let best = null, best_score = 0;
+        for (let neighbour of neighbours){
+            let neighbour_tile = this.get_tile(neighbour);
+            if (!neighbour_tile) continue;
+            let score = place.direction_score(neighbour, target) * neighbour_tile.accessibility;
+            if (score > best_score) {
+                best_score = score;
+                best = neighbour;
+            }
+        }
+        return best;
+    }
+}
 
 
 
