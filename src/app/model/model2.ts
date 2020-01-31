@@ -9,7 +9,7 @@ export class Tile {
     public type: TileType;
 
     constructor() {
-        this.type = (Math.random() < 0.5)? TileType.a : TileType.b;
+        this.type = (Math.random() < 0.5)? TileType.berg : TileType.gras;
     }
 }
 
