@@ -15,11 +15,7 @@ export class ShaderProgram {
         gl.attachShader(this.shaderProgram, vertexShader);   
         gl.attachShader(this.shaderProgram, fragmentShader);   
         gl.linkProgram(this.shaderProgram);
-        gl.detachShader(this.shaderProgram, vertexShader);
-        gl.detachShader(this.shaderProgram, fragmentShader);
-        gl.deleteShader(vertexShader);
-        gl.deleteShader(fragmentShader);
-
+        
         // if something in our 2 shaders is incorrect it will not link
         if (!gl.getProgramParameter(this.shaderProgram, gl.LINK_STATUS)) {
             console.error([
@@ -28,9 +24,18 @@ export class ShaderProgram {
                 gl.getShaderInfoLog(fragmentShader)
             ]);
         }
+        
+        gl.detachShader(this.shaderProgram, vertexShader);
+        gl.detachShader(this.shaderProgram, fragmentShader);
+        gl.deleteShader(vertexShader);
+        gl.deleteShader(fragmentShader);
     }
 
     public use(gl : WebGL2RenderingContext) {
         gl.useProgram(this.shaderProgram);
+    }
+
+    public unformLocation(gl : WebGL2RenderingContext, name : string) {
+        return gl.getUniformLocation(this.shaderProgram, name);
     }
 }
