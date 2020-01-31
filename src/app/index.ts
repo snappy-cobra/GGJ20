@@ -1,26 +1,13 @@
 import './style.css';
 import {ShaderProgram} from './util/shaderprogram';
 import * as Model from './model/model2';
-
+import {Texture} from './util/texture';
 
 var gl : WebGL2RenderingContext;
 
-let vertexCode : string = "#version 300 es\n"+
-    "layout (location=0) in vec3 a_pos;" +
-
-    "uniform mat4 MVP;" +
-
-    "void main() {" +
-        "gl_Position = MVP * vec4(a_pos, 1.0);" +
-    "}";
-    
-let fragmentCode : string = "#version 300 es\n"+
-    "precision mediump float;"+
-    "out vec4 fragColor;"+
-    "uniform vec4 u_color;"+
-    "void main() {"+
-        "fragColor = u_color;"+
-    "}";
+import vertexCode from './shaders/tile.vert'
+import fragmentCode from './shaders/tile.frag'
+import main_texture_path from '../images/texture.png'
 
 let defaultShader : ShaderProgram;
 
@@ -107,6 +94,7 @@ function start() {
     gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(0);
 
+    var main_texture : Texture = new Texture(gl, main_texture_path);
 }
 
 const s : number = 0.1;
@@ -125,7 +113,7 @@ function drawHex(x : number, y : number, type : Model.Tile) {
 
     
     gl.uniformMatrix4fv(defaultShader.unformLocation(gl, "MVP"), false, MVP);
-    gl.uniform4f(defaultShader.unformLocation(gl, "u_color"), type.type, 0, 0, 1);
+    gl.uniform1f(defaultShader.unformLocation(gl, "u_tile"), type.type);
     gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
 }
 
