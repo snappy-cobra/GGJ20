@@ -1,5 +1,5 @@
 import './style.css';
-import {modelmain} from './model/model';
+import {model_main} from './model/model';
 import {add_cursor} from './model/cursor';
 
 var gl : WebGL2RenderingContext;
@@ -16,8 +16,8 @@ function main() {
     }
 
     start();
-    
-    modelmain()
+
+    model_main()
     add_cursor()
     return;
     requestAnimationFrame(renderLoop)
