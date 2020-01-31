@@ -1,5 +1,5 @@
 import './style.css';
-
+import {modelmain} from './model/model';
 
 var gl : WebGL2RenderingContext;
 
@@ -15,7 +15,9 @@ function main() {
     }
 
     start();
-  
+    
+    modelmain()
+    return;
     requestAnimationFrame(renderLoop)
 }   
 
