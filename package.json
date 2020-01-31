@@ -1,0 +1,42 @@
+{
+  "name": "ggj20",
+  "version": "0.0.1",
+  "description": "Global Game Jam Groningen 2020 Game",
+  "private": true,
+  "scripts": {
+    "start": "webpack-dev-server",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snappy-cobra/GGJ20.git"
+  },
+  "keywords": [
+    "global",
+    "game",
+    "jam",
+    "2020",
+    "snappy",
+    "cobra",
+    "hack",
+    "competition",
+    "weekend"
+  ],
+  "author": "Snappy Cobra",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/snappy-cobra/GGJ20/issues"
+  },
+  "homepage": "https://github.com/snappy-cobra/GGJ20#readme",
+  "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.4.2",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^1.1.3",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1"
+  }
+}
