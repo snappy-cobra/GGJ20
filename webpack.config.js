@@ -34,6 +34,17 @@ module.exports = {
           'file-loader'
         ],
       },
+      {
+        test: /\.(frag|vert)$/i,
+        use: [
+          {
+            loader: 'raw-loader',
+            options: {
+              esModule: false,
+            },
+          },
+        ],
+      }
     ],
   },
   resolve: {
