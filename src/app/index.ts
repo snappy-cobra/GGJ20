@@ -1,5 +1,6 @@
 import './style.css';
 import {ShaderProgram} from './util/shaderprogram';
+import * as Model from './model/model2';
 
 
 var gl : WebGL2RenderingContext;
@@ -109,7 +110,7 @@ function start() {
 }
 
 const s : number = 0.1;
-function drawHex(x : number, y : number) {
+function drawHex(x : number, y : number, type : Model.Tile) {
     
     if (Math.abs(y) % 2 == 1)
         x += 0.5
@@ -124,17 +125,19 @@ function drawHex(x : number, y : number) {
 
     
     gl.uniformMatrix4fv(defaultShader.unformLocation(gl, "MVP"), false, MVP);
-    gl.uniform4f(defaultShader.unformLocation(gl, "u_color"), x, y, 0, 1);
+    gl.uniform4f(defaultShader.unformLocation(gl, "u_color"), type.type, 0, 0, 1);
     gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
 }
 
 
+var model : Model.MooieCode = new Model.MooieCode(); 
 function render(deltaTime : number) {
 
     defaultShader.use(gl);
-    for(let x=-10; x<10; x++) {
-        for(let y=-10; y<10; y++) {
-            drawHex(x, y);
+
+    for(let x=0; x<model.width; x++) {
+        for(let y=0; y<model.height; y++) {
+            drawHex(x-0.5*model.width, y-0.5*model.height, model.tiles[x][y]);
         }
     }
 }
