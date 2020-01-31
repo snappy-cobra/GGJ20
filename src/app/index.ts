@@ -1,4 +1,5 @@
 import './style.css';
+import {ShaderProgram} from './util/shaderprogram';
 
 
 var gl : WebGL2RenderingContext;
@@ -48,57 +49,32 @@ function renderLoop(timeMS : number) {
 
 
 function start() {   
-    var vertexCode : string = "#version 300 es\n"+
+
+    let vertexCode : string = "#version 300 es\n"+
         "layout (location=0) in vec3 a_pos;" +
                     
         "void main(void) {" +
             "gl_Position = vec4(a_pos, 1.0);" +
         "}";
-
-    var vertexShader : WebGLShader = gl.createShader(gl.VERTEX_SHADER);
-    gl.shaderSource(vertexShader, vertexCode);
-    gl.compileShader(vertexShader);
-    
-    var fragmentCode : string = "#version 300 es\n"+
+        
+    let fragmentCode : string = "#version 300 es\n"+
         "precision mediump float;"+
         "out vec4 fragColor;"+
         "void main() {"+
             "fragColor = vec4(1.0, 0.0, 1.0, 1.0);"+
         "}";
 
-    var fragmentShader : WebGLShader = gl.createShader(gl.FRAGMENT_SHADER);
-    gl.shaderSource(fragmentShader, fragmentCode);
-    gl.compileShader(fragmentShader);
+    let shader = new ShaderProgram(gl, vertexCode, fragmentCode);
+    shader.use(gl);
 
-    var shaderProgram = gl.createProgram();
-    gl.attachShader(shaderProgram, vertexShader);   
-    gl.attachShader(shaderProgram, fragmentShader);   
-    gl.linkProgram(shaderProgram);
-    gl.detachShader(shaderProgram, vertexShader);
-    gl.detachShader(shaderProgram, fragmentShader);
-    gl.deleteShader(vertexShader);
-    gl.deleteShader(fragmentShader);
-
-    // if something in our 2 shaders is incorrect it will not link
-    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-        console.error([
-            gl.getProgramInfoLog(shaderProgram), 
-            gl.getShaderInfoLog(vertexShader), 
-            gl.getShaderInfoLog(fragmentShader)
-        ]);
-    }
-
-    gl.useProgram(shaderProgram);
-
-
-    var vertices = new Float32Array([
+    let vertices = new Float32Array([
         // x   y    z
         -0.6, -0.6, 0.0,
         0.6, -0.6, 0.0,
         0.0,  0.6, 0.0,
     ]);
 
-    var vbo : WebGLBuffer = gl.createBuffer();
+    let vbo : WebGLBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
