@@ -3,7 +3,7 @@
 
 export function modelmain() {
     
-    let map = new GameMap();
+    let map = new GameMap(20, 20);
     let street = new Street(new HexPos(0, 0), new HexPos(5, 5));
 }
 
@@ -91,11 +91,11 @@ var Mountain = new Tile("mountain", 0);
 class GameMap {
     ground: Tile[][];
     
-    constructor(){
+    constructor(width: Number, height: Number){
         this.ground = [];
-        for (let x=0; x<20; ++x){
+        for (let x=0; x<width; ++x){
             this.ground[x] = [];
-            for (let y=0; y<20; ++y){
+            for (let y=0; y<height; ++y){
                 this.ground[x][y] = Grass;
             }
         }
@@ -119,6 +119,10 @@ class GameMap {
         }
         return best;
     }
+    
+    view(){
+        return this.ground.map(l => l.map( tile => tile.name));
+    }
 }
 
 class Street {
@@ -139,4 +143,17 @@ class Street {
     }
 }
 
-
+export class Game {
+    street: Street
+    map: GameMap
+    
+    constructor(width: Number, height: Number, street_start: HexPos, street_target: HexPos){
+        this.map = new GameMap(width, height);
+        this.street = new Street(street_start, street_target);
+    }
+    
+    update() {
+        this.street.grow(this.map);
+    }
+}
+        
