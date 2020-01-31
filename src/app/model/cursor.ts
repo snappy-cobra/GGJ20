@@ -4,7 +4,7 @@ export function add_cursor() {
     return new Cursor(new HexPos(10,10));
 }
 
-class Cursor {
+export class Cursor {
     position: HexPos;
 
     constructor(position: HexPos) {
