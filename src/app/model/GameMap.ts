@@ -37,6 +37,10 @@ export class GameMap {
         return best;
     }
 
+    place_mountain(pos: HexPos) {
+        this.ground[pos.x][pos.y] = Mountain
+    }
+
     view(){
         return this.ground.map(l => l.map( tile => tile.name));
     }

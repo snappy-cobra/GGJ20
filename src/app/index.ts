@@ -28,7 +28,6 @@ function main() {
     start();
 
     model_main()
-    add_cursor()
     requestAnimationFrame(renderLoop)
 }   
 

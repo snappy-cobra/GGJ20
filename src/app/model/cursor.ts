@@ -1,14 +1,17 @@
 import {HexPos} from "./HexPos";
+import {GameMap} from "./GameMap";
 
-export function add_cursor() {
-    return new Cursor(new HexPos(10,10));
+export function add_cursor(gameMap: GameMap) {
+    return new Cursor(new HexPos(10,10), gameMap);
 }
 
 class Cursor {
     position: HexPos;
+    gameMap: GameMap;
 
-    constructor(position: HexPos) {
+    constructor(position: HexPos, gameMap: GameMap) {
         this.position = position;
+        this.gameMap = gameMap;
 
         document.addEventListener('keydown', this.key_down_function.bind(this));
     }
@@ -34,6 +37,9 @@ class Cursor {
         }
         if (event.code == 'KeyA') {
             this.position.x -= 1;
+        }
+        if (event.code == 'Enter') {
+            this.gameMap.place_mountain(this.position)
         }
     }
 }
