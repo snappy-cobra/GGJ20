@@ -3,19 +3,8 @@
 
 export function modelmain() {
     
-    let a = new HexPos(0, 0);
-    let b = new HexPos(5, 5);
-    console.log(a.get_neighbours());
-    for (let neighbour of a.get_neighbours()){
-        console.log(neighbour, a.direction_score(neighbour, b))
-    }
-    
     let map = new GameMap();
-    let street = new HexPos(0, 0);
-    while (street.hash() != b.hash()){
-        console.log(street);
-        street = map.next_tile(street, b);
-    }
+    let street = new Street(new HexPos(0, 0), new HexPos(5, 5));
 }
 
 
@@ -104,9 +93,9 @@ class GameMap {
     
     constructor(){
         this.ground = [];
-        for (let x=0; x<10; ++x){
-            this.ground[x] = []
-            for (let y=0; y<10; ++y){
+        for (let x=0; x<20; ++x){
+            this.ground[x] = [];
+            for (let y=0; y<20; ++y){
                 this.ground[x][y] = Grass;
             }
         }
@@ -132,5 +121,22 @@ class GameMap {
     }
 }
 
+class Street {
+    head: HexPos;
+    tail: HexPos[];
+    target: HexPos;
+    
+    constructor(begin: HexPos, end: HexPos){
+        this.head = begin;
+        this.tail = [];
+        this.target = end;
+    }
+    
+    grow(map: GameMap){
+        let next = map.next_tile(this.head, this.target);
+        this.tail.push(this.head);
+        this.head = next;
+    }
+}
 
 
