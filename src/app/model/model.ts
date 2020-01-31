@@ -4,17 +4,18 @@
 export function modelmain() {
     
     let a = new HexPos(0, 0);
+    let b = new HexPos(5, 5);
     console.log(a.get_neighbours());
     for (let neighbour of a.get_neighbours()){
-        console.log(a.direction_to(neighbour)/ Math.PI)
+        console.log(neighbour, a.direction_score(neighbour, b))
     }
 }
 
 
 
 export class Vec2 {
-    x = 0
-    y = 0
+    x: number;
+    y: number;
     
     
     constructor(x: number, y: number) {
@@ -29,8 +30,8 @@ export class Vec2 {
 }
 
 export class HexPos {
-    x = 0;
-    y = 0;
+    x: number;
+    y: number;
     
     constructor(x: number, y: number) {
         this.x = x;
@@ -50,8 +51,8 @@ export class HexPos {
             new HexPos(this.x - 1, this.y),
             new HexPos(this.x, this.y + 1),
             new HexPos(this.x, this.y - 1),
-            new HexPos(this.x + 1, this.y + 1),
-            new HexPos(this.x - 1, this.y - 1)
+            new HexPos(this.x + 1, this.y - 1),
+            new HexPos(this.x - 1, this.y + 1)
         ];
     }
     
@@ -59,7 +60,39 @@ export class HexPos {
         return this.real_position().direction_to(other.real_position());
     }
     
-    direction_score(target: HexPos, neighbour: HexPos) {
-        return Math.abs(((this.direction_to(target) - this.direction_to(neighbour)) / (2*Math.PI)) % 1)
-    }  
+    direction_score(neighbour: HexPos, target: HexPos) {
+        let dist = Math.abs((this.direction_to(target) - this.direction_to(neighbour)) / (2*Math.PI));
+        if (dist > 0.5){
+            dist = 1 - dist;
+        }
+        return 1 - dist * 2;
+    }
+    
+    hash(){
+        // turn it into an immutable type
+        return JSON.stringify(this);
+    }
 }
+
+
+function distmod1(a: number, b: number) {
+    return 
+}
+
+class Tile {
+    name: string;
+    constructor(name: string){
+        this.name = name;
+    }
+}
+
+// class GameMap {
+//     cells: Map<string, Tile>
+//     
+//     constructor(){
+//         this.cells = new Map();
+//         this.cells.set(
+// }
+
+
+
