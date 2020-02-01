@@ -13,11 +13,11 @@ export class GameMap {
         for (let x=0; x<width; ++x){
             this.ground[x] = [];
             for (let y=0; y<height; ++y){
-                let content = tiles.Grass;
+                let content = tiles.Grass();
                 if (Math.random() < 0.1){
-                    content = tiles.Mountain;
+                    content = tiles.Mountain();
                 } else if (Math.random() < 0.1){
-                    content = tiles.Forest;
+                    content = tiles.Forest();
                 }
                 this.ground[x][y] = content;
             }
@@ -44,7 +44,7 @@ export class GameMap {
     }
 
     place_mountain(pos: HexPos) {
-        this.ground[pos.x][pos.y] = tiles.Mountain;
+        this.ground[pos.x][pos.y] = tiles.Mountain();
     }
 
     view(){

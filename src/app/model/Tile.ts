@@ -23,14 +23,14 @@ export class Tile {
         else if (typ == TileType.Forest)    {this.animStrength[0] = 0;  this.animStrength[1] = 1; }
         else if (typ == TileType.Farm)      {this.animStrength[0] = 1;  this.animStrength[1] = 1; }
         else                                {this.animStrength[0] = Math.random();  this.animStrength[1] =  Math.random(); }
-
+        Object.freeze(this);
     }
 }
 
 export var tiles = {
-    Street: new Tile("street", 0, TileType.Street),
-    Grass: new Tile("grass", 1, TileType.Grass),
-    Mountain: new Tile("mountain", 0.01, TileType.Mountain),
-    Forest: new Tile("forest", 0.5, TileType.Forest),
-    Farm: new Tile("farm", 1, TileType.Farm)
+    Street: ()=> new Tile("street", 0, TileType.Street),
+    Grass: ()=> new Tile("grass", 1, TileType.Grass),
+    Mountain: ()=> new Tile("mountain", 0.01, TileType.Mountain),
+    Forest: ()=> new Tile("forest", 0.5, TileType.Forest),
+    Farm: ()=> new Tile("farm", 1, TileType.Farm)
 }

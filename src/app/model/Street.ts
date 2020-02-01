@@ -27,7 +27,7 @@ export class Street {
 
             let next = map.next_tile(this.head, this.target);
             if (next){
-                map.ground[next.x][next.y] = tiles.Street;
+                map.ground[next.x][next.y] = tiles.Street();
                 this.tail.push(this.head);
                 this.head = next;
             }
