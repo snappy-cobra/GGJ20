@@ -20,7 +20,9 @@ import { TextureType, Tile } from './model/Tile';
 let defaultShader : ShaderProgram;
 let cursorShader : ShaderProgram;
 let introCloudShader : ShaderProgram;
-var game : Game = new Game(30, 20, null, null);
+let gameWidth = 30;
+let gameHeight = 20;
+var game : Game = new Game(gameWidth, gameHeight, null, null);
 
 
 function main() {
@@ -66,7 +68,7 @@ function renderLoop(timeMS : number) {
 }
 
 function glInit() {   
-    gl.enable(gl.DEPTH_TEST)
+    // gl.enable(gl.DEPTH_TEST)
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
@@ -124,8 +126,8 @@ function update(deltaTime : number) {
 
 const s : number = 0.2;
 function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
-    x -= 15;
-    y -= 10;
+    x -= gameWidth/2;
+    y -= gameHeight/2;
     if (Math.abs(y) % 2 == 1)
         x += 0.5
     y *= Math.sqrt(3/4);
@@ -140,8 +142,8 @@ function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
     gl.uniformMatrix4fv(shader.unformLocation(gl, "MVP"), false, MVP); 
 }
 
-function drawHex(x : number, y : number, tile : Tile) {
-    setMVP(defaultShader, x, y);
+function drawHex(x : number, y : number, z : number, tile : Tile) {
+    setMVP(defaultShader, x, y, z);
     gl.uniform1f(defaultShader.unformLocation(gl, "u_tile"), tile.type);
     gl.uniform2f(defaultShader.unformLocation(gl, "u_animation"), tile.animStrength[0], tile.animStrength[1]);
 
@@ -149,22 +151,31 @@ function drawHex(x : number, y : number, tile : Tile) {
 }
 
 
+var bgTile : Tile = new Tile("bg", 0, TextureType.Water);
 function render(time : number) {
+
     defaultShader.use(gl);
     gl.uniform1f(defaultShader.unformLocation(gl, "u_time"), time);
     
     let view = game.view();
+    for(let x: number=-20; x<view.width+20; x++) { // TODO: overdraw
+        for(let y: number=-20; y<view.height+20; y++) {
+            drawHex(x, y, -0.01 + Math.max(2-time, 0), bgTile);
+        }
+    }
     for(let x: number=0; x<view.width; x++) {
         for(let y: number=0; y<view.height; y++) {
-            drawHex(x, y, view.tiles[x][y]);
+            drawHex(x, y, Math.max(2-time, 0), view.tiles[x][y]);
         }
     }
     
+    if (time >= 2.2) {
+        cursorShader.use(gl);
+        setMVP(cursorShader, game.cursor.position.x, game.cursor.position.y, 0.001);
+        gl.uniform1f(cursorShader.unformLocation(gl, "u_time"), time);
+        gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
+    }
 
-    cursorShader.use(gl);
-    setMVP(cursorShader, game.cursor.position.x, game.cursor.position.y, 0.001);
-    gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
-    
     if (time < 10.0) { // INTRO done;
         introCloudShader.use(gl);
         gl.uniform1f(introCloudShader.unformLocation(gl, "u_time"), absoluteTime);
