@@ -5,7 +5,7 @@ export function add_cursor(gameMap: GameMap) {
     return new Cursor(new HexPos(10,10), gameMap);
 }
 
-class Cursor {
+export class Cursor {
     position: HexPos;
     gameMap: GameMap;
 
