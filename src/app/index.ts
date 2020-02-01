@@ -5,16 +5,24 @@ import {DrawTile} from './model/drawtile';
 import {Game} from './model/Game';
 import {HexPos} from './model/HexPos';
 import {ShaderProgram} from './util/shaderprogram';
+<<<<<<< HEAD
+=======
+import * as Model from './model/model2';
+import {Cursor} from './model/cursor';
+>>>>>>> 3591be2e37d8f1fc1d6affb42d4b1cee842b925e
 import {Texture} from './util/texture';
 
 var gl : WebGL2RenderingContext;
 
-import vertexCode from './shaders/tile.vert'
-import fragmentCode from './shaders/tile.frag'
+import tileVertexCode from './shaders/tile.vert'
+import tileFragmentCode from './shaders/tile.frag'
+import cursorVertexCode from './shaders/cursor.vert'
+import corsorFragmentCode from './shaders/cursor.frag'
 import main_texture_path from '../images/texture.png'
 
 let defaultShader : ShaderProgram;
-
+let cursorShader : ShaderProgram;
+let cursor: Cursor;
 
 function main() {
     var canvas = <any>document.getElementById("glCanvas");
@@ -30,7 +38,7 @@ function main() {
     start();
 
     model_main()
-    add_cursor()
+    cursor = add_cursor()
     requestAnimationFrame(renderLoop)
 }   
 
@@ -63,7 +71,13 @@ function renderLoop(timeMS : number) {
 
 
 function start() {   
-    defaultShader = new ShaderProgram(gl, vertexCode, fragmentCode);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+
+    defaultShader = new ShaderProgram(gl, tileVertexCode, tileFragmentCode);
+    cursorShader = new ShaderProgram(gl, cursorVertexCode, corsorFragmentCode);
+
     // Design desission
     let a = 1/Math.sqrt(3);
     let b = 0.5;
@@ -103,22 +117,24 @@ function start() {
     var main_texture : Texture = new Texture(gl, main_texture_path);
 }
 
-const s : number = 0.1;
-function drawHex(x : number, y : number, type : DrawTile) {
-    
+function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
     if (Math.abs(y) % 2 == 1)
         x += 0.5
     y *= Math.sqrt(3/4);
-    
+
     let MVP = new Float32Array([
-        s,0,0,0,
-        0,s,0,0,
-        0,0,s,0,
-        x*s,y*s,0,1,
+          s,   0, 0, 0,
+          0,   s, 0, 0,
+          0,   0, s, 0,
+        x*s, y*s, z, 1,
     ]);
 
-    
-    gl.uniformMatrix4fv(defaultShader.unformLocation(gl, "MVP"), false, MVP);
+    gl.uniformMatrix4fv(shader.unformLocation(gl, "MVP"), false, MVP); 
+}
+
+const s : number = 0.1;
+function drawHex(x : number, y : number, type : Model.Tile) {
+    setMVP(defaultShader, x, y);
     gl.uniform1f(defaultShader.unformLocation(gl, "u_tile"), type.type);
     gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
 }
@@ -126,8 +142,9 @@ function drawHex(x : number, y : number, type : DrawTile) {
 
 var model : Game = new Game(20, 20, null, null);
 function render(deltaTime : number) {
-
+    
     defaultShader.use(gl);
+<<<<<<< HEAD
     let view = model.view();
     let width: number = view.width;
     let height: number = view.height;
@@ -135,8 +152,17 @@ function render(deltaTime : number) {
     for(let x: number=0; x<width; x++) {
         for(let y: number=0; y<height; y++) {
             drawHex(x - 0.5 * width, y - 0.5 * height, tiles[x][y]);
+=======
+    for(let x=0; x<model.width; x++) {
+        for(let y=0; y<model.height; y++) {
+            drawHex(x-0.5*model.width, y-0.5*model.height, model.tiles[x][y]);
+>>>>>>> 3591be2e37d8f1fc1d6affb42d4b1cee842b925e
         }
     }
+    
+    cursorShader.use(gl);
+    setMVP(cursorShader, cursor.position.x, cursor.position.y, 1);
+    gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
 }
 
 
