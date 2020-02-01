@@ -98,7 +98,7 @@ export class GameMap {
 
     somewhere_center_pos() {
         let x = Math.floor(this.width/4)+Math.floor(Math.random() * this.width/2);
-        let y = Math.floor(this.height/4)+Math.floor(Math.random() * this.height/2);
+        let y = Math.floor(this.height/2) + Math.floor(Math.random() * this.height/4 - this.height/8);
         return new HexPos(x, y)
     }
 }
