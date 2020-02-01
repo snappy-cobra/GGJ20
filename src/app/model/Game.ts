@@ -4,7 +4,7 @@ import {HexPos} from "./HexPos";
 import {Cursor} from "./cursor";
 import {MapMaker} from "./MapMaker";
 
-const DELAY = 2;
+const DELAY = 1;
 
 export class Game {
 //     street: Street;

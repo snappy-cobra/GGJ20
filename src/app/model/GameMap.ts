@@ -17,7 +17,9 @@ export class GameMap {
         this.ground = ground;
         this.start_road = start_road;
         this.end_road = end_road;
-        this.ground[0][0] = new tiles.StreetHead(new HexPos(width - 1, height - 1));
+        if (start_road){
+            this.set_tile(start_road, new tiles.StreetHead(end_road));
+        }
     }
     
     update(){
