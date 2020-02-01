@@ -1,13 +1,13 @@
-import {HexPos} from "../HexPos";
+import {Direction, directions, HexPos} from "../HexPos";
 import {MapMaker} from "../MapMaker";
-import {tiles} from "../Tile";
+import {TextureType, tiles} from "../Tile";
 import {MountainRange} from "./MountainRange";
 
 export class River{
     mapMaker: MapMaker;
 
     constructor(mapMaker: MapMaker, num_rivers: Number, possible_starts: HexPos[]) {
-        this.mapMaker = mapMaker
+        this.mapMaker = mapMaker;
         for (let i=0; i<num_rivers; i++) {
             let index = Math.floor(Math.random() * possible_starts.length);
             this.create_river(possible_starts[index]);
@@ -16,23 +16,26 @@ export class River{
     }
 
     placable(pos: HexPos) {
-        if (this.mapMaker.get_tile(pos) == undefined) {
+        let tile = this.mapMaker.get_tile(pos);
+        if (tile == undefined) {
             return false;
         }
-        return !(this.mapMaker.get_tile(pos) instanceof MountainRange);
+        return !(tile instanceof tiles.Mountain || tile instanceof tiles.River);
     }
 
-    set_river(pos: HexPos) {
-        this.mapMaker.set_tile(pos, new tiles.River());
+    set_river(pos: HexPos, in_dir: Direction, out_dir: Direction) {
+        this.mapMaker.set_tile(pos, new tiles.River(in_dir, out_dir));
     }
 
     create_river(starter_pos: HexPos) {
-        console.log(starter_pos)
+        console.log(starter_pos);
         let real_start_point = this.search_start_point(starter_pos);
-        this.set_river(real_start_point);
+        //this.set_river(real_start_point, null, null);
         let real_end_point = this.select_end();
-        this.set_river(real_end_point);
-        this.generate_river(real_start_point, real_end_point);
+        //this.set_river(real_end_point, null, null);
+        if (real_start_point != undefined) {
+            this.generate_river(real_start_point, real_end_point);
+        }
     }
 
     select_end() {
@@ -73,7 +76,23 @@ export class River{
     }
 
     generate_river(start: HexPos, end:HexPos) {
-        let dir = this.mapMaker.next_dir(start, end)
-        console.log(dir)
+        let cur = start;
+        let prev_dir = null;
+        for (let i=0; i<40; i++) {
+            for (let d of directions) {
+                let n = cur.move(d);
+                let tile = this.mapMaker.get_tile(n);
+                if (tile == undefined) {
+                    return
+                } else if (tile instanceof tiles.Ocean) {
+                    this.set_river(cur, prev_dir, d);
+                    return;
+                }
+            }
+            let dir = this.mapMaker.next_dir(cur, end);
+            this.set_river(cur, prev_dir, dir);
+            cur = cur.move(dir);
+            prev_dir = dir;
+        }
     }
 }

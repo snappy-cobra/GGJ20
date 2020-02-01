@@ -11,6 +11,7 @@ export enum TextureType {
     Farm = 5,
     Water = 1,
     Harbor = 6,
+    Boat = 7,
     River = 14,
 
 
@@ -62,6 +63,8 @@ class Forest extends Tile   { constructor(){ super("forest", 0.5, TextureType.Fo
 class Grass extends Tile    { constructor(){ super("grass", 1, TextureType.Grass); }}
 class Farm extends Tile     { constructor(){ super("farm", 1, TextureType.Farm); }}
 class Ocean extends Tile { constructor(){ super("ocean", 0, TextureType.Water); }}
+class Boat extends Tile { constructor(){ super("boat", 0, TextureType.Boat); }}
+
 
 class Harbor extends Tile {
     constructor(){
@@ -70,8 +73,16 @@ class Harbor extends Tile {
 }
 
 class River extends Tile {
-    constructor(){
-        super("river", 0.25, TextureType.River);
+    constructor(prev: Direction = null, next: Direction = null){
+        let tex;
+        if (!next){
+            var str = "River_"+(<string>prev)+(<string>prev);
+            tex = (<any>TextureType)[str];
+        } else {
+            var str = "River_"+(<string>next)+(<string>prev);
+            tex = (<any>TextureType)[str];
+        }
+        super("river", 0.25, tex);
     }
 }
 
@@ -95,5 +106,6 @@ export var tiles = {
     StreetHead,
     Ocean,
     Harbor,
-    River
+    River,
+    Boat
 };

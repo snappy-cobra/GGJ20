@@ -31,10 +31,18 @@ export class Farm {
         return this.mapMaker.get_tile(pos) instanceof tiles.Grass
     }
 
+    somewhere_center_pos() {
+        let width = this.mapMaker.width;
+        let height = this.mapMaker.height;
+        let x = Math.floor((width/2)) + Math.floor(Math.random() * width/4 - width/8);
+        let y = Math.floor(height/2) + Math.floor(Math.random() * height/4 - height/8);
+        return new HexPos(x, y)
+    }
+
     random_farm_tile() {
         let hexPos;
         do {
-            hexPos = this.mapMaker.somewhere_center_pos();
+            hexPos = this.somewhere_center_pos();
         } while (!this.placable(hexPos));
         return hexPos
     }

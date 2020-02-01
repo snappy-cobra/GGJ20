@@ -20,7 +20,7 @@ export class MountainRange {
     }
 
     placable(pos: HexPos) {
-        return this.mapMaker.get_tile(pos) instanceof tiles.Grass
+        return this.mapMaker.get_tile(pos) instanceof tiles.Grass;
     }
 
     random_mountainless_tile() {
@@ -28,7 +28,7 @@ export class MountainRange {
         do {
             hexPos = this.mapMaker.random_hexPos();
         } while (!this.placable(hexPos));
-        return hexPos
+        return hexPos;
     }
 
     mountain_init(start_amount: number) {

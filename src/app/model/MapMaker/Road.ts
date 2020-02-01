@@ -1,6 +1,6 @@
 import {MapMaker} from "../MapMaker";
-import {HexPos} from "../HexPos";
-import {Tile, tiles} from "../Tile";
+import {Direction, HexPos} from "../HexPos";
+import {tiles} from "../Tile";
 
 export class Road {
     mapMaker: MapMaker;
@@ -9,9 +9,15 @@ export class Road {
         this.mapMaker = mapMaker;
         let start_pos = this.find_left_start();
         this.set_harbor(start_pos);
+        if (this.mapMaker.on_map(start_pos.move(Direction.Left))) {
+            this.mapMaker.set_tile(start_pos.move(Direction.Left), new tiles.Boat());
+        }
         this.mapMaker.start_road = start_pos;
         let end_pos = this.find_right_end();
         this.set_harbor(end_pos);
+        if (this.mapMaker.on_map(end_pos.move(Direction.Right))) {
+            this.mapMaker.set_tile(end_pos.move(Direction.Right), new tiles.Boat());
+        }
         this.mapMaker.end_road = end_pos;
     }
 

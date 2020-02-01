@@ -34,9 +34,17 @@ export class Grass {
     random_grass_tile() {
         let hexPos;
         do {
-            hexPos = this.mapMaker.somewhere_center_pos();
+            hexPos = this.somewhere_center_pos();
         } while (this.mapMaker.get_tile(hexPos) instanceof tiles.Grass);
         return hexPos
+    }
+
+    somewhere_center_pos() {
+        let width = this.mapMaker.width;
+        let height = this.mapMaker.height;
+        let x = Math.floor(width/4)+Math.floor(Math.random() * width/2);
+        let y = Math.floor(height/2) + Math.floor(Math.random() * height/4 - height/8);
+        return new HexPos(x, y)
     }
 
     current_grasss() {
