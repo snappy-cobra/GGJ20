@@ -3,6 +3,10 @@ import {vector2d_from_hex} from './Vector2d'
 import {GameMap} from "./GameMap";
 import { tiles} from "./Tile";
 
+
+
+const DELAY = 2;
+
 export class Street {
     head: HexPos;
     tail: HexPos[];
@@ -19,7 +23,7 @@ export class Street {
     grow(map: GameMap, deltaTime : number){
         this.time += deltaTime;
         if (this.nextGrowTime < this.time) {   
-            this.nextGrowTime = this.time + 0.1;
+            this.nextGrowTime = this.time + DELAY;
 
             let next = map.next_tile(this.head, this.target);
             if (next){
