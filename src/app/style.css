@@ -2,6 +2,7 @@ html, body {
   overflow: hidden;
   height: 100%;
   margin: 0;
+  user-select: none;
 }
 
 #container {
@@ -31,18 +32,13 @@ html, body {
 
 .main_title {
   text-align: center;
-  font-size: 10em;
-}
-
-.main_title {
-  text-align: center;
   font-size: 10vh;
   padding-top: 4vh;
 }
 
 .subtitle {
   text-align: center;
-  font-size: 4em;
+  font-size: 4vh;
 }
 
 #start_button {
@@ -54,6 +50,24 @@ html, body {
   margin-top: 4vh;
   border-radius: 1vh;
   font-size: 6vh;
+  box-shadow: 0vh 1vh 1vh;
+  cursor: pointer;
+}
+
+#start_button:hover {
+  box-shadow: 0vh 0.5vh 1vh;
+}
+
+.instructions {
+  display: block;
+  background-image: url("../images/Instructions.png"); 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain; 
+  height: 50vh;
+  width: 70vh;
+  margin: auto;
+  margin-top: 6vh;
 }
 
 #snappy-logo {
