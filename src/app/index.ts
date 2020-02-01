@@ -12,7 +12,7 @@ import tileFragmentCode from './shaders/tile.frag'
 import cursorVertexCode from './shaders/cursor.vert'
 import corsorFragmentCode from './shaders/cursor.frag'
 import main_texture_path from '../images/texture.png'
-import { TileType } from './model/Tile';
+import { TileType, Tile } from './model/Tile';
 
 let defaultShader : ShaderProgram;
 let cursorShader : ShaderProgram;
@@ -134,9 +134,11 @@ function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
     gl.uniformMatrix4fv(shader.unformLocation(gl, "MVP"), false, MVP); 
 }
 
-function drawHex(x : number, y : number, type : TileType) {
+function drawHex(x : number, y : number, tile : Tile) {
     setMVP(defaultShader, x, y);
-    gl.uniform1f(defaultShader.unformLocation(gl, "u_tile"), type);
+    gl.uniform1f(defaultShader.unformLocation(gl, "u_tile"), tile.type);
+    gl.uniform2f(defaultShader.unformLocation(gl, "u_animation"), tile.animStrength[0], tile.animStrength[1]);
+
     gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
 }
 

@@ -48,6 +48,6 @@ export class GameMap {
     }
 
     view(){
-        return this.ground.map(l => l.map( tile => tile.type));
+        return this.ground.map(l => l.map( tile => tile));
     }
 }
