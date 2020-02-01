@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Lobster';
+  src:  url('../fonts/Lobster.ttf') format('woff');
+  font-weight: 600;
+  font-style: normal;
+}
+
 html, body {
   overflow: hidden;
   height: 100%;
@@ -34,11 +41,13 @@ html, body {
   text-align: center;
   font-size: 10vh;
   padding-top: 4vh;
+  font-family: Lobster;
 }
 
 .subtitle {
   text-align: center;
   font-size: 4vh;
+  font-family: Lobster;
 }
 
 #start_button {
@@ -52,6 +61,7 @@ html, body {
   font-size: 6vh;
   box-shadow: 0vh 1vh 1vh;
   cursor: pointer;
+  font-family: Lobster;
 }
 
 #start_button:hover {
