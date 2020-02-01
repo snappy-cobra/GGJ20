@@ -11,7 +11,7 @@ export class Game {
     map: GameMap;
     cursor: Cursor;
     mapMaker: MapMaker;
-    wait: number = DELAY;
+    wait: number = 3;
 
     constructor(width: number, height: number, street_start: HexPos, street_target: HexPos){
         this.mapMaker = new MapMaker(width, height);
