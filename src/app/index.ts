@@ -30,8 +30,7 @@ function main() {
     }
 
     start();
-
-    requestAnimationFrame(renderLoop)
+    requestAnimationFrame(renderLoop);
 }   
 
 function resize() {
@@ -160,6 +159,14 @@ function render(time : number) {
     gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
 }
 
-
 window.onresize = resize;
 window.onload = main;
+
+if (true) {
+    document.getElementById("main_menu").classList.add("hidden");
+}
+else {
+    document.getElementById("start_button").addEventListener("click", () => {
+        document.getElementById("main_menu").classList.add("hidden");
+    });
+}
