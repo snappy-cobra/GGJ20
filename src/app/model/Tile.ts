@@ -30,7 +30,7 @@ export class Tile {
 export var tiles = {
     Street: ()=> new Tile("street", 0, TileType.Street),
     Grass: ()=> new Tile("grass", 1, TileType.Grass),
-    Mountain: ()=> new Tile("mountain", 0.01, TileType.Mountain),
+    Mountain: ()=> new Tile("mountain", 0, TileType.Mountain),
     Forest: ()=> new Tile("forest", 0.5, TileType.Forest),
     Farm: ()=> new Tile("farm", 1, TileType.Farm)
 }

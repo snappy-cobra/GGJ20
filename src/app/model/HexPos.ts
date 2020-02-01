@@ -80,4 +80,8 @@ export class HexPos {
         }
         return 1 - dist * 2;
     }
+    
+    equals(other: HexPos){
+        return this.x == other.x && this.y == other.y;
+    }
 }
