@@ -6,16 +6,20 @@ import {mat4, vec3} from 'gl-matrix';
 
 var gl : WebGL2RenderingContext;
 var canvas : any;
+var started: boolean = false;
 
 import tileVertexCode from './shaders/tile.vert'
 import tileFragmentCode from './shaders/tile.frag'
 import cursorVertexCode from './shaders/cursor.vert'
-import corsorFragmentCode from './shaders/cursor.frag'
+import cursorFragmentCode from './shaders/cursor.frag'
+import introCloudVertexCode from './shaders/introcloud.vert'
+import introCloudFragmentCode from './shaders/introcloud.frag'
 import main_texture_path from '../images/texture.png'
 import { TextureType, Tile } from './model/Tile';
 
 let defaultShader : ShaderProgram;
 let cursorShader : ShaderProgram;
+let introCloudShader : ShaderProgram;
 var game : Game = new Game(20, 20, null, null);
 
 
@@ -48,18 +52,18 @@ function renderLoop(timeMS : number) {
     oldTimeMS = timeMS;
     time += deltaTime;
     
-    gl.clearColor(Math.sin(time*2.0)*0.4 + 0.6,  0.5,  Math.cos(time*2.0)*0.4 + 0.6, 1.0);
+    gl.clearColor(104.0/255.0, 182.0/255.0, 220.0/255.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.viewport(0, 0, canvas.width, canvas.height);
     
-    update(deltaTime);
-    render(time);
-    
+    render((started)? time : 0.0);
+    if (started) update(deltaTime);
 
     requestAnimationFrame(renderLoop)
 }
 
 function glInit() {   
+    // gl.enable(gl.DEPTH_TEST)
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
@@ -104,7 +108,8 @@ function start() {
     glInit();
 
     defaultShader = new ShaderProgram(gl, tileVertexCode, tileFragmentCode);
-    cursorShader = new ShaderProgram(gl, cursorVertexCode, corsorFragmentCode);
+    cursorShader = new ShaderProgram(gl, cursorVertexCode, cursorFragmentCode);
+    introCloudShader = new ShaderProgram(gl, introCloudVertexCode, introCloudFragmentCode);
 
     var main_texture : Texture = new Texture(gl, main_texture_path);
 }
@@ -123,11 +128,10 @@ function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
     y *= Math.sqrt(3/4);
 
     var MVP: mat4 = mat4.create();
-    var width = canvas.width;
-    var height = canvas.height;
-    var ratio = width/height;
-    mat4.ortho(MVP, -1*ratio, 1*ratio, -1, 1, -1, 1000);
-    mat4.translate(MVP, MVP, [x*s,y*s,z]);
+    var ratio = canvas.width/canvas.height;
+    // mat4.ortho(MVP, -1*ratio, 1*ratio, -1, 1, -100, 100);
+    mat4.perspective(MVP, 45.0, ratio, 0.1, 100);
+    mat4.translate(MVP, MVP, [x*s,y*s,z-2]);
     mat4.scale(MVP, MVP, [s,s,s]);
 
     gl.uniformMatrix4fv(shader.unformLocation(gl, "MVP"), false, MVP); 
@@ -143,7 +147,6 @@ function drawHex(x : number, y : number, tile : Tile) {
 
 
 function render(time : number) {
-    
     defaultShader.use(gl);
     gl.uniform1f(defaultShader.unformLocation(gl, "u_time"), time);
     
@@ -154,9 +157,23 @@ function render(time : number) {
         }
     }
     
+    if (time > 10.0) return; // INTRO done;
     cursorShader.use(gl);
-    setMVP(cursorShader, game.cursor.position.x, game.cursor.position.y, 1);
+    setMVP(cursorShader, game.cursor.position.x, game.cursor.position.y, 0.1);
     gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
+
+    introCloudShader.use(gl);
+    gl.uniform1f(introCloudShader.unformLocation(gl, "u_time"), time);
+
+    var MVP: mat4 = mat4.create();
+    var ratio = canvas.width/canvas.height;
+    mat4.perspective(MVP, 45.0, ratio, 0.1, 100);
+    mat4.translate(MVP, MVP, [0.0, 0, -3.0 + time * 0.5]);
+    mat4.scale(MVP, MVP, [10.0,10.0,10.0]);
+
+    gl.uniformMatrix4fv(introCloudShader.unformLocation(gl, "MVP"), false, MVP); 
+    gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
+    
 }
 
 window.onresize = resize;
@@ -164,9 +181,12 @@ window.onload = main;
 
 if (true) {
     document.getElementById("main_menu").classList.add("hidden");
+    started = true;
 }
 else {
     document.getElementById("start_button").addEventListener("click", () => {
         document.getElementById("main_menu").classList.add("hidden");
+        started = true;
+        time = 0;
     });
 }
