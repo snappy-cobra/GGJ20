@@ -63,7 +63,7 @@ function renderLoop(timeMS : number) {
 }
 
 function glInit() {   
-    // gl.enable(gl.DEPTH_TEST)
+    gl.enable(gl.DEPTH_TEST)
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
@@ -119,9 +119,9 @@ function update(deltaTime : number) {
     game.update(deltaTime);
 }
 
-const s : number = 0.1;
+const s : number = 0.2;
 function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
-    x -= 10;
+    x -= 15;
     y -= 10;
     if (Math.abs(y) % 2 == 1)
         x += 0.5
@@ -131,7 +131,7 @@ function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
     var ratio = canvas.width/canvas.height;
     // mat4.ortho(MVP, -1*ratio, 1*ratio, -1, 1, -100, 100);
     mat4.perspective(MVP, 45.0, ratio, 0.1, 100);
-    mat4.translate(MVP, MVP, [x*s,y*s,z-2]);
+    mat4.translate(MVP, MVP, [x*s,y*s,z-4]);
     mat4.scale(MVP, MVP, [s,s,s]);
 
     gl.uniformMatrix4fv(shader.unformLocation(gl, "MVP"), false, MVP); 
@@ -157,23 +157,25 @@ function render(time : number) {
         }
     }
     
-    if (time > 10.0) return; // INTRO done;
+
     cursorShader.use(gl);
-    setMVP(cursorShader, game.cursor.position.x, game.cursor.position.y, 0.1);
-    gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
-
-    introCloudShader.use(gl);
-    gl.uniform1f(introCloudShader.unformLocation(gl, "u_time"), time);
-
-    var MVP: mat4 = mat4.create();
-    var ratio = canvas.width/canvas.height;
-    mat4.perspective(MVP, 45.0, ratio, 0.1, 100);
-    mat4.translate(MVP, MVP, [0.0, 0, -3.0 + time * 0.5]);
-    mat4.scale(MVP, MVP, [10.0,10.0,10.0]);
-
-    gl.uniformMatrix4fv(introCloudShader.unformLocation(gl, "MVP"), false, MVP); 
+    setMVP(cursorShader, game.cursor.position.x, game.cursor.position.y, 0.001);
     gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
     
+
+    if (time < 10.0) { // INTRO done;
+        introCloudShader.use(gl);
+        gl.uniform1f(introCloudShader.unformLocation(gl, "u_time"), time);
+
+        var MVP: mat4 = mat4.create();
+        var ratio = canvas.width/canvas.height;
+        mat4.perspective(MVP, 45.0, ratio, 0.1, 100);
+        mat4.translate(MVP, MVP, [0.0, 0, -3.0 + time * 0.5]);
+        mat4.scale(MVP, MVP, [10.0,10.0,10.0]);
+
+        gl.uniformMatrix4fv(introCloudShader.unformLocation(gl, "MVP"), false, MVP); 
+        gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
+    }
 }
 
 window.onresize = resize;
