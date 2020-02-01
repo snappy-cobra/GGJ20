@@ -1,6 +1,6 @@
 import {MapMaker} from "../MapMaker";
 import {HexPos} from "../HexPos";
-import {Tile, tiles} from "../Tile";
+import {tiles} from "../Tile";
 
 export class Forest {
     mapMaker: MapMaker;

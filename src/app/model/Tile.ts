@@ -62,9 +62,7 @@ class StreetHead extends Tile {
     target: HexPos;
     prev: Direction
     constructor(target: HexPos, prev: Direction = null){
-        var str = "Street_"+(<string>prev)+(<string>prev);
-        let tex = (<any>TextureType)[str];
-
+        let tex = (prev)? (<any>TextureType)["Street_"+(<string>prev)+(<string>prev)] : TextureType.Street;
         super("street", 0, tex);
         this.target = target;
         this.prev = prev;
