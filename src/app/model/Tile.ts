@@ -1,5 +1,5 @@
 
-import {HexPos} from "./HexPos";
+import {HexPos, Direction} from "./HexPos";
 
 export enum TextureType {
     Mountain = 0,
@@ -9,12 +9,12 @@ export enum TextureType {
     Farm = 5,
 
 
-    Sreet_AA = 4, Sreet_AB = 4, Sreet_AC = 4, Sreet_AD = 4, Sreet_AE = 4, Sreet_AF = 4,
-    Sreet_BA = 4, Sreet_BB = 4, Sreet_BC = 4, Sreet_BD = 4, Sreet_BE = 4, Sreet_BF = 4,
-    Sreet_CA = 4, Sreet_CB = 4, Sreet_CC = 4, Sreet_CD = 4, Sreet_CE = 4, Sreet_CF = 4,
-    Sreet_DA = 4, Sreet_DB = 4, Sreet_DC = 4, Sreet_DD = 4, Sreet_DE = 4, Sreet_DF = 4,
-    Sreet_EA = 4, Sreet_EB = 4, Sreet_EC = 4, Sreet_ED = 4, Sreet_EE = 4, Sreet_EF = 4,
-    Sreet_FA = 4, Sreet_FB = 4, Sreet_FC = 4, Sreet_FD = 4, Sreet_FE = 4, Sreet_FF = 4,
+    Street_AA = 4, Street_AB = 4, Street_AC = 4, Street_AD = 4, Street_AE = 4, Street_AF = 4,
+    Street_BA = 4, Street_BB = 4, Street_BC = 4, Street_BD = 4, Street_BE = 4, Street_BF = 4,
+    Street_CA = 4, Street_CB = 4, Street_CC = 4, Street_CD = 4, Street_CE = 4, Street_CF = 4,
+    Street_DA = 4, Street_DB = 4, Street_DC = 4, Street_DD = 4, Street_DE = 4, Street_DF = 4,
+    Street_EA = 4, Street_EB = 4, Street_EC = 4, Street_ED = 4, Street_EE = 4, Street_EF = 4,
+    Street_FA = 4, Street_FB = 4, Street_FC = 4, Street_FD = 4, Street_FE = 4, Street_FF = 4,
 }
 
 export class Tile {
@@ -37,9 +37,15 @@ export class Tile {
 //         Object.freeze(this);
     }
 }
-
 class Street extends Tile {
-    constructor(){
+    constructor(prev: Direction = null, next: Direction = null){
+        let tex;
+        if (!prev || !next){
+            tex = TextureType.Street;
+        } else {
+            console.log(prev, next);
+            tex = TextureType["Street_"+(<string>prev)+(<string>next)];
+        }
         super("street", 0, TextureType.Street);
     }
 }
@@ -70,9 +76,17 @@ class Farm extends Tile {
 
 class StreetHead extends Tile {
     target: HexPos;
-    constructor(target: HexPos){
-        super("street", 0, TextureType.Street);
+    prev: Direction
+    constructor(target: HexPos, prev: Direction = null){
+        let tex: TextureType;
+        if (prev){
+            tex = TextureType["Street_"+(<string>prev)+(<string>prev)];
+        } else {
+            tex = TextureType.Street;
+        }
+        super("street", 0, tex);
         this.target = target;
+        this.prev = prev;
     }
 }
 
