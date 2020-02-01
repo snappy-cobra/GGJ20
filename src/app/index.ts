@@ -5,6 +5,7 @@ import {ShaderProgram} from './util/shaderprogram';
 import {Texture} from './util/texture';
 
 var gl : WebGL2RenderingContext;
+var canvas : any;
 
 import tileVertexCode from './shaders/tile.vert'
 import tileFragmentCode from './shaders/tile.frag'
@@ -18,11 +19,10 @@ var game : Game = new Game(20, 20, null, null);
 
 
 function main() {
-    var canvas = <any>document.getElementById("glCanvas");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    
+    canvas = <any>document.getElementById("glCanvas");
     gl = canvas.getContext("webgl2");
+    resize();
+    
     if (gl === null) {
       alert("Unable to initialize WebGL. Your browser or machine may not support it.");
       return;
@@ -34,10 +34,9 @@ function main() {
 }   
 
 function resize() {
-    var canvas = <any>document.getElementById("glCanvas");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    gl.viewport(0, 0,  window.innerWidth, window.innerHeight);
+    gl.viewport(0, 0, canvas.width, canvas.height);
 }
 
 
@@ -53,7 +52,7 @@ function renderLoop(timeMS : number) {
     
     gl.clearColor(Math.sin(time*2.0)*0.4 + 0.6,  0.5,  Math.cos(time*2.0)*0.4 + 0.6, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.viewport(0, 0, canvas.width, canvas.height);
     
     render(deltaTime);
     
@@ -116,7 +115,10 @@ function update() {
     game.update();
 }
 
+const s : number = 0.1;
 function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
+    x -= 10;
+    y -= 10;
     if (Math.abs(y) % 2 == 1)
         x += 0.5
     y *= Math.sqrt(3/4);
@@ -131,7 +133,6 @@ function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
     gl.uniformMatrix4fv(shader.unformLocation(gl, "MVP"), false, MVP); 
 }
 
-const s : number = 0.1;
 function drawHex(x : number, y : number, type : DrawTile) {
     setMVP(defaultShader, x, y);
     gl.uniform1f(defaultShader.unformLocation(gl, "u_tile"), type.type);
@@ -145,7 +146,7 @@ function render(deltaTime : number) {
     let view = game.view();
     for(let x: number=0; x<view.width; x++) {
         for(let y: number=0; y<view.height; y++) {
-            drawHex(x - 0.5 * view.width, y - 0.5 * view.height, view.tiles[x][y]);
+            drawHex(x, y, view.tiles[x][y]);
         }
     }
     
