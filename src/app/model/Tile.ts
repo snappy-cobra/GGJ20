@@ -38,7 +38,8 @@ export class Tile {
         else if (typ == TextureType.Grass)     {this.animStrength[0] = 1;  this.animStrength[1] = 0; }
         else if (typ == TextureType.Forest)    {this.animStrength[0] = 0;  this.animStrength[1] = 1; }
         else if (typ == TextureType.Farm)      {this.animStrength[0] = 1;  this.animStrength[1] = 1; }
-        else                                   {this.animStrength[0] = Math.random();  this.animStrength[1] =  Math.random(); }
+        else if (typ == TextureType.Water)     {this.animStrength[0] = Math.random();  this.animStrength[1] =  Math.random(); }
+        else                                   {this.animStrength[0] = 0;  this.animStrength[1] =  0; }
 //         Object.freeze(this);
     }
 }
@@ -60,12 +61,7 @@ class Mountain extends Tile { constructor(){ super("mountain", 0, TextureType.Mo
 class Forest extends Tile   { constructor(){ super("forest", 0.5, TextureType.Forest); }}
 class Grass extends Tile    { constructor(){ super("grass", 1, TextureType.Grass); }}
 class Farm extends Tile     { constructor(){ super("farm", 1, TextureType.Farm); }}
-
-class Ocean extends Tile {
-    constructor(){
-        super("ocean", 0, TextureType.Water);
-    }
-}
+class Ocean extends Tile { constructor(){ super("ocean", 0, TextureType.Water); }}
 
 class Harbor extends Tile {
     constructor(){
