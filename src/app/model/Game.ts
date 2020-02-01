@@ -4,7 +4,7 @@ import {HexPos} from "./HexPos";
 import {Cursor} from "./cursor";
 import {MapMaker} from "./MapMaker";
 
-const DELAY = 1;
+const DELAY = 2;
 
 export class Game {
 //     street: Street;
@@ -42,10 +42,10 @@ export class Game {
             height: this.map.height,
             tiles: grid
         }*/
-        let grid = this.mapMaker.view();
+        let grid = this.map.view();
         return {
-            width: this.mapMaker.width,
-            height: this.mapMaker.height,
+            width: this.map.width,
+            height: this.map.height,
             tiles: grid
         }
     }

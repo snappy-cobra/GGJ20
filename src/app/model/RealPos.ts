@@ -20,4 +20,8 @@ export class RealPos {
     direction_to(other: RealPos){
         return Math.atan2(this.y - other.y, this.x - other.x);
     }
+    
+    distance_to(other: RealPos){
+        return Math.hypot(this.x - other.x, this.y - other.y);
+    }
 }
