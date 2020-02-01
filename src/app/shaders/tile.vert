@@ -1,7 +1,7 @@
 #version 300 es
 layout (location=0) in vec3 a_pos;
 
-uniform float u_tile;
+uniform mediump float u_tile;
 uniform mat4 MVP;
 
 out vec2 texcoord;

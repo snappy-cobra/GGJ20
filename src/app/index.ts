@@ -140,6 +140,8 @@ function drawHex(x : number, y : number, type : TileType) {
 function render(time : number) {
     
     defaultShader.use(gl);
+    gl.uniform1f(defaultShader.unformLocation(gl, "u_time"), time);
+    
     let view = game.view();
     for(let x: number=0; x<view.width; x++) {
         for(let y: number=0; y<view.height; y++) {
