@@ -141,12 +141,9 @@ function render(deltaTime : number) {
     
     defaultShader.use(gl);
     let view = model.view();
-    let width: number = view.width;
-    let height: number = view.height;
-    let tiles: DrawTile[][] = view.tiles;
-    for(let x: number=0; x<width; x++) {
-        for(let y: number=0; y<height; y++) {
-            drawHex(x - 0.5 * width, y - 0.5 * height, tiles[x][y]);
+    for(let x: number=0; x<view.width; x++) {
+        for(let y: number=0; y<view.height; y++) {
+            drawHex(x - 0.5 * view.width, y - 0.5 * view.height, view.tiles[x][y]);
         }
     }
     
