@@ -68,7 +68,7 @@ class Boat extends Tile { constructor(){ super("boat", 0, TextureType.Boat); }}
 
 class Harbor extends Tile {
     constructor(){
-        super("harbor", 0, TextureType.Harbor);
+        super("harbor", 1, TextureType.Harbor);
     }
 }
 
