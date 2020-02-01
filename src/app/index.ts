@@ -7,6 +7,7 @@ import {mat4, vec3} from 'gl-matrix';
 var gl : WebGL2RenderingContext;
 var canvas : any;
 var started: boolean = false;
+var livesCount: number = 3;
 
 import tileVertexCode from './shaders/tile.vert'
 import tileFragmentCode from './shaders/tile.frag'

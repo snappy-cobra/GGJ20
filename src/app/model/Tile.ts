@@ -37,7 +37,8 @@ export class Tile {
         else if (typ == TextureType.Grass)     {this.animStrength[0] = 1;  this.animStrength[1] = 0; }
         else if (typ == TextureType.Forest)    {this.animStrength[0] = 0;  this.animStrength[1] = 1; }
         else if (typ == TextureType.Farm)      {this.animStrength[0] = 1;  this.animStrength[1] = 1; }
-        else                                   {this.animStrength[0] = Math.random();  this.animStrength[1] =  Math.random(); }
+        else if (typ == TextureType.Water)     {this.animStrength[0] = Math.random();  this.animStrength[1] =  Math.random(); }
+        else                                   {this.animStrength[0] = 0;  this.animStrength[1] =  0; }
 //         Object.freeze(this);
     }
 }

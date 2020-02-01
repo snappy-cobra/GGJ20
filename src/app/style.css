@@ -16,6 +16,7 @@ html, body {
 #container {
   height: 100%;
   position: relative;
+  display: block;
 }
 
 #glCanvas {
@@ -35,7 +36,8 @@ html, body {
 }
 
 .hidden {
-  display: none;
+  transition: visibility 0s linear 0.7s, opacity 0.7s ease-in-out;
+  opacity: 0;
 }
 
 .main_title {
@@ -91,4 +93,13 @@ html, body {
   width: 35vh;
   bottom: 5vh;
   right: 0;
+}
+
+
+
+
+#lives {
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }

@@ -1,5 +1,5 @@
 import {HexPos, directions, invert} from "./HexPos";
-import {tiles, Tile} from "./Tile";
+import {tiles, Tile, TextureType} from "./Tile";
 
 
 export class GameMap {
@@ -64,6 +64,9 @@ export class GameMap {
     }
 
     set_tile(place: HexPos, tile: Tile){
+        if (this.ground[place.x][place.y].type == TextureType.Farm)
+            console.log("Leven verloren");
+
         this.ground[place.x][place.y] = tile;
     }
 
@@ -91,7 +94,7 @@ export class GameMap {
     }
 
     view(){
-        return this.ground.map(l => l.map( tile => tile));
+        return this.ground;
     }
 
     random_hexPos() {
