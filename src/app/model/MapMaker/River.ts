@@ -32,6 +32,7 @@ export class River{
         this.set_river(real_start_point);
         let real_end_point = this.select_end();
         this.set_river(real_end_point);
+        this.generate_river(real_start_point, real_end_point);
     }
 
     select_end() {
@@ -57,7 +58,6 @@ export class River{
         return new HexPos(x, y);
     }
 
-
     search_start_point(starter_pos: HexPos) {
         let neighbours = starter_pos.get_neighbours();
         while (true) {
@@ -70,5 +70,10 @@ export class River{
                 neighbours.concat(n.get_neighbours())
             }
         }
+    }
+
+    generate_river(start: HexPos, end:HexPos) {
+        let dir = this.mapMaker.next_dir(start, end)
+        console.log(dir)
     }
 }
