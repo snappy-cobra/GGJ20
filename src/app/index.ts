@@ -151,7 +151,7 @@ function render(deltaTime : number) {
     }
     
     cursorShader.use(gl);
-//     setMVP(cursorShader, cursor.position.x, cursor.position.y, 1);
+    setMVP(cursorShader, cursor.position.x, cursor.position.y, 1);
     gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
 }
 
