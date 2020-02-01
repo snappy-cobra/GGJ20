@@ -3,13 +3,9 @@ import {model_main} from './model/model';
 import {add_cursor} from './model/cursor';
 import {DrawTile} from './model/drawtile';
 import {Game} from './model/Game';
+import {Cursor} from './model/cursor';
 import {HexPos} from './model/HexPos';
 import {ShaderProgram} from './util/shaderprogram';
-<<<<<<< HEAD
-=======
-import * as Model from './model/model2';
-import {Cursor} from './model/cursor';
->>>>>>> 3591be2e37d8f1fc1d6affb42d4b1cee842b925e
 import {Texture} from './util/texture';
 
 var gl : WebGL2RenderingContext;
@@ -133,7 +129,7 @@ function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
 }
 
 const s : number = 0.1;
-function drawHex(x : number, y : number, type : Model.Tile) {
+function drawHex(x : number, y : number, type : DrawTile) {
     setMVP(defaultShader, x, y);
     gl.uniform1f(defaultShader.unformLocation(gl, "u_tile"), type.type);
     gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
@@ -144,7 +140,6 @@ var model : Game = new Game(20, 20, null, null);
 function render(deltaTime : number) {
     
     defaultShader.use(gl);
-<<<<<<< HEAD
     let view = model.view();
     let width: number = view.width;
     let height: number = view.height;
@@ -152,16 +147,11 @@ function render(deltaTime : number) {
     for(let x: number=0; x<width; x++) {
         for(let y: number=0; y<height; y++) {
             drawHex(x - 0.5 * width, y - 0.5 * height, tiles[x][y]);
-=======
-    for(let x=0; x<model.width; x++) {
-        for(let y=0; y<model.height; y++) {
-            drawHex(x-0.5*model.width, y-0.5*model.height, model.tiles[x][y]);
->>>>>>> 3591be2e37d8f1fc1d6affb42d4b1cee842b925e
         }
     }
     
     cursorShader.use(gl);
-    setMVP(cursorShader, cursor.position.x, cursor.position.y, 1);
+//     setMVP(cursorShader, cursor.position.x, cursor.position.y, 1);
     gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
 }
 
