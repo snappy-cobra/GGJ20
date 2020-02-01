@@ -44,10 +44,15 @@ html * {
 }
 
 .main_title {
-  text-align: center;
-  font-size: 10vh;
-  padding-top: 4vh;
-  font-family: Lobster;
+  display: block;
+  background-image: url("../images/Title.png"); 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain; 
+  height: 20vh;
+  width: 70vh;
+  margin: auto;
+  margin-top: 1vh;
 }
 
 .subtitle {
@@ -98,9 +103,6 @@ html * {
   right: 0;
 }
 
-
-
-
 #lives {
   transition: opacity 2.0s ease-in-out;
   transition-delay: 1s;
@@ -119,9 +121,6 @@ html * {
   height: 100px;
 }
 
-
-
-
 #gameover {
   position: absolute;
   min-height: 100%;
@@ -129,6 +128,18 @@ html * {
   margin: 0;
   padding: 0;
   color:black;
+}
+
+.gameover_image {
+  display: block;
+  background-image: url("../images/GameOver.png"); 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain; 
+  height: 50vh;
+  width: 70vh;
+  margin: auto;
+  margin-top: 1vh;
 }
 
 #restart_button {
