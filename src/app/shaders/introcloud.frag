@@ -1,15 +1,11 @@
 #version 300 es
 precision mediump float;
 
-uniform sampler2D u_texture;
-uniform float u_time;
-uniform vec2 u_animation;
-
-in vec3 v_pos;
-in vec2 texcoord;
 out vec4 fragColor;
+in vec2 v_pos;
+in vec4 v_MVPpos;
 
-
+uniform float u_time;
 
 // https://thebookofshaders.com/11/
 // 2D Random
@@ -38,12 +34,35 @@ float noise (in vec2 st) {
     (c - a)* u.y * (1.0 - u.x) +
     (d - b) * u.x * u.y;
 }
+const int FBM_OCTAVES = 3;
+const float H = 1.5;
 
+// http://iquilezles.org/www/articles/fbm/fbm.htm
+float fbm(vec2 x)
+{
+    float G = exp2(-H);
+    float f = 1.0;
+    float a = 1.0;
+    float t = 0.0;
+    for( int i=0; i<FBM_OCTAVES; i++ )
+    {
+        t += a*noise(f*x);
+        f *= 2.0;
+        a *= G;
+    }
+    return t;
+}
+
+float pattern( vec2 p )
+{
+    vec2 q = vec2( fbm( p + vec2(0.0, 0.0) ), fbm( p + vec2(5.2,1.3)) );
+
+    return fbm( p + 1.5 * q ) * 0.7;
+}
 
 void main() {
-    vec2 distortion = vec2(noise(texcoord + u_time) -0.5, noise(texcoord + u_time) -0.5) * 2.0 * 0.01 * u_animation;
+    float f = pattern(v_MVPpos.xy + vec2(u_time * 0.1));
+    f += 0.3;
 
-    float f = pow(v_pos.x, 2.0) + pow(v_pos.y, 2.0);
-
-    fragColor = texture(u_texture, texcoord) - vec4(f,f,f, 0.0);
+    fragColor = vec4(f, f, f, f) + vec4(0.0, 0.0, 0.0, v_MVPpos.z - 2.0);
 }
