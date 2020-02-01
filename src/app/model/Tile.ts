@@ -43,8 +43,7 @@ class Street extends Tile {
         if (!prev || !next){
             tex = TextureType.Street;
         } else {
-            console.log(prev, next);
-            tex = TextureType["Street_"+(<string>prev)+(<string>next)];
+            tex = TextureType[<any>("Street_"+(<string>prev)+(<string>next))];
         }
         super("street", 0, TextureType.Street);
     }
@@ -80,7 +79,7 @@ class StreetHead extends Tile {
     constructor(target: HexPos, prev: Direction = null){
         let tex: TextureType;
         if (prev){
-            tex = TextureType["Street_"+(<string>prev)+(<string>prev)];
+            tex = TextureType[("Street_"+(<string>prev)+(<string>prev))];
         } else {
             tex = TextureType.Street;
         }

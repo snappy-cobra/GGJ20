@@ -77,12 +77,16 @@ export class HexPos {
         }
     }
 
-    get_neighbours() {
+    get_neighbours(): HexPos[] {
         return directions.map(dir => this.move(dir));
     }
 
     direction_to(other: HexPos){
         return this.real_position().direction_to(other.real_position());
+    }
+    
+    distance_to(other: HexPos){
+        return this.real_position().distance_to(other.real_position());
     }
 
     direction_score(neighbour: HexPos, target: HexPos) {
@@ -95,5 +99,9 @@ export class HexPos {
     
     equals(other: HexPos){
         return this.x == other.x && this.y == other.y;
+    }
+    
+    hash(): string{
+        return JSON.stringify(this);
     }
 }
