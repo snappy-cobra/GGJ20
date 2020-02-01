@@ -1,7 +1,7 @@
 import {HexPos} from "./HexPos";
 import {vector2d_from_hex} from './Vector2d'
 import {GameMap} from "./GameMap";
-import { TileType } from "./Tile";
+import { tiles} from "./Tile";
 
 export class Street {
     head: HexPos;
@@ -22,9 +22,11 @@ export class Street {
             this.nextGrowTime = this.time + 0.1;
 
             let next = map.next_tile(this.head, this.target);
-            map.ground[next.x][next.y].type = TileType.Street
-            this.tail.push(this.head);
-            this.head = next;
+            if (next){
+                map.ground[next.x][next.y] = tiles.Street;
+                this.tail.push(this.head);
+                this.head = next;
+            }
         }
     }
 

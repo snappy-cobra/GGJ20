@@ -8,24 +8,29 @@ export enum TileType {
 
 export class Tile {
     accessibility: number;
+    name: string; // for debugging
     type: TileType;
     animStrength: Float32Array;
 
     private static nranimStrengths = [[0,0], [0,0], [0,0]];
-    constructor(accessibility: number, type: TileType){
+    constructor(name: string, accessibility: number, typ: TileType){
         this.accessibility = accessibility;
-        this.type = type;
+        this.name = name;
+        this.type = typ;
         this.animStrength = new Float32Array(2);
-        if (type == TileType.Mountain)  {this.animStrength[0] = 0;  this.animStrength[1] = 0; }
-        else if (type == TileType.Grass)     {this.animStrength[0] = 1;  this.animStrength[1] = 0; }
-        else if (type == TileType.Forest)    {this.animStrength[0] = 0;  this.animStrength[1] = 1; }
-        else if (type == TileType.Farm)      {this.animStrength[0] = 1;  this.animStrength[1] = 1; }
-        else                            {this.animStrength[0] = Math.random();  this.animStrength[1] =  Math.random(); }
-    }
+        if (typ == TileType.Mountain)       {this.animStrength[0] = 0;  this.animStrength[1] = 0; }
+        else if (typ == TileType.Grass)     {this.animStrength[0] = 1;  this.animStrength[1] = 0; }
+        else if (typ == TileType.Forest)    {this.animStrength[0] = 0;  this.animStrength[1] = 1; }
+        else if (typ == TileType.Farm)      {this.animStrength[0] = 1;  this.animStrength[1] = 1; }
+        else                                {this.animStrength[0] = Math.random();  this.animStrength[1] =  Math.random(); }
 
-
-    private static nrs = [1, 0.5, 0];
-    public static create(drawtile: TileType){
-        return new Tile(this.nrs[drawtile], drawtile);
     }
+}
+
+export var tiles = {
+    Street: new Tile("street", 0, TileType.Street),
+    Grass: new Tile("grass", 1, TileType.Grass),
+    Mountain: new Tile("mountain", 0, TileType.Mountain),
+    Forest: new Tile("forest", 0.5, TileType.Forest),
+    Farm: new Tile("farm", 1, TileType.Farm)
 }
