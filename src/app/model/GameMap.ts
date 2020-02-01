@@ -18,7 +18,13 @@ export class GameMap {
         for (let x=0; x<width; ++x){
             this.ground[x] = [];
             for (let y=0; y<height; ++y){
-                this.ground[x][y] = Grass;
+                let content = Grass;
+                if (Math.random() < 0.1){
+                    content = Mountain;
+                } else if (Math.random() < 0.1){
+                    content = Forest;
+                }
+                this.ground[x][y] = content;
             }
         }
     }
