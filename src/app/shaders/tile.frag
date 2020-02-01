@@ -5,6 +5,7 @@ uniform sampler2D u_texture;
 uniform float u_time;
 uniform vec2 u_animation;
 
+in vec3 v_pos;
 in vec2 texcoord;
 out vec4 fragColor;
 
@@ -42,5 +43,7 @@ float noise (in vec2 st) {
 void main() {
     vec2 distortion = vec2(noise(texcoord + u_time) -0.5, noise(texcoord + u_time) -0.5) * 2.0 * 0.01 * u_animation;
 
-    fragColor = texture(u_texture, texcoord);
+    float f = pow(v_pos.x, 2.0) + pow(v_pos.y, 2.0);
+
+    fragColor = texture(u_texture, texcoord) - vec4(f,f,f, 0.0);
 }
