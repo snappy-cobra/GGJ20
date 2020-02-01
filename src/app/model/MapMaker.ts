@@ -1,15 +1,17 @@
 import {GameMap} from "./GameMap";
 import {MountainRange} from "./MapMaker/MountainRange";
 import {Tile, tiles} from "./Tile";
+import {Forest} from "./MapMaker/Forest";
 
 enum Fase {
     mountain,
-    grass
+    forest
 }
 
 export class MapMaker extends GameMap{
     fase: Fase;
     mountainRange: MountainRange;
+    forest: Forest;
 
     constructor(width: number, height: number) {
         let ground: Tile[][] = [];
@@ -21,7 +23,8 @@ export class MapMaker extends GameMap{
         }
         super(width, height, ground);
         this.fase = Fase.mountain;
-        this.mountainRange = new MountainRange(this, 4,40)
+        this.mountainRange = new MountainRange(this, 4,40);
+        this.forest = new Forest(this, 7, 50);
     }
 
     mapStep() {

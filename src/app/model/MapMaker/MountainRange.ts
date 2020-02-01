@@ -27,8 +27,8 @@ export class MountainRange {
 
     mountain_init(start_amount: number) {
         for (let i=0; i<start_amount; i++) {
-            this.mapMaker.set_tile(this.random_mountainless_tile(), new tiles.Mountain());
-            this.mountain_number += 1;
+            console.log("start");
+            this.set_mountain(this.random_mountainless_tile());
         }
     }
 
@@ -37,23 +37,21 @@ export class MountainRange {
     }
 
     found_location(hexPos: HexPos) {
-        //TODO: CHECK BIJ MERGE
-        if ((hexPos.x < 0 || hexPos.x > this.mapMaker.width) || (hexPos.y < 0 || hexPos.y > this.mapMaker.height)) {
+        if ((hexPos.x < 0 || hexPos.x >= this.mapMaker.width) || (hexPos.y < 0 || hexPos.y >= this.mapMaker.height)) {
+            console.log("NOPEEE");
             this.new_walking_tile();
             return
         }
-
-        this.mapMaker.set_tile(hexPos, new tiles.Mountain());
-        this.mountain_number += 1;
-        this.new_walking_tile()
+        this.set_mountain(hexPos);
+        this.new_walking_tile();
     }
 
     random_step() {
         let dir = directions[Math.floor(Math.random() * 6)];
         let resulting_pos = this.walking_tile.move(dir);
         let outside_allowed = 2;
-        if ((resulting_pos.x < -outside_allowed || resulting_pos.x > this.mapMaker.width+outside_allowed)
-            || (resulting_pos.y < -outside_allowed || resulting_pos.y > this.mapMaker.height+outside_allowed)) {
+        if ((resulting_pos.x < -outside_allowed || resulting_pos.x >= this.mapMaker.width+outside_allowed)
+            || (resulting_pos.y < -outside_allowed || resulting_pos.y >= this.mapMaker.height+outside_allowed)) {
             this.new_walking_tile();
             return
         }
@@ -70,6 +68,12 @@ export class MountainRange {
             }
         }
         this.random_step()
+    }
+
+    set_mountain(pos: HexPos) {
+        console.log("HIEIEEER", pos);
+        this.mapMaker.set_tile(pos, new tiles.Mountain());
+        this.mountain_number += 1;
     }
 
     generate_mountain_range(){

@@ -44,7 +44,7 @@ export class Street {
         for (let n of neighbours) {
             let vec_n = vector2d_from_hex(this.head, n);
             let cur_value = vec_n.sum(vec_a).magnitude();
-            console.log(n.x, n.y, cur_value);
+            //console.log(n.x, n.y, cur_value);
             if (cur_value > max_value) {
                 max_value = cur_value;
                 max_neighbour = n;
