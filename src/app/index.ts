@@ -6,7 +6,6 @@ import {mat4, vec3} from 'gl-matrix';
 
 var gl : WebGL2RenderingContext;
 var canvas : any;
-var started: boolean = false;
 var livesCount: number = 3;
 
 import tileVertexCode from './shaders/tile.vert'
@@ -25,6 +24,15 @@ let gameWidth = 30;
 let gameHeight = 20;
 var game : Game = new Game(gameWidth, gameHeight, null, null);
 
+enum GameState {
+    MENU,
+    PLAYING,
+    GAMEOVER
+}
+var gameState: GameState = GameState.MENU;
+
+
+/****************************************************************************** Main */ 
 
 function main() {
     canvas = <any>document.getElementById("glCanvas");
@@ -46,26 +54,43 @@ function resize() {
     gl.viewport(0, 0, canvas.width, canvas.height);
 }
 
+function gameOver() {
+    gameState = GameState.GAMEOVER;
+    document.getElementById("gameover").classList.remove("hidden");
+}
 
+
+/****************************************************************************** Render Loop */ 
 let oldTimeMS = 0;
 let absoluteTime = 0;
 let time = 0;
-
 
 function renderLoop(timeMS : number) {  
     const deltaTime = (timeMS - oldTimeMS) / 1000;
     oldTimeMS = timeMS;
     absoluteTime += deltaTime;
-    if (started) time += deltaTime;
+    if (gameState == GameState.PLAYING) time += deltaTime;
     
     gl.clearColor(104.0/255.0, 182.0/255.0, 220.0/255.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.viewport(0, 0, canvas.width, canvas.height);
     
-    render((started)? time : 0.0);
-    if (started) update(deltaTime);
+    render((gameState == GameState.PLAYING)? time : 0.0);
+    if (gameState == GameState.PLAYING) update(deltaTime);
 
     requestAnimationFrame(renderLoop)
+}
+
+
+/******************************************************************************  Start */ 
+function start() {   
+    glInit();
+
+    defaultShader = new ShaderProgram(gl, tileVertexCode, tileFragmentCode);
+    cursorShader = new ShaderProgram(gl, cursorVertexCode, cursorFragmentCode);
+    introCloudShader = new ShaderProgram(gl, introCloudVertexCode, introCloudFragmentCode);
+
+    var main_texture : Texture = new Texture(gl, main_texture_path);
 }
 
 function glInit() {   
@@ -110,20 +135,20 @@ function glInit() {
     gl.enableVertexAttribArray(0);
 }
 
-function start() {   
-    glInit();
-
-    defaultShader = new ShaderProgram(gl, tileVertexCode, tileFragmentCode);
-    cursorShader = new ShaderProgram(gl, cursorVertexCode, cursorFragmentCode);
-    introCloudShader = new ShaderProgram(gl, introCloudVertexCode, introCloudFragmentCode);
-
-    var main_texture : Texture = new Texture(gl, main_texture_path);
-}
-
+/******************************************************************************  Update */ 
 
 function update(deltaTime : number) {
+    if (game.map.lives < livesCount) {
+        var livesDom = document.getElementById("lives");
+        livesCount -= 1;
+        livesDom.removeChild(livesDom.children[livesCount]);
+
+        if (livesCount <= 0) { gameOver(); }
+    }
     game.update(deltaTime);
 }
+
+/******************************************************************************  Render */ 
 
 const s : number = 0.2;
 function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
@@ -192,16 +217,35 @@ function render(time : number) {
     }
 }
 
+
+/******************************************************************************  EVENTS */ 
+
 window.onresize = resize;
 window.onload = main;
 
-if (true) {
+if (false) {
     document.getElementById("main_menu").classList.add("hidden");
-    started = true;
+    gameState = GameState.PLAYING;
 }
-else {
-    document.getElementById("start_button").addEventListener("click", () => {
-        document.getElementById("main_menu").classList.add("hidden");
-        started = true;
-    });
-}
+
+document.getElementById("start_button").addEventListener("click", () => {
+    document.getElementById("main_menu").classList.add("hidden");
+    document.getElementById("lives").classList.remove("hidden");
+    gameState = GameState.PLAYING;
+});
+
+document.getElementById("restart_button").addEventListener("click", () => {
+    document.getElementById("gameover").classList.add("hidden");
+    document.getElementById("lives").classList.remove("hidden");
+
+    game = new Game(gameWidth, gameHeight, null, null);
+    time = 0;
+
+    livesCount = 3;
+    for (let i=0; i<livesCount; i++) {
+        var node = document.createElement("div");
+        node.classList.add('live');
+        document.getElementById("lives").appendChild(node);
+    }
+    gameState = GameState.PLAYING;
+});

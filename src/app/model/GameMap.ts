@@ -8,6 +8,7 @@ export class GameMap {
     height: number;
     start_road: HexPos;
     end_road: HexPos;
+    lives: number = 3;
 
     constructor(width: number, height: number, ground: Tile[][], start_road: HexPos, end_road: HexPos){
         this.width = width;
@@ -65,7 +66,7 @@ export class GameMap {
 
     set_tile(place: HexPos, tile: Tile){
         if (this.ground[place.x][place.y].type == TextureType.Farm)
-            console.log("Leven verloren");
+            this.lives -= 1;
 
         this.ground[place.x][place.y] = tile;
     }
@@ -87,10 +88,6 @@ export class GameMap {
             }
         }
         return best;
-    }
-
-    place_mountain(pos: HexPos) {
-        this.ground[pos.x][pos.y] = new tiles.Mountain();
     }
 
     view(){

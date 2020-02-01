@@ -13,6 +13,10 @@ html, body {
   background-color: white;
 }
 
+html * {
+  transition: visibility 0s ease-in-out 0.7s, opacity 0.7s ease-in-out;
+}
+
 #container {
   height: 100%;
   position: relative;
@@ -36,8 +40,7 @@ html, body {
 }
 
 .hidden {
-  transition: visibility 0s linear 0.7s, opacity 0.7s ease-in-out;
-  opacity: 0;
+  visibility: hidden;
 }
 
 .main_title {
@@ -99,7 +102,49 @@ html, body {
 
 
 #lives {
+  transition: opacity 2.0s ease-in-out;
+  transition-delay: 1s;
   position: absolute;
   top: 10px;
   left: 10px;
+}
+
+.live {
+  display: inline-block;
+  background-image: url("../images/Grain.png"); 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain; 
+  width: 100px;
+  height: 100px;
+}
+
+
+
+
+#gameover {
+  position: absolute;
+  min-height: 100%;
+  min-width: 100%;
+  margin: 0;
+  padding: 0;
+  color:black;
+}
+
+#restart_button {
+  text-align: center;
+  background-color: white;
+  color: black;
+  width: 35vh;
+  margin: auto;
+  margin-top: 4vh;
+  border-radius: 1vh;
+  font-size: 6vh;
+  box-shadow: 0vh 1vh 1vh;
+  cursor: pointer;
+  font-family: Lobster;
+}
+
+#restart_button:hover {
+  box-shadow: 0vh 0.5vh 1vh;
 }
