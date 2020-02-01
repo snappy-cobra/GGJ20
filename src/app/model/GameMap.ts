@@ -13,15 +13,51 @@ export class GameMap {
         for (let x=0; x<width; ++x){
             this.ground[x] = [];
             for (let y=0; y<height; ++y){
-                let content = tiles.Grass();
+                let content = new tiles.Grass();
                 if (Math.random() < 0.1){
-                    content = tiles.Mountain();
+                    content = new tiles.Mountain();
                 } else if (Math.random() < 0.1){
-                    content = tiles.Forest();
+                    content = new tiles.Forest();
                 }
                 this.ground[x][y] = content;
             }
         }
+        this.ground[0][0] = new tiles.StreetHead(new HexPos(width - 1, height - 1));
+    }
+    
+    update(){
+        let updated: boolean[][] = [];
+        for (let x=0; x<this.width; ++x){
+            updated[x] = [];
+            for (let y=0; y<this.height; ++y){
+                updated[x][y] = false;
+            }
+        }
+        for (let pos of this.valid_positions()){
+            if (updated[pos.x][pos.y]){
+                continue;
+            }
+            updated[pos.x][pos.y] = true;
+            let tile = this.get_tile(pos);
+            if (tile instanceof tiles.StreetHead){
+                this.ground[pos.x][pos.y] = new tiles.Street();
+                let next = this.next_tile(pos, tile.target);
+                if (next != null){
+                    this.ground[next.x][next.y] = tile;
+                    updated[next.x][next.y] = true;
+                }
+            }
+        }
+    }
+    
+    valid_positions(){
+        let positions: HexPos[] = [];
+        for (let x=0; x<this.width; ++x){
+            for (let y=0; y<this.height; ++y){
+                positions.push(new HexPos(x, y));
+            }
+        }
+        return positions;
     }
 
     get_tile(place: HexPos){
@@ -29,6 +65,9 @@ export class GameMap {
     }
 
     next_tile(place: HexPos, target: HexPos){
+        if (place.equals(target)){
+            return null;
+        }
         let neighbours = place.get_neighbours();
         let best = null, best_score = 0;
         for (let neighbour of neighbours){
@@ -44,7 +83,7 @@ export class GameMap {
     }
 
     place_mountain(pos: HexPos) {
-        this.ground[pos.x][pos.y] = tiles.Mountain();
+        this.ground[pos.x][pos.y] = new tiles.Mountain();
     }
 
     view(){

@@ -12,7 +12,7 @@ import tileFragmentCode from './shaders/tile.frag'
 import cursorVertexCode from './shaders/cursor.vert'
 import corsorFragmentCode from './shaders/cursor.frag'
 import main_texture_path from '../images/texture.png'
-import { TileType, Tile } from './model/Tile';
+import {Tile} from './model/Tile';
 
 let defaultShader : ShaderProgram;
 let cursorShader : ShaderProgram;

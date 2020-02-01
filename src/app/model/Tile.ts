@@ -1,3 +1,6 @@
+
+import {HexPos} from "./HexPos";
+
 export enum TextureType {
     Mountain = 0,
     Grass = 1,
@@ -30,14 +33,53 @@ export class Tile {
         else if (typ == TextureType.Forest)    {this.animStrength[0] = 0;  this.animStrength[1] = 1; }
         else if (typ == TextureType.Farm)      {this.animStrength[0] = 1;  this.animStrength[1] = 1; }
         else                                   {this.animStrength[0] = Math.random();  this.animStrength[1] =  Math.random(); }
-        Object.freeze(this);
+//         Object.freeze(this);
+    }
+}
+
+class Street extends Tile {
+    constructor(){
+        super("street", 0, TextureType.Street);
+    }
+}
+
+class Mountain extends Tile {
+    constructor(){
+        super("mountain", 0, TextureType.Mountain);
+    }
+}
+
+class Forest extends Tile {
+    constructor(){
+        super("forest", 0.5, TextureType.Forest);
+    }
+}
+
+class Grass extends Tile {
+    constructor(){
+        super("grass", 1, TextureType.Grass);
+    }
+}
+
+class Farm extends Tile {
+    constructor(){
+        super("farm", 1, TextureType.Farm);
+    }
+}
+
+class StreetHead extends Tile {
+    target: HexPos;
+    constructor(target: HexPos){
+        super("street", 0, TextureType.Farm);
+        this.target = target;
     }
 }
 
 export var tiles = {
-    Street: ()=> new Tile("street", 0, TextureType.Street),
-    Grass: ()=> new Tile("grass", 1, TextureType.Grass),
-    Mountain: ()=> new Tile("mountain", 0, TextureType.Mountain),
-    Forest: ()=> new Tile("forest", 0.5, TextureType.Forest),
-    Farm: ()=> new Tile("farm", 1, TextureType.Farm)
+    Street,
+    Grass,
+    Mountain,
+    Forest,
+    Farm,
+    StreetHead,
 }
