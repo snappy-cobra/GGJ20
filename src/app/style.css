@@ -21,8 +21,8 @@ html, body {
   min-width: 100%;
   margin: 0;
   padding: 0;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
+  background-color: rgba(250, 250, 250, 0.8);
+  color: black;
 }
 
 .hidden {
@@ -49,9 +49,21 @@ html, body {
   text-align: center;
   background-color: white;
   color: black;
-  width: 15vw;
+  width: 25vh;
   margin: auto;
   margin-top: 4vh;
   border-radius: 1vh;
   font-size: 6vh;
+}
+
+#snappy-logo {
+  position: absolute;
+  background-image: url("../images/Logo_text.svg"); 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain; 
+  height: 10vh;
+  width: 35vh;
+  bottom: 5vh;
+  right: 0;
 }
