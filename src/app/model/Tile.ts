@@ -58,12 +58,7 @@ class Mountain extends Tile { constructor(){ super("mountain", 0, TextureType.Mo
 class Forest extends Tile   { constructor(){ super("forest", 0.5, TextureType.Forest); }}
 class Grass extends Tile    { constructor(){ super("grass", 1, TextureType.Grass); }}
 class Farm extends Tile     { constructor(){ super("farm", 1, TextureType.Farm); }}
-
-class Ocean extends Tile {
-    constructor(){
-        super("ocean", 0, TextureType.Water);
-    }
-}
+class Ocean extends Tile { constructor(){ super("ocean", 0, TextureType.Water); }}
 
 class StreetHead extends Tile {
     target: HexPos;
