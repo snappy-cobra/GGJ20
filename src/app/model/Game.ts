@@ -14,8 +14,8 @@ export class Game {
         this.street = new Street(street_start || new HexPos(0, 0), street_target || new HexPos(width - 1, height - 1));
     }
 
-    update() {
-        this.street.grow(this.map);
+    update(deltaTime : number) {
+        this.street.grow(this.map, deltaTime);
     }
     
     view() {

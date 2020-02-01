@@ -1,10 +1,6 @@
 import {HexPos} from "./HexPos";
 import {Tile} from "./Tile"
-import {TileType, DrawTile} from "./drawtile"
-
-var Grass = new Tile("grass", 1, new DrawTile(TileType.Grass));
-var Forest = new Tile("forest", 0.5, new DrawTile(TileType.Forest));
-var Mountain = new Tile("mountain", 0, new DrawTile(TileType.Mountain));
+import {TileType} from "./Tile"
 
 export class GameMap {
     ground: Tile[][];
@@ -18,11 +14,11 @@ export class GameMap {
         for (let x=0; x<width; ++x){
             this.ground[x] = [];
             for (let y=0; y<height; ++y){
-                let content = Grass;
+                let content = Tile.create(TileType.Grass);
                 if (Math.random() < 0.1){
-                    content = Mountain;
+                    content = Tile.create(TileType.Mountain);
                 } else if (Math.random() < 0.1){
-                    content = Forest;
+                    content = Tile.create(TileType.Forest);
                 }
                 this.ground[x][y] = content;
             }
@@ -49,10 +45,10 @@ export class GameMap {
     }
 
     place_mountain(pos: HexPos) {
-        this.ground[pos.x][pos.y] = Mountain
+        this.ground[pos.x][pos.y] = Tile.create(TileType.Mountain)
     }
 
     view(){
-        return this.ground.map(l => l.map( tile => tile.draw));
+        return this.ground.map(l => l.map( tile => tile.type));
     }
 }

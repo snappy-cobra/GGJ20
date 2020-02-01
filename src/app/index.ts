@@ -1,5 +1,4 @@
 import './style.css';
-import {DrawTile} from './model/drawtile';
 import {Game} from './model/Game';
 import {ShaderProgram} from './util/shaderprogram';
 import {Texture} from './util/texture';
@@ -13,6 +12,7 @@ import tileFragmentCode from './shaders/tile.frag'
 import cursorVertexCode from './shaders/cursor.vert'
 import corsorFragmentCode from './shaders/cursor.frag'
 import main_texture_path from '../images/texture.png'
+import { TileType } from './model/Tile';
 
 let defaultShader : ShaderProgram;
 let cursorShader : ShaderProgram;
@@ -45,8 +45,6 @@ let oldTimeMS = 0;
 let time = 0;
 
 function renderLoop(timeMS : number) {  
-    update();
-
     const deltaTime = (timeMS - oldTimeMS) / 1000;
     oldTimeMS = timeMS;
     time += deltaTime;
@@ -55,7 +53,8 @@ function renderLoop(timeMS : number) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.viewport(0, 0, canvas.width, canvas.height);
     
-    render(deltaTime);
+    update(deltaTime);
+    render(time);
     
 
     requestAnimationFrame(renderLoop)
@@ -112,8 +111,8 @@ function start() {
 }
 
 
-function update() {
-    game.update();
+function update(deltaTime : number) {
+    game.update(deltaTime);
 }
 
 const s : number = 0.1;
@@ -131,14 +130,14 @@ function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
     gl.uniformMatrix4fv(shader.unformLocation(gl, "MVP"), false, MVP); 
 }
 
-function drawHex(x : number, y : number, type : DrawTile) {
+function drawHex(x : number, y : number, type : TileType) {
     setMVP(defaultShader, x, y);
-    gl.uniform1f(defaultShader.unformLocation(gl, "u_tile"), type.type);
+    gl.uniform1f(defaultShader.unformLocation(gl, "u_tile"), type);
     gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
 }
 
 
-function render(deltaTime : number) {
+function render(time : number) {
     
     defaultShader.use(gl);
     let view = game.view();

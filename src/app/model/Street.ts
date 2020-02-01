@@ -1,11 +1,14 @@
 import {HexPos} from "./HexPos";
 import {vector2d_from_hex} from './Vector2d'
 import {GameMap} from "./GameMap";
+import { TileType } from "./Tile";
 
 export class Street {
     head: HexPos;
     tail: HexPos[];
     target: HexPos;
+    nextGrowTime: number = 0;
+    time: number = 0;
 
     constructor(begin: HexPos, end: HexPos){
         this.head = begin;
@@ -13,10 +16,16 @@ export class Street {
         this.target = end;
     }
 
-    grow(map: GameMap){
-        let next = map.next_tile(this.head, this.target);
-        this.tail.push(this.head);
-        this.head = next;
+    grow(map: GameMap, deltaTime : number){
+        this.time += deltaTime;
+        if (this.nextGrowTime < this.time) {   
+            this.nextGrowTime = this.time + 0.1;
+
+            let next = map.next_tile(this.head, this.target);
+            map.ground[next.x][next.y].type = TileType.Street
+            this.tail.push(this.head);
+            this.head = next;
+        }
     }
 
     next_tile_thijs(goal: HexPos) {
