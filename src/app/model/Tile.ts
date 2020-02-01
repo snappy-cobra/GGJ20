@@ -78,7 +78,13 @@ class StreetHead extends Tile {
     target: HexPos;
     prev: Direction
     constructor(target: HexPos, prev: Direction = null){
-        super("street", 0, TextureType.Street);
+        let tex: TextureType;
+        if (prev){
+            tex = TextureType["Street_"+(<string>prev)+(<string>prev)];
+        } else {
+            tex = TextureType.Street;
+        }
+        super("street", 0, tex);
         this.target = target;
         this.prev = prev;
     }
