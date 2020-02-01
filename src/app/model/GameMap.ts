@@ -1,4 +1,4 @@
-import {HexPos} from "./HexPos";
+import {HexPos, directions, invert} from "./HexPos";
 import {tiles, Tile} from "./Tile";
 
 
@@ -29,11 +29,13 @@ export class GameMap {
             updated[pos.x][pos.y] = true;
             let tile = this.get_tile(pos);
             if (tile instanceof tiles.StreetHead){
-                this.ground[pos.x][pos.y] = new tiles.Street();
-                let next = this.next_tile(pos, tile.target);
-                if (next != null){
-                    this.ground[next.x][next.y] = tile;
-                    updated[next.x][next.y] = true;
+                this.ground[pos.x][pos.y] = new tiles.Street(tile.prev);
+                let next = this.next_dir(pos, tile.target);
+                if (next){
+                    let nextpos = pos.move(next);
+                    this.set_tile(nextpos, new tiles.StreetHead(tile.target, invert(next)));
+                    updated[nextpos.x][nextpos.y] = true;
+                    this.set_tile(pos, new tiles.Street(tile.prev, next));
                 }
             }
         }
@@ -57,19 +59,20 @@ export class GameMap {
         this.ground[place.x][place.y] = tile;
     }
 
-    next_tile(place: HexPos, target: HexPos){
+    next_dir(place: HexPos, target: HexPos){
         if (place.equals(target)){
             return null;
         }
         let neighbours = place.get_neighbours();
         let best = null, best_score = 0;
-        for (let neighbour of neighbours){
+        for (let dir of directions){
+            let neighbour = place.move(dir);
             let neighbour_tile = this.get_tile(neighbour);
             if (!neighbour_tile) continue;
             let score = place.direction_score(neighbour, target) * neighbour_tile.accessibility;
             if (score > best_score) {
                 best_score = score;
-                best = neighbour;
+                best = dir;
             }
         }
         return best;
@@ -86,6 +89,6 @@ export class GameMap {
     random_hexPos() {
         let x = Math.floor(Math.random() * this.width);
         let y = Math.floor(Math.random() * this.height);
-        return new HexPos(x, y)
+        return new HexPos(x, y);
     }
 }
