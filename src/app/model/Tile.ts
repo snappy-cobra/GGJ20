@@ -37,7 +37,7 @@ export class Tile {
 export var tiles = {
     Street: ()=> new Tile("street", 0, TextureType.Street),
     Grass: ()=> new Tile("grass", 1, TextureType.Grass),
-    Mountain: ()=> new Tile("mountain", 0.01, TextureType.Mountain),
+    Mountain: ()=> new Tile("mountain", 0, TextureType.Mountain),
     Forest: ()=> new Tile("forest", 0.5, TextureType.Forest),
     Farm: ()=> new Tile("farm", 1, TextureType.Farm)
 }

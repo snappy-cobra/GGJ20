@@ -1,12 +1,69 @@
-html {
+html, body {
   overflow: hidden;
-}
-
-body {
+  height: 100%;
   margin: 0;
 }
 
-canvas {
+#container {
+  height: 100%;
+  position: relative;
+}
+
+#glCanvas {
+  position: absolute;
   border: 1px solid black;
   background-color: black;
+}
+
+#main_menu {
+  position: absolute;
+  min-height: 100%;
+  min-width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: rgba(250, 250, 250, 0.8);
+  color: black;
+}
+
+.hidden {
+  display: none;
+}
+
+.main_title {
+  text-align: center;
+  font-size: 10em;
+}
+
+.main_title {
+  text-align: center;
+  font-size: 10vh;
+  padding-top: 4vh;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 4em;
+}
+
+#start_button {
+  text-align: center;
+  background-color: white;
+  color: black;
+  width: 25vh;
+  margin: auto;
+  margin-top: 4vh;
+  border-radius: 1vh;
+  font-size: 6vh;
+}
+
+#snappy-logo {
+  position: absolute;
+  background-image: url("../images/Logo_text.svg"); 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain; 
+  height: 10vh;
+  width: 35vh;
+  bottom: 5vh;
+  right: 0;
 }

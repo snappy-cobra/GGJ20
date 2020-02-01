@@ -5,7 +5,7 @@ import { tiles} from "./Tile";
 
 
 
-const DELAY = 2;
+const DELAY = 0.1;
 
 export class Street {
     head: HexPos;
@@ -22,7 +22,7 @@ export class Street {
 
     grow(map: GameMap, deltaTime : number){
         this.time += deltaTime;
-        if (this.nextGrowTime < this.time) {   
+        if (this.nextGrowTime < this.time && !this.head.equals(this.target)) {   
             this.nextGrowTime = this.time + DELAY;
 
             let next = map.next_tile(this.head, this.target);
