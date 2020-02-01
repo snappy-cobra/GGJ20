@@ -1,19 +1,30 @@
 import {HexPos} from "./HexPos";
 import {Tile} from "./Tile"
+import {TileType, DrawTile} from "./drawtile"
 
-var Grass = new Tile("grass", 1);
-var Forest = new Tile("forest", 0.5);
-var Mountain = new Tile("mountain", 0);
+var Grass = new Tile("grass", 1, new DrawTile(TileType.Grass));
+var Forest = new Tile("forest", 0.5, new DrawTile(TileType.Forest));
+var Mountain = new Tile("mountain", 0, new DrawTile(TileType.Mountain));
 
 export class GameMap {
     ground: Tile[][];
+    width: number;
+    height: number;
 
-    constructor(width: Number, height: Number){
+    constructor(width: number, height: number){
+        this.width = width;
+        this.height = height;
         this.ground = [];
         for (let x=0; x<width; ++x){
             this.ground[x] = [];
             for (let y=0; y<height; ++y){
-                this.ground[x][y] = Grass;
+                let content = Grass;
+                if (Math.random() < 0.1){
+                    content = Mountain;
+                } else if (Math.random() < 0.1){
+                    content = Forest;
+                }
+                this.ground[x][y] = content;
             }
         }
     }
@@ -42,6 +53,6 @@ export class GameMap {
     }
 
     view(){
-        return this.ground.map(l => l.map( tile => tile.name));
+        return this.ground.map(l => l.map( tile => tile.draw));
     }
 }
