@@ -1,7 +1,6 @@
 import {HexPos} from "./HexPos";
-import {Tile} from "./Tile"
-import {TileType} from "./Tile"
-import {MapMaker} from "./MapMaker";
+import {tiles, Tile} from "./Tile";
+
 
 export class GameMap {
     ground: Tile[][];
@@ -12,6 +11,42 @@ export class GameMap {
         this.width = width;
         this.height = height;
         this.ground = ground;
+        this.ground[0][0] = new tiles.StreetHead(new HexPos(width - 1, height - 1));
+    }
+    
+    update(){
+        let updated: boolean[][] = [];
+        for (let x=0; x<this.width; ++x){
+            updated[x] = [];
+            for (let y=0; y<this.height; ++y){
+                updated[x][y] = false;
+            }
+        }
+        for (let pos of this.valid_positions()){
+            if (updated[pos.x][pos.y]){
+                continue;
+            }
+            updated[pos.x][pos.y] = true;
+            let tile = this.get_tile(pos);
+            if (tile instanceof tiles.StreetHead){
+                this.ground[pos.x][pos.y] = new tiles.Street();
+                let next = this.next_tile(pos, tile.target);
+                if (next != null){
+                    this.ground[next.x][next.y] = tile;
+                    updated[next.x][next.y] = true;
+                }
+            }
+        }
+    }
+    
+    valid_positions(){
+        let positions: HexPos[] = [];
+        for (let x=0; x<this.width; ++x){
+            for (let y=0; y<this.height; ++y){
+                positions.push(new HexPos(x, y));
+            }
+        }
+        return positions;
     }
 
     get_tile(place: HexPos){
@@ -20,11 +55,12 @@ export class GameMap {
 
     set_tile(place: HexPos, tile: Tile){
         this.ground[place.x][place.y] = tile;
-        console.log("TESSTTT");
-        console.log(tile);
     }
 
     next_tile(place: HexPos, target: HexPos){
+        if (place.equals(target)){
+            return null;
+        }
         let neighbours = place.get_neighbours();
         let best = null, best_score = 0;
         for (let neighbour of neighbours){
@@ -40,11 +76,11 @@ export class GameMap {
     }
 
     place_mountain(pos: HexPos) {
-        this.ground[pos.x][pos.y] = Tile.create(TileType.Mountain)
+        this.ground[pos.x][pos.y] = new tiles.Mountain();
     }
 
     view(){
-        return this.ground.map(l => l.map( tile => tile.type));
+        return this.ground.map(l => l.map( tile => tile));
     }
 
     random_hexPos() {

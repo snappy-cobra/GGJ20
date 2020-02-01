@@ -14,6 +14,7 @@ export class RealPos {
         this.y = hexPos.y * Math.sqrt(3/4)
         //this.x + this.y * 0.5,
         //this.y * Math.sqrt(3/4)
+        Object.freeze(this);
     }
 
     direction_to(other: RealPos){

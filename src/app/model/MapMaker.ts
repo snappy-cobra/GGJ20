@@ -1,7 +1,6 @@
 import {GameMap} from "./GameMap";
-import {Tile, TileType} from "./Tile";
-import {directions, HexPos} from "./HexPos";
 import {MountainRange} from "./MapMaker/MountainRange";
+import {Tile, tiles} from "./Tile";
 
 enum Fase {
     mountain,
@@ -17,7 +16,7 @@ export class MapMaker extends GameMap{
         for (let x=0; x<width; ++x){
             ground[x] = [];
             for (let y=0; y<height; ++y){
-                ground[x][y] = Tile.create(TileType.Grass);
+                ground[x][y] = new tiles.Grass();
             }
         }
         super(width, height, ground);

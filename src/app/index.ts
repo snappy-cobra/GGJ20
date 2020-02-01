@@ -12,7 +12,7 @@ import tileFragmentCode from './shaders/tile.frag'
 import cursorVertexCode from './shaders/cursor.vert'
 import corsorFragmentCode from './shaders/cursor.frag'
 import main_texture_path from '../images/texture.png'
-import { TileType } from './model/Tile';
+import {Tile} from './model/Tile';
 
 let defaultShader : ShaderProgram;
 let cursorShader : ShaderProgram;
@@ -124,15 +124,21 @@ function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
     y *= Math.sqrt(3/4);
 
     var MVP: mat4 = mat4.create();
+    var width = canvas.width;
+    var height = canvas.height;
+    var ratio = width/height;
+    mat4.ortho(MVP, -1*ratio, 1*ratio, -1, 1, -1, 1000);
     mat4.translate(MVP, MVP, [x*s,y*s,z]);
     mat4.scale(MVP, MVP, [s,s,s]);
 
     gl.uniformMatrix4fv(shader.unformLocation(gl, "MVP"), false, MVP); 
 }
 
-function drawHex(x : number, y : number, type : TileType) {
+function drawHex(x : number, y : number, tile : Tile) {
     setMVP(defaultShader, x, y);
-    gl.uniform1f(defaultShader.unformLocation(gl, "u_tile"), type);
+    gl.uniform1f(defaultShader.unformLocation(gl, "u_tile"), tile.type);
+    gl.uniform2f(defaultShader.unformLocation(gl, "u_animation"), tile.animStrength[0], tile.animStrength[1]);
+
     gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
 }
 

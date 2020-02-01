@@ -26,6 +26,7 @@ export class HexPos {
     constructor(x: number, y: number) {
         this.x = x;
         this.y = y;
+        Object.freeze(this);
     }
 
     real_position() {
@@ -78,5 +79,9 @@ export class HexPos {
             dist = 1 - dist;
         }
         return 1 - dist * 2;
+    }
+    
+    equals(other: HexPos){
+        return this.x == other.x && this.y == other.y;
     }
 }

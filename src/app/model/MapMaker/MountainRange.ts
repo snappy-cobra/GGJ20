@@ -1,6 +1,6 @@
 import {directions, HexPos} from "../HexPos";
-import {Tile, TileType} from "../Tile";
 import {MapMaker} from "../MapMaker";
+import {tiles} from "../Tile";
 
 export class MountainRange {
     mountain_number: number;
@@ -21,13 +21,13 @@ export class MountainRange {
         let hexPos;
         do {
             hexPos = this.mapMaker.random_hexPos();
-        } while (this.mapMaker.get_tile(hexPos).type == TileType.Mountain);
+        } while (this.mapMaker.get_tile(hexPos) instanceof tiles.Mountain);
         return hexPos
     }
 
     mountain_init(start_amount: number) {
         for (let i=0; i<start_amount; i++) {
-            this.mapMaker.set_tile(this.random_mountainless_tile(), new Tile(1, TileType.Mountain));
+            this.mapMaker.set_tile(this.random_mountainless_tile(), new tiles.Mountain());
             this.mountain_number += 1;
         }
     }
@@ -38,7 +38,12 @@ export class MountainRange {
 
     found_location(hexPos: HexPos) {
         //TODO: CHECK BIJ MERGE
-        this.mapMaker.set_tile(hexPos, new Tile(0, TileType.Mountain));
+        if ((hexPos.x < 0 || hexPos.x > this.mapMaker.width) || (hexPos.y < 0 || hexPos.y > this.mapMaker.height)) {
+            this.new_walking_tile();
+            return
+        }
+
+        this.mapMaker.set_tile(hexPos, new tiles.Mountain());
         this.mountain_number += 1;
         this.new_walking_tile()
     }
@@ -46,7 +51,9 @@ export class MountainRange {
     random_step() {
         let dir = directions[Math.floor(Math.random() * 6)];
         let resulting_pos = this.walking_tile.move(dir);
-        if ((resulting_pos.x < 0 || resulting_pos.x > this.mapMaker.width) || (resulting_pos.y < 0 || resulting_pos.y > this.mapMaker.height)) {
+        let outside_allowed = 2;
+        if ((resulting_pos.x < -outside_allowed || resulting_pos.x > this.mapMaker.width+outside_allowed)
+            || (resulting_pos.y < -outside_allowed || resulting_pos.y > this.mapMaker.height+outside_allowed)) {
             this.new_walking_tile();
             return
         }
@@ -57,7 +64,7 @@ export class MountainRange {
         for (let n of this.walking_tile.get_neighbours()) {
             //TODO for merge checken of dit nog werkt
             let t = this.mapMaker.get_tile(n);
-            if (t != undefined && t.type == TileType.Mountain) {
+            if (t != undefined && t instanceof tiles.Mountain) {
                 this.found_location(this.walking_tile);
                 return;
             }
