@@ -49,6 +49,10 @@ export class GameMap {
         return positions;
     }
 
+    on_map(pos: HexPos) {
+        return (pos.x >= 0 && pos.x < this.width) && (pos.y >= 0 && pos.y < this.height)
+    }
+
     get_tile(place: HexPos){
         return (this.ground[place.x] || [])[place.y] // Yes, I know...
     }
@@ -56,6 +60,7 @@ export class GameMap {
     set_tile(place: HexPos, tile: Tile){
         this.ground[place.x][place.y] = tile;
     }
+
 
     next_tile(place: HexPos, target: HexPos){
         if (place.equals(target)){
@@ -86,6 +91,12 @@ export class GameMap {
     random_hexPos() {
         let x = Math.floor(Math.random() * this.width);
         let y = Math.floor(Math.random() * this.height);
+        return new HexPos(x, y)
+    }
+
+    somewhere_center_pos() {
+        let x = Math.floor(this.width/4)+Math.floor(Math.random() * this.width/2);
+        let y = Math.floor(this.height/4)+Math.floor(Math.random() * this.height/2);
         return new HexPos(x, y)
     }
 }

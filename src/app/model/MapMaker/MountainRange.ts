@@ -27,7 +27,6 @@ export class MountainRange {
 
     mountain_init(start_amount: number) {
         for (let i=0; i<start_amount; i++) {
-            console.log("start");
             this.set_mountain(this.random_mountainless_tile());
         }
     }
@@ -37,8 +36,7 @@ export class MountainRange {
     }
 
     found_location(hexPos: HexPos) {
-        if ((hexPos.x < 0 || hexPos.x >= this.mapMaker.width) || (hexPos.y < 0 || hexPos.y >= this.mapMaker.height)) {
-            console.log("NOPEEE");
+        if (!this.mapMaker.on_map(hexPos)) {
             this.new_walking_tile();
             return
         }
@@ -71,7 +69,6 @@ export class MountainRange {
     }
 
     set_mountain(pos: HexPos) {
-        console.log("HIEIEEER", pos);
         this.mapMaker.set_tile(pos, new tiles.Mountain());
         this.mountain_number += 1;
     }
