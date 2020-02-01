@@ -27,11 +27,15 @@ export class Farm {
         this.cur_farm_number += 1;
     }
 
+    placable(pos: HexPos) {
+        return this.mapMaker.get_tile(pos) instanceof tiles.Grass
+    }
+
     random_farm_tile() {
         let hexPos;
         do {
             hexPos = this.mapMaker.somewhere_center_pos();
-        } while (this.mapMaker.get_tile(hexPos) instanceof tiles.Grass);
+        } while (!this.placable(hexPos));
         return hexPos
     }
 
@@ -50,7 +54,7 @@ export class Farm {
         if (!this.mapMaker.on_map(pos)) {
             return
         }
-        if (this.mapMaker.get_tile(pos) instanceof tiles.Grass){
+        if (this.placable(pos)){
             this.set_farm(pos);
         }
     }

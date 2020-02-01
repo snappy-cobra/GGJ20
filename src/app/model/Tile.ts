@@ -7,6 +7,7 @@ export enum TextureType {
     Forest = 3,
     Street = 4,
     Farm = 5,
+    Water = 1,
 
 
     Street_AA = 4, Street_AB = 4, Street_AC = 4, Street_AD = 4, Street_AE = 4, Street_AF = 4,
@@ -74,6 +75,12 @@ class Farm extends Tile {
     }
 }
 
+class Ocean extends Tile {
+    constructor(){
+        super("ocean", 0, TextureType.Water);
+    }
+}
+
 class StreetHead extends Tile {
     target: HexPos;
     prev: Direction
@@ -97,4 +104,5 @@ export var tiles = {
     Forest,
     Farm,
     StreetHead,
+    Ocean
 };

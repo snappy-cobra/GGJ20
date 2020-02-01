@@ -26,11 +26,15 @@ export class Forest {
         this.cur_forest_number += 1;
     }
 
+    placable(pos: HexPos) {
+        return this.mapMaker.get_tile(pos) instanceof tiles.Grass
+    }
+
     random_forestless_tile() {
         let hexPos;
         do {
             hexPos = this.mapMaker.random_hexPos();
-        } while (this.mapMaker.get_tile(hexPos) instanceof tiles.Mountain || this.mapMaker.get_tile(hexPos) instanceof tiles.Forest);
+        } while (!this.placable(hexPos));
         return hexPos
     }
 
@@ -41,14 +45,16 @@ export class Forest {
             if (tile == undefined) {
                 continue;
             }
-            if (tile instanceof tiles.Mountain || tile instanceof tiles.Forest) {
+            if (!this.placable(n)) {
                 continue;
             }
             suitable_neighbours.push(n);
+            console.log("nu nog hier")
         }
         if (suitable_neighbours.length < 1) {
             return
         }
+        console.log(suitable_neighbours.length);
         let winner = suitable_neighbours[Math.floor(Math.random() * suitable_neighbours.length)];
         this.set_forest(winner);
     }
@@ -58,12 +64,15 @@ export class Forest {
         do {
             hexPos = this.mapMaker.random_hexPos();
         } while (!(this.mapMaker.get_tile(hexPos) instanceof tiles.Forest));
+        console.log("hoi:0")
         this.grow_forest_neighbour(hexPos)
     }
 
     generate_forest() {
+        console.log("ja")
         while (this.cur_forest_number < this.max_forest_number) {
             this.forest_update()
+            console.log("NEXXXT")
         }
     }
 }

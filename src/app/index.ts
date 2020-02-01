@@ -20,7 +20,7 @@ import { TextureType, Tile } from './model/Tile';
 let defaultShader : ShaderProgram;
 let cursorShader : ShaderProgram;
 let introCloudShader : ShaderProgram;
-var game : Game = new Game(20, 20, null, null);
+var game : Game = new Game(30, 20, null, null);
 
 
 function main() {

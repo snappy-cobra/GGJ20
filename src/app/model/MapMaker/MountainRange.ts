@@ -17,11 +17,15 @@ export class MountainRange {
         this.generate_mountain_range();
     }
 
+    placable(pos: HexPos) {
+        return this.mapMaker.get_tile(pos) instanceof tiles.Grass
+    }
+
     random_mountainless_tile() {
         let hexPos;
         do {
             hexPos = this.mapMaker.random_hexPos();
-        } while (this.mapMaker.get_tile(hexPos) instanceof tiles.Mountain);
+        } while (!this.placable(hexPos));
         return hexPos
     }
 
