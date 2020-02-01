@@ -3,6 +3,7 @@ import {DrawTile} from './model/drawtile';
 import {Game} from './model/Game';
 import {ShaderProgram} from './util/shaderprogram';
 import {Texture} from './util/texture';
+import {mat4, vec3} from 'gl-matrix';
 
 var gl : WebGL2RenderingContext;
 var canvas : any;
@@ -123,12 +124,9 @@ function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
         x += 0.5
     y *= Math.sqrt(3/4);
 
-    let MVP = new Float32Array([
-          s,   0, 0, 0,
-          0,   s, 0, 0,
-          0,   0, s, 0,
-        x*s, y*s, z, 1,
-    ]);
+    var MVP: mat4 = mat4.create();
+    mat4.translate(MVP, MVP, [x*s,y*s,z]);
+    mat4.scale(MVP, MVP, [s,s,s]);
 
     gl.uniformMatrix4fv(shader.unformLocation(gl, "MVP"), false, MVP); 
 }
