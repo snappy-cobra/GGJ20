@@ -1,11 +1,19 @@
+import {HexPos} from "./HexPos";
+
 export class RealPos {
     x: number;
     y: number;
 
 
-    constructor(x: number, y: number) {
+    constructor(hexPos: HexPos) {
+        let x = hexPos.x;
+        if ((hexPos.y % 2) == 1) {
+            x += 0.5
+        }
         this.x = x;
-        this.y = y;
+        this.y = hexPos.y * Math.sqrt(3/4)
+        //this.x + this.y * 0.5,
+        //this.y * Math.sqrt(3/4)
     }
 
     direction_to(other: RealPos){

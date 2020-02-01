@@ -17,12 +17,13 @@ export class Cursor {
     }
 
     key_down_function(event: KeyboardEvent) {
-        console.log(this.position)
+        console.log(this.position);
+
         if (event.code == 'KeyW') {
-            this.position.x -= 1;
             this.position.y += 1;
         }
         if (event.code == 'KeyE') {
+            this.position.x += 1;
             this.position.y += 1;
         }
         if (event.code == 'KeyD') {

@@ -10,20 +10,17 @@ export class HexPos {
     }
 
     real_position() {
-        return new RealPos(
-            this.x + this.y * 0.5,
-            this.y * Math.sqrt(3/4)
-        );
+        return new RealPos(this);
     }
 
     get_neighbours() {
         return [
-            new HexPos(this.x + 1, this.y),
-            new HexPos(this.x - 1, this.y),
             new HexPos(this.x, this.y + 1),
-            new HexPos(this.x, this.y - 1),
+            new HexPos(this.x + 1, this.y + 1),
+            new HexPos(this.x+1, this.y),
             new HexPos(this.x + 1, this.y - 1),
-            new HexPos(this.x - 1, this.y + 1)
+            new HexPos(this.x, this.y - 1),
+            new HexPos(this.x - 1, this.y)
         ];
     }
 
