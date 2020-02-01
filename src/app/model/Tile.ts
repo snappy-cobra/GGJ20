@@ -1,9 +1,9 @@
 
 export enum TileType {
     Mountain = 0,
-    Grass = 1,
-    Forest = 2,
-    Farm = 3,
+    Grass = 2,
+    Forest = 3,
+    Farm = 5,
     Street = 4
 }
 

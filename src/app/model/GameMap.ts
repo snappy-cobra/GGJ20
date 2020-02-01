@@ -1,32 +1,27 @@
 import {HexPos} from "./HexPos";
 import {Tile} from "./Tile"
 import {TileType} from "./Tile"
+import {MapMaker} from "./MapMaker";
 
 export class GameMap {
     ground: Tile[][];
     width: number;
     height: number;
 
-    constructor(width: number, height: number){
+    constructor(width: number, height: number, ground: Tile[][]){
         this.width = width;
         this.height = height;
-        this.ground = [];
-        for (let x=0; x<width; ++x){
-            this.ground[x] = [];
-            for (let y=0; y<height; ++y){
-                let content = Tile.create(TileType.Grass);
-                if (Math.random() < 0.1){
-                    content = Tile.create(TileType.Mountain);
-                } else if (Math.random() < 0.1){
-                    content = Tile.create(TileType.Forest);
-                }
-                this.ground[x][y] = content;
-            }
-        }
+        this.ground = ground;
     }
 
     get_tile(place: HexPos){
         return (this.ground[place.x] || [])[place.y] // Yes, I know...
+    }
+
+    set_tile(place: HexPos, tile: Tile){
+        this.ground[place.x][place.y] = tile;
+        console.log("TESSTTT");
+        console.log(tile);
     }
 
     next_tile(place: HexPos, target: HexPos){
@@ -50,5 +45,11 @@ export class GameMap {
 
     view(){
         return this.ground.map(l => l.map( tile => tile.type));
+    }
+
+    random_hexPos() {
+        let x = Math.floor(Math.random() * this.width);
+        let y = Math.floor(Math.random() * this.height);
+        return new HexPos(x, y)
     }
 }
