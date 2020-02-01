@@ -24,7 +24,7 @@ export class Street {
         if (this.nextGrowTime < this.time && !this.head.equals(this.target)) {   
             this.nextGrowTime = this.time + DELAY;
 
-            let next = map.next_tile(this.head, this.target);
+            let next = this.head.move(map.next_dir(this.head, this.target));
             if (next){
                 map.ground[next.x][next.y] = new tiles.Street();
                 this.tail.push(this.head);
