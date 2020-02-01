@@ -23,7 +23,6 @@ export class Cursor {
         if (event.code == "KeyX"){this.position = this.position.move(Direction.BottomRight);}
         if (event.code == "KeyZ"){this.position = this.position.move(Direction.BottomLeft);}
         if (event.code == "KeyA"){this.position = this.position.move(Direction.Left);}
-        console.log(this.position);
         if (event.code == 'Enter') {
             this.gameMap.place_mountain(this.position)
         }
