@@ -1,6 +1,7 @@
+
 import {HexPos, directions, invert} from "./HexPos";
 import {tiles, Tile} from "./Tile";
-
+import { Heapq } from "ts-heapq";
 
 export class GameMap {
     ground: Tile[][];
@@ -51,6 +52,10 @@ export class GameMap {
         return positions;
     }
 
+    on_map(pos: HexPos) {
+        return (pos.x >= 0 && pos.x < this.width) && (pos.y >= 0 && pos.y < this.height)
+    }
+
     get_tile(place: HexPos): Tile{
         return (this.ground[place.x] || [])[place.y] // Yes, I know...
     }
@@ -59,7 +64,7 @@ export class GameMap {
         this.ground[place.x][place.y] = tile;
     }
 
-    next_dir(place: HexPos, target: HexPos){
+    next_dir(place: HexPos, target: HexPos) {
         if (place.equals(target)){
             return null;
         }
@@ -100,8 +105,10 @@ export class GameMap {
         let best_dir = null
         for (let dir of directions){
             let neighbour = place.move(dir)
-            if (!this.get_tile(neighbour)) continue;
-            let cost = this.shortest_path_cost(place, target);
+            let tile = this.get_tile(neighbour)
+            if (!tile) continue;
+            let [cost, path] = this.shortest_path_cost(neighbour, target);
+            cost += 1/tile.accessibility;
             if (cost < best_cost){
                 best_cost = cost;
                 best_dir = dir;
@@ -110,34 +117,35 @@ export class GameMap {
         return best_dir;
     }
     
-    shortest_path_cost(start: HexPos, end: HexPos){
+    shortest_path_cost(start: HexPos, end: HexPos): [number, HexPos[]]{
         // A*
         let visited = new Set();
-        
-        let frontier: [number, number, HexPos][] = [[start.distance_to(end), 0, start]];
-        while (frontier.length){
-            let [estimate, cost, current] = frontier.shift();
+        let frontier = new Heapq<[number, number, HexPos, HexPos[]]>([], (a, b) => a[0] < b[0]);
+        frontier.push([start.distance_to(end), 0, start, []]);
+        while (frontier.length()){
+            let [estimate, cost, current, path] = frontier.pop();
             if (visited.has(current.hash())) continue;
             visited.add(current.hash());
             if (current.equals(end)){
-                return cost;
+                return [cost, path];
             }
             for (let neighbour of current.get_neighbours()){
                 let tile = this.get_tile(neighbour);
                 if (!tile) continue;
                 let newcost = cost + 1 / tile.accessibility;
                 if (newcost >= Infinity) continue;
-                let entry: [number, number, HexPos] = [newcost + neighbour.distance_to(end), newcost, neighbour];
-                for (let i=0; i<frontier.length; ++i){
-                    if (frontier[i] >= entry){
-                        frontier.splice(i, 0, entry);
-                    }
-                }
-                frontier.push();
-                frontier.sort();
+                let entry: [number, number, HexPos, HexPos[]] = [newcost + neighbour.distance_to(end), newcost, neighbour, path.concat([current])];
+                frontier.push(entry);
             }
         }
-        return Infinity;
+        return [Infinity, []];
+    }
+        
+
+    somewhere_center_pos() {
+        let x = Math.floor(this.width/4)+Math.floor(Math.random() * this.width/2);
+        let y = Math.floor(this.height/2) + Math.floor(Math.random() * this.height/4 - this.height/8);
+        return new HexPos(x, y)
     }
 }
 

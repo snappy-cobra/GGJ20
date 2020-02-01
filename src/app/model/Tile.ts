@@ -1,20 +1,23 @@
 
 import {HexPos, Direction} from "./HexPos";
 
+const Y = 8;
+
 export enum TextureType {
     Mountain = 0,
     Grass = 2,
     Forest = 3,
     Street = 4,
     Farm = 5,
+    Water = 1,
 
 
-    Street_AA = 4, Street_AB = 4, Street_AC = 4, Street_AD = 4, Street_AE = 4, Street_AF = 4,
-    Street_BA = 4, Street_BB = 4, Street_BC = 4, Street_BD = 4, Street_BE = 4, Street_BF = 4,
-    Street_CA = 4, Street_CB = 4, Street_CC = 4, Street_CD = 4, Street_CE = 4, Street_CF = 4,
-    Street_DA = 4, Street_DB = 4, Street_DC = 4, Street_DD = 4, Street_DE = 4, Street_DF = 4,
-    Street_EA = 4, Street_EB = 4, Street_EC = 4, Street_ED = 4, Street_EE = 4, Street_EF = 4,
-    Street_FA = 4, Street_FB = 4, Street_FC = 4, Street_FD = 4, Street_FE = 4, Street_FF = 4,
+    Street_AA = 1*Y+0,      Street_AB = 1*Y+1,      Street_AC = 1*Y+2,      Street_AD = 1*Y+3,      Street_AE = 1*Y+4,      Street_AF = 1*Y+5, 
+    Street_BA = Street_AB,  Street_BB = 2*Y+1,      Street_BC = 2*Y+2,      Street_BD = 2*Y+3,      Street_BE = 2*Y+4,      Street_BF = 2*Y+5, 
+    Street_CA = Street_AC,  Street_CB = Street_BC,  Street_CC = 3*Y+2,      Street_CD = 3*Y+3,      Street_CE = 3*Y+4,      Street_CF = 3*Y+5, 
+    Street_DA = Street_AD,  Street_DB = Street_BD,  Street_DC = Street_CD,  Street_DD = 4*Y+3,      Street_DE = 4*Y+4,      Street_DF = 4*Y+5, 
+    Street_EA = Street_AE,  Street_EB = Street_BE,  Street_EC = Street_CE,  Street_ED = Street_DE,  Street_EE = 5*Y+4,      Street_EF = 5*Y+5, 
+    Street_FA = Street_AF,  Street_FB = Street_BF,  Street_FC = Street_CF,  Street_FD = Street_DF,  Street_FE = Street_EF,  Street_FF = 6*Y+5, 
 }
 
 export class Tile {
@@ -40,36 +43,25 @@ export class Tile {
 class Street extends Tile {
     constructor(prev: Direction = null, next: Direction = null){
         let tex;
-        if (!prev || !next){
-            tex = TextureType.Street;
+        if (!next){
+            var str = "Street_"+(<string>prev)+(<string>prev);
+            tex = (<any>TextureType)[str];
         } else {
-            tex = TextureType[<any>("Street_"+(<string>prev)+(<string>next))];
+            var str = "Street_"+(<string>next)+(<string>prev);
+            tex = (<any>TextureType)[str];
         }
-        super("street", 0, TextureType.Street);
+        super("street", 0, tex);
     }
 }
 
-class Mountain extends Tile {
-    constructor(){
-        super("mountain", 0, TextureType.Mountain);
-    }
-}
+class Mountain extends Tile { constructor(){ super("mountain", 0, TextureType.Mountain); }}
+class Forest extends Tile   { constructor(){ super("forest", 0.5, TextureType.Forest); }}
+class Grass extends Tile    { constructor(){ super("grass", 1, TextureType.Grass); }}
+class Farm extends Tile     { constructor(){ super("farm", 1, TextureType.Farm); }}
 
-class Forest extends Tile {
+class Ocean extends Tile {
     constructor(){
-        super("forest", 0.5, TextureType.Forest);
-    }
-}
-
-class Grass extends Tile {
-    constructor(){
-        super("grass", 1, TextureType.Grass);
-    }
-}
-
-class Farm extends Tile {
-    constructor(){
-        super("farm", 1, TextureType.Farm);
+        super("ocean", 0.1, TextureType.Water);
     }
 }
 
@@ -77,12 +69,7 @@ class StreetHead extends Tile {
     target: HexPos;
     prev: Direction
     constructor(target: HexPos, prev: Direction = null){
-        let tex: TextureType;
-        if (prev){
-            tex = TextureType[("Street_"+(<string>prev)+(<string>prev))];
-        } else {
-            tex = TextureType.Street;
-        }
+        let tex = (prev)? (<any>TextureType)["Street_"+(<string>prev)+(<string>prev)] : TextureType.Street;
         super("street", 0, tex);
         this.target = target;
         this.prev = prev;
@@ -96,4 +83,5 @@ export var tiles = {
     Forest,
     Farm,
     StreetHead,
+    Ocean
 };

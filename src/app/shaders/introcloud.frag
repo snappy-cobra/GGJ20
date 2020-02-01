@@ -53,16 +53,17 @@ float fbm(vec2 x)
     return t;
 }
 
-float pattern( vec2 p )
+float pattern( vec2 p, float t)
 {
-    vec2 q = vec2( fbm( p + vec2(0.0, 0.0) ), fbm( p + vec2(5.2,1.3)) );
+    vec2 q = vec2( fbm( p + vec2(t, 0) ), fbm( p + vec2(5.2,1.3)) );
 
     return fbm( p + 1.5 * q ) * 0.7;
 }
 
 void main() {
-    float f = pattern(v_MVPpos.xy + vec2(u_time * 0.1));
-    f += 0.3;
+    float f = pattern(v_MVPpos.xy, u_time * 0.5);
+    f /= 3.0;
+    f += 0.66;
 
     fragColor = vec4(f, f, f, f) + vec4(0.0, 0.0, 0.0, v_MVPpos.z - 2.0);
 }

@@ -39,11 +39,11 @@ float noise (in vec2 st) {
     (d - b) * u.x * u.y;
 }
 
-
+const float animationStrength = 0.005;
 void main() {
-    vec2 distortion = vec2(noise(texcoord + u_time) -0.5, noise(texcoord + u_time) -0.5) * 2.0 * 0.01 * u_animation;
+    vec2 distortion = vec2(noise(texcoord + u_time * u_animation) -0.5, noise(texcoord + u_time * u_animation) -0.5) * 2.0 * animationStrength * u_animation;
 
     float f = pow(v_pos.x, 2.0) + pow(v_pos.y, 2.0);
 
-    fragColor = texture(u_texture, texcoord) - vec4(f,f,f, 0.0);
+    fragColor = texture(u_texture, texcoord + distortion) - vec4(f,f,f, 0.0);
 }

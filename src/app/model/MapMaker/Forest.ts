@@ -1,6 +1,6 @@
 import {MapMaker} from "../MapMaker";
 import {HexPos} from "../HexPos";
-import {Tile, tiles} from "../Tile";
+import {tiles} from "../Tile";
 
 export class Forest {
     mapMaker: MapMaker;
@@ -26,11 +26,15 @@ export class Forest {
         this.cur_forest_number += 1;
     }
 
+    placable(pos: HexPos) {
+        return this.mapMaker.get_tile(pos) instanceof tiles.Grass
+    }
+
     random_forestless_tile() {
         let hexPos;
         do {
             hexPos = this.mapMaker.random_hexPos();
-        } while (this.mapMaker.get_tile(hexPos) instanceof tiles.Mountain || this.mapMaker.get_tile(hexPos) instanceof tiles.Forest);
+        } while (!this.placable(hexPos));
         return hexPos
     }
 
@@ -41,7 +45,7 @@ export class Forest {
             if (tile == undefined) {
                 continue;
             }
-            if (tile instanceof tiles.Mountain || tile instanceof tiles.Forest) {
+            if (!this.placable(n)) {
                 continue;
             }
             suitable_neighbours.push(n);

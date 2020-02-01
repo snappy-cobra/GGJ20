@@ -1,7 +1,16 @@
+@font-face {
+  font-family: 'Lobster';
+  src:  url('../fonts/Lobster.ttf') format('woff');
+  font-weight: 600;
+  font-style: normal;
+}
+
 html, body {
   overflow: hidden;
   height: 100%;
   margin: 0;
+  user-select: none;
+  background-color: white;
 }
 
 #container {
@@ -21,7 +30,7 @@ html, body {
   min-width: 100%;
   margin: 0;
   padding: 0;
-  background-color: rgba(250, 250, 250, 0.8);
+  /* background-color: rgba(250, 250, 250, 0.8); The game does this now */
   color: black;
 }
 
@@ -31,18 +40,15 @@ html, body {
 
 .main_title {
   text-align: center;
-  font-size: 10em;
-}
-
-.main_title {
-  text-align: center;
   font-size: 10vh;
   padding-top: 4vh;
+  font-family: Lobster;
 }
 
 .subtitle {
   text-align: center;
-  font-size: 4em;
+  font-size: 4vh;
+  font-family: Lobster;
 }
 
 #start_button {
@@ -54,6 +60,25 @@ html, body {
   margin-top: 4vh;
   border-radius: 1vh;
   font-size: 6vh;
+  box-shadow: 0vh 1vh 1vh;
+  cursor: pointer;
+  font-family: Lobster;
+}
+
+#start_button:hover {
+  box-shadow: 0vh 0.5vh 1vh;
+}
+
+.instructions {
+  display: block;
+  background-image: url("../images/Instructions.png"); 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain; 
+  height: 50vh;
+  width: 70vh;
+  margin: auto;
+  margin-top: 6vh;
 }
 
 #snappy-logo {
