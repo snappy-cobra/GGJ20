@@ -124,6 +124,10 @@ function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
     y *= Math.sqrt(3/4);
 
     var MVP: mat4 = mat4.create();
+    var width = canvas.width;
+    var height = canvas.height;
+    var ratio = width/height;
+    mat4.ortho(MVP, -1*ratio, 1*ratio, -1, 1, -1, 1000);
     mat4.translate(MVP, MVP, [x*s,y*s,z]);
     mat4.scale(MVP, MVP, [s,s,s]);
 
