@@ -49,12 +49,10 @@ export class Forest {
                 continue;
             }
             suitable_neighbours.push(n);
-            console.log("nu nog hier")
         }
         if (suitable_neighbours.length < 1) {
             return
         }
-        console.log(suitable_neighbours.length);
         let winner = suitable_neighbours[Math.floor(Math.random() * suitable_neighbours.length)];
         this.set_forest(winner);
     }
@@ -64,15 +62,12 @@ export class Forest {
         do {
             hexPos = this.mapMaker.random_hexPos();
         } while (!(this.mapMaker.get_tile(hexPos) instanceof tiles.Forest));
-        console.log("hoi:0")
         this.grow_forest_neighbour(hexPos)
     }
 
     generate_forest() {
-        console.log("ja")
         while (this.cur_forest_number < this.max_forest_number) {
             this.forest_update()
-            console.log("NEXXXT")
         }
     }
 }
