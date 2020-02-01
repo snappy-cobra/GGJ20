@@ -40,6 +40,9 @@ export class GameMap {
             if (tile instanceof tiles.StreetHead){
                 this.ground[pos.x][pos.y] = new tiles.Street(tile.prev);
                 let next = this.planned_next_dir(pos, tile.target);
+                if (!next){
+                    next = this.next_dir(pos, tile.target);
+                }
                 if (next){
                     let nextpos = pos.move(next);
                     if (this.get_tile(nextpos) instanceof tiles.Harbor){
