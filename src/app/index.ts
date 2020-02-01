@@ -162,6 +162,11 @@ function render(time : number) {
 window.onresize = resize;
 window.onload = main;
 
-document.getElementById("start_button").addEventListener("click", () => {
+if (true) {
     document.getElementById("main_menu").classList.add("hidden");
-});
+}
+else {
+    document.getElementById("start_button").addEventListener("click", () => {
+        document.getElementById("main_menu").classList.add("hidden");
+    });
+}
