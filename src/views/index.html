@@ -4,21 +4,29 @@
     <title>GGJ20 - A game by Snappy Cobra</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+      .hideWhileLoading {
+        display: none;
+        background-color: white;
+      }
+    </style>
   </head>
   <body>
-    <div id="container">
+    <div id="container" class="hideWhileLoading">
       <canvas id="glCanvas">
         Canvas element not supported. Please update your browser.
       </canvas>
       <div id="main_menu">
         <div class="main_title">WegInDeWeg</div>
         <div class="subtitle">Want de weg moet weg.</div>
-        <div class="instructions">
-          
-        </div>
+        <div class="instructions"></div>
         <div id="start_button">START</div>
-        <div id="snappy-logo">
-        </div>
+        <div id="snappy-logo"> </div>
+      </div>
+      <div id="lives">
+        <div class="live">graantje</div>
+        <div class="live">graantje</div>
+        <div class="live">graantje</div>
       </div>
     </div>
   </body>

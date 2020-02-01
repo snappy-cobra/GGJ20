@@ -7,11 +7,15 @@ export class GameMap {
     ground: Tile[][];
     width: number;
     height: number;
+    start_road: HexPos;
+    end_road: HexPos;
 
-    constructor(width: number, height: number, ground: Tile[][]){
+    constructor(width: number, height: number, ground: Tile[][], start_road: HexPos, end_road: HexPos){
         this.width = width;
         this.height = height;
         this.ground = ground;
+        this.start_road = start_road;
+        this.end_road = end_road;
         this.ground[0][0] = new tiles.StreetHead(new HexPos(width - 1, height - 1));
     }
     
@@ -61,6 +65,10 @@ export class GameMap {
     }
 
     set_tile(place: HexPos, tile: Tile){
+        if (this.ground[place.x][place.y] instanceof tiles.Farm){
+            console.log("Leven verloren");
+        }
+
         this.ground[place.x][place.y] = tile;
     }
 
@@ -88,7 +96,7 @@ export class GameMap {
     }
 
     view(){
-        return this.ground.map(l => l.map( tile => tile));
+        return this.ground;
     }
 
     random_hexPos() {

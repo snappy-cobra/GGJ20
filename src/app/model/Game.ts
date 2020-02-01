@@ -15,7 +15,7 @@ export class Game {
 
     constructor(width: number, height: number, street_start: HexPos, street_target: HexPos){
         this.mapMaker = new MapMaker(width, height);
-        this.map = new GameMap(width, height, this.mapMaker.ground);
+        this.map = new GameMap(width, height, this.mapMaker.ground, this.mapMaker.start_road, this.mapMaker.end_road);
         //this.map = new GameMap(width, height, this.mapMaker);
         this.cursor = new Cursor(new HexPos(10,10), this.map);
 //         this.street = new Street(street_start || new HexPos(0, 0), street_target || new HexPos(width - 1, height - 1));
