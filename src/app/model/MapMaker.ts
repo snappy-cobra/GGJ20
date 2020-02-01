@@ -24,7 +24,7 @@ export class MapMaker extends GameMap{
                 ground[x][y] = new tiles.Ocean();
             }
         }
-        super(width, height, ground);
+        super(width, height, ground, null, null);
         new Grass(this,5, 300);
         console.log("Builded Grass");
         new Road(this);

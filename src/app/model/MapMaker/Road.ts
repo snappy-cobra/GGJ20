@@ -9,8 +9,10 @@ export class Road {
         this.mapMaker = mapMaker;
         let start_pos = this.find_left_start();
         this.set_harbor(start_pos);
+        this.mapMaker.start_road = start_pos;
         let end_pos = this.find_right_end();
         this.set_harbor(end_pos);
+        this.mapMaker.end_road = end_pos;
     }
 
 

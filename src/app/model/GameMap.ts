@@ -6,11 +6,15 @@ export class GameMap {
     ground: Tile[][];
     width: number;
     height: number;
+    start_road: HexPos;
+    end_road: HexPos;
 
-    constructor(width: number, height: number, ground: Tile[][]){
+    constructor(width: number, height: number, ground: Tile[][], start_road: HexPos, end_road: HexPos){
         this.width = width;
         this.height = height;
         this.ground = ground;
+        this.start_road = start_road;
+        this.end_road = end_road;
         this.ground[0][0] = new tiles.StreetHead(new HexPos(width - 1, height - 1));
     }
     
