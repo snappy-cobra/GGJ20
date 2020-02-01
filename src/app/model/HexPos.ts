@@ -1,5 +1,24 @@
 import {RealPos} from "./RealPos";
 
+export enum Direction {
+    TopLeft,
+    TopRight,
+    Right,
+    BottomRight,
+    BottomLeft,
+    Left
+}
+
+export var directions: Direction[] = [
+    Direction.TopLeft,
+    Direction.TopRight,
+    Direction.Right,
+    Direction.BottomRight,
+    Direction.BottomLeft,
+    Direction.Left
+]
+
+
 export class HexPos {
     x: number;
     y: number;
@@ -11,6 +30,38 @@ export class HexPos {
 
     real_position() {
         return new RealPos(this);
+    }
+    
+    move(dir: Direction) {
+        if (dir == Direction.Right){
+            return new HexPos(this.x + 1, this.y);
+        }
+        if (dir == Direction.Left){
+            return new HexPos(this.x - 1, this.y);
+        }
+        if (this.y & 1){ // y is odd
+            switch (dir){
+                case Direction.TopLeft:
+                    return new HexPos(this.x, this.y+1);
+                case Direction.TopRight:
+                    return new HexPos(this.x+1, this.y+1);
+                case Direction.BottomLeft:
+                    return new HexPos(this.x, this.y-1);
+                case Direction.BottomRight:
+                    return new HexPos(this.x+1, this.y-1);
+            }
+        } else {
+            switch (dir){
+                case Direction.TopLeft:
+                    return new HexPos(this.x-1, this.y+1);
+                case Direction.TopRight:
+                    return new HexPos(this.x, this.y+1);
+                case Direction.BottomLeft:
+                    return new HexPos(this.x-1, this.y-1);
+                case Direction.BottomRight:
+                    return new HexPos(this.x, this.y-1);
+            }
+        }
     }
 
     get_neighbours() {

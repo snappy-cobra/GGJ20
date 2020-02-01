@@ -1,4 +1,4 @@
-import {HexPos} from "./HexPos";
+import {HexPos, Direction} from "./HexPos";
 import {GameMap} from "./GameMap";
 
 export function add_cursor(gameMap: GameMap) {
@@ -18,50 +18,12 @@ export class Cursor {
 
     key_down_function(event: KeyboardEvent) {
         console.log(this.position);
-
-        if (this.position.y % 2) {
-            if (event.code == 'KeyW') {
-                this.position.y += 1;
-            }
-            if (event.code == 'KeyE') {
-                this.position.x += 1;
-                this.position.y += 1;
-            }
-            if (event.code == 'KeyD') {
-                this.position.x += 1;
-            }
-            if (event.code == 'KeyX') {
-                this.position.x += 1;
-                this.position.y -= 1;
-            }
-            if (event.code == 'KeyZ') {
-                this.position.y -= 1;
-            }
-            if (event.code == 'KeyA') {
-                this.position.x -= 1;
-            }
-        } else {
-            if (event.code == 'KeyW') {
-                this.position.x -= 1;
-                this.position.y += 1;
-            }
-            if (event.code == 'KeyE') {
-                this.position.y += 1;
-            }
-            if (event.code == 'KeyD') {
-                this.position.x += 1;
-            }
-            if (event.code == 'KeyX') {
-                this.position.y -= 1;
-            }
-            if (event.code == 'KeyZ') {
-                this.position.x -= 1;
-                this.position.y -= 1;
-            }
-            if (event.code == 'KeyA') {
-                this.position.x -= 1;
-            }
-        }
+        if (event.code == "KeyW"){this.position = this.position.move(Direction.TopLeft);}
+        if (event.code == "KeyE"){this.position = this.position.move(Direction.TopRight);}
+        if (event.code == "KeyD"){this.position = this.position.move(Direction.Right);}
+        if (event.code == "KeyX"){this.position = this.position.move(Direction.BottomRight);}
+        if (event.code == "KeyZ"){this.position = this.position.move(Direction.BottomLeft);}
+        if (event.code == "KeyA"){this.position = this.position.move(Direction.Left);}
         if (event.code == 'Enter') {
             this.gameMap.place_mountain(this.position)
         }
