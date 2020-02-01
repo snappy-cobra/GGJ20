@@ -3,6 +3,7 @@ html, body {
   height: 100%;
   margin: 0;
   user-select: none;
+  background-color: white;
 }
 
 #container {
@@ -22,7 +23,7 @@ html, body {
   min-width: 100%;
   margin: 0;
   padding: 0;
-  background-color: rgba(250, 250, 250, 0.8);
+  /* background-color: rgba(250, 250, 250, 0.8); The game does this now */
   color: black;
 }
 

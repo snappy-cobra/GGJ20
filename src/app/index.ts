@@ -45,12 +45,15 @@ function resize() {
 
 
 let oldTimeMS = 0;
+let absoluteTime = 0;
 let time = 0;
+
 
 function renderLoop(timeMS : number) {  
     const deltaTime = (timeMS - oldTimeMS) / 1000;
     oldTimeMS = timeMS;
-    time += deltaTime;
+    absoluteTime += deltaTime;
+    if (started) time += deltaTime;
     
     gl.clearColor(104.0/255.0, 182.0/255.0, 220.0/255.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -162,10 +165,9 @@ function render(time : number) {
     setMVP(cursorShader, game.cursor.position.x, game.cursor.position.y, 0.001);
     gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
     
-
     if (time < 10.0) { // INTRO done;
         introCloudShader.use(gl);
-        gl.uniform1f(introCloudShader.unformLocation(gl, "u_time"), time);
+        gl.uniform1f(introCloudShader.unformLocation(gl, "u_time"), absoluteTime);
 
         var MVP: mat4 = mat4.create();
         var ratio = canvas.width/canvas.height;
@@ -189,6 +191,5 @@ else {
     document.getElementById("start_button").addEventListener("click", () => {
         document.getElementById("main_menu").classList.add("hidden");
         started = true;
-        time = 0;
     });
 }
