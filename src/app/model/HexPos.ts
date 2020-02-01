@@ -65,14 +65,7 @@ export class HexPos {
     }
 
     get_neighbours() {
-        return [
-            new HexPos(this.x, this.y + 1),
-            new HexPos(this.x + 1, this.y + 1),
-            new HexPos(this.x+1, this.y),
-            new HexPos(this.x + 1, this.y - 1),
-            new HexPos(this.x, this.y - 1),
-            new HexPos(this.x - 1, this.y)
-        ];
+        return directions.map(dir => this.move(dir));
     }
 
     direction_to(other: HexPos){
