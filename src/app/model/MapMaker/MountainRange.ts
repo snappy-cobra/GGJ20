@@ -7,11 +7,13 @@ export class MountainRange {
     max_mountain_number: number;
     walking_tile: HexPos;
     mapMaker: MapMaker;
+    mountain_startpoints: HexPos[];
 
     constructor(mapMaker: MapMaker, start_mountain_number:number, max_mountain_number: number) {
         this.mapMaker = mapMaker;
         this.mountain_number = 0;
         this.max_mountain_number = max_mountain_number;
+        this.mountain_startpoints = [];
         this.mountain_init(start_mountain_number);
         this.new_walking_tile();
         this.generate_mountain_range();
@@ -31,7 +33,9 @@ export class MountainRange {
 
     mountain_init(start_amount: number) {
         for (let i=0; i<start_amount; i++) {
-            this.set_mountain(this.random_mountainless_tile());
+            let pos = this.random_mountainless_tile();
+            this.set_mountain(pos);
+            this.mountain_startpoints.push(pos);
         }
     }
 

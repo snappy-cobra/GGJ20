@@ -5,6 +5,7 @@ import {Forest} from "./MapMaker/Forest";
 import {Farm} from "./MapMaker/Farm";
 import {Grass} from "./MapMaker/Grass";
 import {Road} from "./MapMaker/Road";
+import {River} from "./MapMaker/River";
 
 enum Fase {
     mountain,
@@ -33,6 +34,8 @@ export class MapMaker extends GameMap{
         console.log("Builded Mountains");
         this.forest = new Forest(this, 8, 70);
         console.log("Builded Forest");
+        new River(this, 2, this.mountainRange.mountain_startpoints);
+        console.log("Builded Rivers");
         this.farm = new Farm(this, 1, 15);
         console.log("Builded Farms")
     }
