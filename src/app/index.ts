@@ -7,6 +7,7 @@ import {mat4, vec3} from 'gl-matrix';
 var gl : WebGL2RenderingContext;
 var canvas : any;
 var livesCount: number = 3;
+var score: number = 0;
 
 import tileVertexCode from './shaders/tile.vert'
 import tileFragmentCode from './shaders/tile.frag'
@@ -61,7 +62,9 @@ function resize() {
 
 function gameOver() {
     gameState = GameState.GAMEOVER;
+    metaGame.score = 0;
     document.getElementById("gameover").classList.remove("hidden");
+    document.getElementById("score").classList.add("hidden");
 }
 
 
@@ -149,6 +152,12 @@ function update(deltaTime : number) {
         livesDom.removeChild(livesDom.children[livesCount]);
 
         if (livesCount <= 0) { gameOver(); }
+    }
+
+    if (metaGame.score != score) {
+        score = metaGame.score;
+        var scoreDom = document.getElementById("score_value");
+        scoreDom.textContent = ""+score;
     }
     metaGame.update(deltaTime);
 }
@@ -248,19 +257,23 @@ if (false) {
 }
 
 document.getElementById("start_button").addEventListener("click", () => {
+    score = 0;
     music_player.play();
     document.getElementById("main_menu").classList.add("hidden");
     document.getElementById("lives").classList.remove("hidden");
+    document.getElementById("score").classList.remove("hidden");
     gameState = GameState.PLAYING;
 });
 
 document.getElementById("restart_button").addEventListener("click", () => {
     document.getElementById("gameover").classList.add("hidden");
     document.getElementById("lives").classList.remove("hidden");
+    document.getElementById("score").classList.remove("hidden");
 
     metaGame.new_world();
     time = 0;
 
+    score = 0;
     livesCount = 3;
     for (let i=0; i<livesCount; i++) {
         var node = document.createElement("div");

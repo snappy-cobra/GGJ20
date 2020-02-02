@@ -112,6 +112,26 @@ html * {
   left: 10px;
 }
 
+#score {
+  transition: opacity 2.0s ease-in-out;
+  transition-delay: 1s;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: Lobster;
+  font-size: 5vh;
+  color:white;
+  text-shadow: -4px 0 black, 0 4px black, 4px 0 black, 0 -4px black;
+}
+
+#score_value {
+  display: inline-block;
+}
+
+.island {
+  display: inline-block;
+}
+
 .live {
   display: inline-block;
   background-image: url("../images/Grain.png"); 
