@@ -1,6 +1,6 @@
 import {Direction, directions, HexPos, invert} from "../HexPos";
 import {MapMaker} from "../MapMaker";
-import {tiles} from "../Tile";
+import {tiles, TextureType, Tile} from "../Tile";
 
 export class River{
     mapMaker: MapMaker;
@@ -23,7 +23,10 @@ export class River{
     }
 
     set_river(pos: HexPos, in_dir: Direction, out_dir: Direction) {
-        this.mapMaker.set_tile(pos, new tiles.River(out_dir, in_dir));
+        if (TextureType[this.mapMaker.get_tile(pos).type].toString().startsWith("River_"))
+            this.mapMaker.set_tile(pos, new Tile("River_CROSSINS", 0.125, TextureType.River_CROSSINS));
+        else
+            this.mapMaker.set_tile(pos, new tiles.River(out_dir, in_dir));
     }
 
     create_river(starter_pos: HexPos) {
