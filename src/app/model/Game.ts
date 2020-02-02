@@ -20,7 +20,7 @@ export class Game {
     constructor(meta_game: MetaGame, width: number, height: number, intensity: number) {
         this.meta_game = meta_game;
         this.mapMaker = make_map(width, height, intensity);
-        this.map = new GameMap(this, width, height, this.mapMaker.ground, this.mapMaker.start_road, this.mapMaker.end_road);
+        this.map = new GameMap(this, width, height, this.mapMaker.ground, this.mapMaker.start_road, this.mapMaker.end_road, (intensity < 2)? 0 : (intensity < 4)? 0.5 : 1);
         //this.map = new GameMap(width, height, this.mapMaker);
         this.cursor = new Cursor(new HexPos(10,10), this.map);
         document.addEventListener('keydown', this.speed_up.bind(this));
