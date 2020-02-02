@@ -1,16 +1,18 @@
 import {Street} from "./Street";
 import {GameMap} from "./GameMap";
-import {HexPos} from "./HexPos";
+import {Direction, HexPos} from "./HexPos";
 import {Cursor} from "./cursor";
 import {MapMaker} from "./MapMaker";
 
-const DELAY = 1;
+const DELAY_FAST = 0.25;
+const DELAY_NORMAL = 1;
 
 export class Game {
 //     street: Street;
     map: GameMap;
     cursor: Cursor;
     mapMaker: MapMaker;
+    delay: number;
     wait: number = 3;
 
     constructor(width: number, height: number, street_start: HexPos, street_target: HexPos){
@@ -18,6 +20,9 @@ export class Game {
         this.map = new GameMap(width, height, this.mapMaker.ground, this.mapMaker.start_road, this.mapMaker.end_road);
         //this.map = new GameMap(width, height, this.mapMaker);
         this.cursor = new Cursor(new HexPos(10,10), this.map);
+        document.addEventListener('keydown', this.speed_up.bind(this));
+        document.addEventListener('keyup', this.speed_down.bind(this));
+        this.delay = DELAY_NORMAL;
 //         this.street = new Street(street_start || new HexPos(0, 0), street_target || new HexPos(width - 1, height - 1));
     }
 
@@ -29,10 +34,25 @@ export class Game {
         if (this.wait > 0){
             return;
         }
-        this.wait += DELAY;
+        this.wait += this.delay;
         this.map.update()
     }
-    
+
+    speed_up(event: KeyboardEvent) {
+        if (event.code == "Space") {
+            this.delay = DELAY_FAST;
+            this.wait = Math.min(this.delay, this.wait);
+        }
+    }
+
+    speed_down(event: KeyboardEvent) {
+        if (event.code == "Space") {
+            this.delay = DELAY_NORMAL;
+        }
+    }
+
+
+
     view() {
         // todo: change this back to map
         /*let grid = this.map.view();
