@@ -1,7 +1,6 @@
 
 import {HexPos, Direction, directions, invert} from "./HexPos";
 import {tiles, Tile} from "./Tile";
-import { Heapq } from "ts-heapq";
 import {Map} from "./Map";
 import {Game} from "./Game";
 
@@ -89,7 +88,7 @@ export class GameMap extends Map{
         
         let tile = this.get_tile(place);
         if (tile instanceof tiles.Mountain) {
-            this.set_tile(place, new tiles.Grass());
+            this.set_tile(place, new tiles.Crushed());
             return true;
         }
         return false;
@@ -115,31 +114,6 @@ export class GameMap extends Map{
             return null;
         }
         return path[0];
-    }
-    
-    shortest_path_cost(start: HexPos, end: HexPos): [number, Direction[]]{
-        // A*
-        let visited = new Set();
-        let frontier = new Heapq<[number, number, HexPos, Direction[]]>([], (a, b) => a[0] < b[0]);
-        frontier.push([start.distance_to(end), 0, start, []]);
-        while (frontier.length()){
-            let [estimate, cost, current, path] = frontier.pop();
-            if (visited.has(current.hash())) continue;
-            visited.add(current.hash());
-            if (current.equals(end)){
-                return [cost, path];
-            }
-            for (let dir of directions){
-                let neighbour = current.move(dir);
-                let tile = this.get_tile(neighbour);
-                if (!tile) continue;
-                let newcost = cost + 1 / tile.accessibility;
-                if (newcost >= Infinity) continue;
-                let entry: [number, number, HexPos, Direction[]] = [newcost + neighbour.distance_to(end), newcost, neighbour, path.concat([dir])];
-                frontier.push(entry);
-            }
-        }
-        return [Infinity, []];
     }
 }
 
