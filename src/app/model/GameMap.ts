@@ -53,6 +53,13 @@ export class GameMap {
                     updated[nextpos.x][nextpos.y] = true;
                     this.set_tile(pos, new tiles.Street(tile.prev, next));
                 }
+            } else if (tile instanceof tiles.Boat){
+                let neighbour = pos.get_neighbours()[Math.random()*6 |0];
+                let other = this.get_tile(neighbour);
+                if (other instanceof tiles.Ocean){
+                    this.set_tile(neighbour, tile);
+                    this.set_tile(pos, other);
+                }
             }
         }
     }
