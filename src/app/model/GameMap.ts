@@ -10,7 +10,7 @@ export class GameMap {
     start_road: HexPos;
     end_road: HexPos;
     lives: number = 3;
-    finished: bool = false;
+    finished: boolean = false;
 
     constructor(width: number, height: number, ground: Tile[][], start_road: HexPos, end_road: HexPos){
         this.width = width;
