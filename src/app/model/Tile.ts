@@ -83,7 +83,7 @@ class Fire extends Tile {
     to_live: number;
     constructor(){
         super("fire", 0, TextureType.Fire); 
-        this.to_live = 2+Math.random()*5|0;
+        this.to_live = 4+Math.random()*5|0;
     }
 }
 
