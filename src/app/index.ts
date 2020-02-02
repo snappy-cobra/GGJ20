@@ -16,6 +16,7 @@ import introCloudVertexCode from './shaders/introcloud.vert'
 import introCloudFragmentCode from './shaders/introcloud.frag'
 import main_texture_path from '../images/texture.png'
 import { TextureType, Tile } from './model/Tile';
+import { Direction, HexPos } from './model/HexPos';
 
 let defaultShader : ShaderProgram;
 let cursorShader : ShaderProgram;
@@ -151,7 +152,7 @@ function update(deltaTime : number) {
 /******************************************************************************  Render */ 
 
 const s : number = 0.2;
-function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
+function getMVP(shader : ShaderProgram, x : number, y : number, z:number=0, scale:number=1) {
     x -= gameWidth/2;
     y -= gameHeight/2;
     if (Math.abs(y) % 2 == 1)
@@ -163,13 +164,12 @@ function setMVP(shader : ShaderProgram, x : number, y : number, z:number=0) {
     // mat4.ortho(MVP, -1*ratio, 1*ratio, -1, 1, -100, 100);
     mat4.perspective(MVP, 45.0, ratio, 0.1, 100);
     mat4.translate(MVP, MVP, [x*s,y*s,z-4]);
-    mat4.scale(MVP, MVP, [s,s,s]);
-
-    gl.uniformMatrix4fv(shader.unformLocation(gl, "MVP"), false, MVP); 
+    mat4.scale(MVP, MVP, [s*scale,s*scale,s*scale]);
+    return MVP;
 }
 
 function drawHex(x : number, y : number, z : number, tile : Tile) {
-    setMVP(defaultShader, x, y, z);
+    gl.uniformMatrix4fv(defaultShader.unformLocation(gl, "MVP"), false, getMVP(defaultShader, x, y, z));
     gl.uniform1f(defaultShader.unformLocation(gl, "u_tile"), tile.type);
     gl.uniform2f(defaultShader.unformLocation(gl, "u_animation"), tile.animStrength[0], tile.animStrength[1]);
 
@@ -184,22 +184,36 @@ function render(time : number) {
     gl.uniform1f(defaultShader.unformLocation(gl, "u_time"), time);
     
     let view = game.view();
-    for(let x: number=-20; x<view.width+20; x++) { // TODO: overdraw
-        for(let y: number=-20; y<view.height+20; y++) {
-            drawHex(x, y, -0.01 + Math.max(2-time, 0), bgTile);
+    let zoom = Math.max(2-time, 0);
+
+    for(let x: number=-7; x<0; x++) {
+        for(let y: number=-7; y<=view.height+7; y++) {
+            drawHex(Math.abs(x+1)+view.width, y, zoom, bgTile);
+            drawHex(x, y, zoom, bgTile);
+        }
+    }
+    for(let x: number=0; x<view.width; x++) {
+        for(let y: number=0; y<=7; y++) {
+            drawHex(x, y+view.height, zoom, bgTile);
+            drawHex(x, -y-1, zoom, bgTile);
         }
     }
     for(let x: number=0; x<view.width; x++) {
         for(let y: number=0; y<view.height; y++) {
-            drawHex(x, y, Math.max(2-time, 0), view.tiles[x][y]);
+            drawHex(x, y, zoom, view.tiles[x][y]);
         }
     }
     
     if (time >= 2.2) {
         cursorShader.use(gl);
-        setMVP(cursorShader, game.cursor.position.x, game.cursor.position.y, 0.001);
+        gl.uniformMatrix4fv(cursorShader.unformLocation(gl, "MVP"), false, getMVP(cursorShader, game.cursor.position.x, game.cursor.position.y, 0.001));
         gl.uniform1f(cursorShader.unformLocation(gl, "u_time"), time);
         gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
+        
+        gl.uniformMatrix4fv(cursorShader.unformLocation(gl, "MVP"), false, getMVP(cursorShader, mouseX - 0.5, mouseY - 0.5, 0.002, 0.2));
+        gl.uniform1f(cursorShader.unformLocation(gl, "u_time"), -999);
+        gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
+
     }
 
     if (time < 10.0) { // INTRO done;
@@ -249,3 +263,21 @@ document.getElementById("restart_button").addEventListener("click", () => {
     }
     gameState = GameState.PLAYING;
 });
+
+
+var mouseX = 0;
+var mouseY = 0;
+
+function mouseUpdate(e:MouseEvent) {
+    mouseX = e.clientX / canvas.width * gameWidth;
+    mouseY = gameHeight - e.clientY / canvas.height * gameHeight;
+
+    console.log(mouseX, mouseY);    
+
+    game.cursor.position = new HexPos(
+        Math.floor(e.clientX / canvas.width * gameWidth - ((Math.floor(mouseY)%2 == 1)? 0.5 : 0.0)), 
+        Math.floor(mouseY)
+    ); 
+}
+
+document.addEventListener('mousemove', (e: MouseEvent) => { mouseUpdate(e) });
