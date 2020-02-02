@@ -1,5 +1,5 @@
 
-import {HexPos, directions, invert} from "./HexPos";
+import {HexPos, Direction, directions, invert} from "./HexPos";
 import {tiles, Tile} from "./Tile";
 import { Heapq } from "ts-heapq";
 
@@ -10,6 +10,7 @@ export class GameMap {
     start_road: HexPos;
     end_road: HexPos;
     lives: number = 3;
+    finished: bool = false;
 
     constructor(width: number, height: number, ground: Tile[][], start_road: HexPos, end_road: HexPos){
         this.width = width;
@@ -18,7 +19,7 @@ export class GameMap {
         this.start_road = start_road;
         this.end_road = end_road;
         if (start_road){
-            this.set_tile(start_road, new tiles.StreetHead(end_road));
+            this.set_tile(start_road, new tiles.StreetHead(end_road, Direction.Left));
         }
     }
     
@@ -39,9 +40,16 @@ export class GameMap {
             if (tile instanceof tiles.StreetHead){
                 this.ground[pos.x][pos.y] = new tiles.Street(tile.prev);
                 let next = this.planned_next_dir(pos, tile.target);
+                if (!next){
+                    next = this.next_dir(pos, tile.target);
+                }
                 if (next){
                     let nextpos = pos.move(next);
-                    this.set_tile(nextpos, new tiles.StreetHead(tile.target, invert(next)));
+                    if (this.get_tile(nextpos) instanceof tiles.Harbor){
+                        this.finished = true;
+                    } else {
+                        this.set_tile(nextpos, new tiles.StreetHead(tile.target, invert(next)));
+                    }
                     updated[nextpos.x][nextpos.y] = true;
                     this.set_tile(pos, new tiles.Street(tile.prev, next));
                 }

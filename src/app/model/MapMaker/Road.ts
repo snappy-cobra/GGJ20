@@ -12,7 +12,7 @@ export class Road {
         if (this.mapMaker.on_map(start_pos.move(Direction.Left))) {
             this.mapMaker.set_tile(start_pos.move(Direction.Left), new tiles.Boat());
         }
-        this.mapMaker.start_road = start_pos;
+        this.mapMaker.start_road = start_pos.move(Direction.Right);
         let end_pos = this.find_right_end();
         this.set_harbor(end_pos);
         if (this.mapMaker.on_map(end_pos.move(Direction.Right))) {
