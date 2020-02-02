@@ -1,6 +1,7 @@
 import SONG_1_PATH from '../../music/song_1.wav';
+import SONG_2_PATH from '../../music/song_2.wav';
 
-const NUM_SONGS = 1;
+const NUM_SONGS = 2;
 
 export class MusicPlayer {
 
@@ -10,15 +11,19 @@ export class MusicPlayer {
     constructor() {
         this.playlist = [];
         this.load_count = 0;
-        let audio: HTMLAudioElement = new Audio(SONG_1_PATH);
-        audio.addEventListener('loadeddata', () => {
-            this.load_count++;
-        });
-        audio.addEventListener('ended', () => {
-            this.play_random_song();
-        });
 
-        this.playlist.push(audio);
+        let paths : string[] = [SONG_1_PATH, SONG_2_PATH];
+
+        paths.forEach(path => {
+            let audio: HTMLAudioElement = new Audio(path);
+            audio.addEventListener('loadeddata', () => {
+                this.load_count++;
+            });
+            audio.addEventListener('ended', () => {
+                this.play_random_song();
+            });
+            this.playlist.push(audio);
+        });
     }
 
     play() {
