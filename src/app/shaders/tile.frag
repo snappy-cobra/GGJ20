@@ -4,6 +4,7 @@ precision mediump float;
 uniform sampler2D u_texture;
 uniform mediump float u_time; // required to have it in both the frag and vert shader
 uniform vec2 u_animation;
+uniform vec4 u_color;
 
 in vec3 v_pos;
 in vec2 texcoord;
@@ -45,5 +46,14 @@ void main() {
 
     float f = pow(v_pos.x, 2.0) + pow(v_pos.y, 2.0);
 
-    fragColor = texture(u_texture, texcoord + distortion) - vec4(f,f,f, 0.0);
+    fragColor = texture(u_texture, texcoord + distortion);
+    
+    if (fragColor.r + fragColor.b > 1.9 && fragColor.g < 0.1)
+        discard;
+    else 
+        fragColor -= vec4(f,f,f, 0.0);
+
+    fragColor.x = mix(fragColor.x, u_color.x, u_color.w);
+    fragColor.y = mix(fragColor.y, u_color.y, u_color.w);
+    fragColor.z = mix(fragColor.z, u_color.z, u_color.w);
 }

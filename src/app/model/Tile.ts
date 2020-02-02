@@ -12,7 +12,7 @@ export enum TextureType {
     Water = 1,
     Harbor = 6,
     Boat = 7,
-    Fire = 4*Y + 7,
+    Fire = 3*Y + 6,
     River = 14,
     Crushed = 15,
 
@@ -30,7 +30,10 @@ export enum TextureType {
     River_DA = River_AD,  River_DB = River_BD,  River_DC = River_CD,  River_DD = 7*Y+5,     River_DE = 7*Y+4,     River_DF = 7*Y+3, 
     River_EA = River_AE,  River_EB = River_BE,  River_EC = River_CE,  River_ED = River_DE,  River_EE = 6*Y+4,     River_EF = 6*Y+3, 
     River_FA = River_AF,  River_FB = River_BF,  River_FC = River_CF,  River_FD = River_DF,  River_FE = River_EF,  River_FF = 5*Y+3, 
-    River_CROSSINS = 14
+    River_CROSSINS = 14,
+
+    Hand_Open = 2*Y+6,
+    Hand_Closed = 2*Y+7
 
 }
 
@@ -83,7 +86,7 @@ class Fire extends Tile {
     to_live: number;
     constructor(){
         super("fire", 0, TextureType.Fire); 
-        this.to_live = 2+Math.random()*5|0;
+        this.to_live = 4+Math.random()*5|0;
     }
 }
 

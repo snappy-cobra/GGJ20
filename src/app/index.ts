@@ -201,7 +201,10 @@ function render(time : number) {
 
     defaultShader.use(gl);
     gl.uniform1f(defaultShader.unformLocation(gl, "u_time"), time);
-    
+    gl.uniform4f(defaultShader.unformLocation(gl, "u_color"), 0, 0, 0, 0.0);
+
+    // gl.uniform3f(cursorShader.unformLocation(gl, "u_force"), game.cursor.position.x, game.cursor.position.y, time);
+
     let view = game.view();
     let zoom = Math.max(2-time, 0);
 
@@ -224,16 +227,16 @@ function render(time : number) {
     }
     
     if (time >= 2.2) {
-        cursorShader.use(gl);
-        gl.uniformMatrix4fv(cursorShader.unformLocation(gl, "MVP"), false, getMVP(cursorShader, game.cursor.position.x, game.cursor.position.y, 0.001));
-        gl.uniform1f(cursorShader.unformLocation(gl, "u_time"), time);
+        gl.uniformMatrix4fv(defaultShader.unformLocation(gl, "MVP"), false, getMVP(defaultShader, game.cursor.position.x, game.cursor.position.y, 0.01 + Math.abs(Math.sin(time)) * 0.02 ));
+        gl.uniform1f(defaultShader.unformLocation(gl, "u_time"), 0);
+        gl.uniform4f(defaultShader.unformLocation(gl, "u_color"), Math.abs(Math.sin(time*5)), Math.abs(Math.sin(time*5)), Math.abs(Math.sin(time*5)), 0.3);
+        gl.uniform1f(defaultShader.unformLocation(gl, "u_tile"), game.cursor.has_mountain? TextureType.Hand_Closed : TextureType.Hand_Open);
         gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
         
+        cursorShader.use(gl);
         gl.uniformMatrix4fv(cursorShader.unformLocation(gl, "MVP"), false, getMVP(cursorShader, mouseX - 0.5, mouseY - 0.5, 0.002, 0.2));
         gl.uniform1f(cursorShader.unformLocation(gl, "u_time"), -999);
         gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
-
-        gl.uniform3f(cursorShader.unformLocation(gl, "u_force"), game.cursor.position.x, game.cursor.position.y, time);
     }
 
     if (time < 10.0) { // INTRO done;
