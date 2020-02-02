@@ -272,7 +272,6 @@ function mouseUpdate(e:MouseEvent) {
     mouseX = e.clientX / canvas.width * gameWidth;
     mouseY = gameHeight - e.clientY / canvas.height * gameHeight;
 
-    console.log(mouseX, mouseY);    
 
     game.cursor.position = new HexPos(
         Math.floor(e.clientX / canvas.width * gameWidth - ((Math.floor(mouseY)%2 == 1)? 0.5 : 0.0)), 

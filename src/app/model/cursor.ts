@@ -16,6 +16,7 @@ export class Cursor {
         this.gameMap = gameMap;
 
         document.addEventListener('keydown', this.key_down_function.bind(this));
+        document.addEventListener("click", this.onclick.bind(this));
     }
 
     key_down_function(event: KeyboardEvent) {
