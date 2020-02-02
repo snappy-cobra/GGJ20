@@ -12,7 +12,7 @@ export enum TextureType {
     Water = 1,
     Harbor = 6,
     Boat = 7,
-    Fire = Y + 7,
+    Fire = 4*Y + 7,
     River = 14,
     Crushed = 15,
 

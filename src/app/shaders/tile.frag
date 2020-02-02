@@ -2,7 +2,7 @@
 precision mediump float;
 
 uniform sampler2D u_texture;
-uniform float u_time;
+uniform mediump float u_time; // required to have it in both the frag and vert shader
 uniform vec2 u_animation;
 
 in vec3 v_pos;
