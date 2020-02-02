@@ -9,11 +9,12 @@ export function add_cursor(gameMap: GameMap) {
 export class Cursor {
     position: HexPos;
     gameMap: GameMap;
-    has_mountain: boolean = false;
+    has_mountain: boolean;
 
     constructor(position: HexPos, gameMap: GameMap) {
         this.position = position;
         this.gameMap = gameMap;
+        this.has_mountain = false;
     }
 
     on_input (code: string) {

@@ -78,7 +78,7 @@ export class GameMap extends Map{
         if (tile == undefined) {
             return false;
         }
-        if (tile instanceof tiles.Mountain || tile instanceof tiles.Harbor || tile instanceof tiles.Street || tile instanceof tiles.StreetHead) {
+        if (tile instanceof tiles.Mountain || tile instanceof tiles.Harbor || tile instanceof tiles.Street || tile instanceof tiles.StreetHead || tile instanceof tiles.Farm) {
             return false;
         }
         this.set_tile(place, new tiles.Mountain());
