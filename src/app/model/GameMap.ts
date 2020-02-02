@@ -99,12 +99,23 @@ export class GameMap {
     place_mountain(place: HexPos) {
         let tile = this.get_tile(place);
         if (tile == undefined) {
-            return
+            return false;
         }
         if (tile instanceof tiles.Mountain || tile instanceof tiles.Harbor || tile instanceof tiles.Street || tile instanceof tiles.StreetHead) {
-            return
+            return false;
         }
         this.set_tile(place, new tiles.Mountain());
+        return true;
+    }
+    
+    grab_mountain(place: HexPos){
+        
+        let tile = this.get_tile(place);
+        if (tile instanceof tiles.Mountain) {
+            this.set_tile(place, new tiles.Grass());
+            return true;
+        }
+        return false;
     }
 
     set_tile(place: HexPos, tile: Tile){
@@ -114,6 +125,7 @@ export class GameMap {
 
         this.ground[place.x][place.y] = tile;
     }
+    
 
     next_dir(place: HexPos, target: HexPos) {
         if (place.equals(target)){
