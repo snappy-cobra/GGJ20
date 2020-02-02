@@ -45,6 +45,8 @@ export class GameMap extends Map{
                     }
                     updated[nextpos.x][nextpos.y] = true;
                     this.set_tile(pos, new tiles.Street(tile.prev, next));
+                } else {
+                    this.game.level_lost();
                 }
             } else if (tile instanceof tiles.Boat){
                 let neighbour = pos.get_neighbours()[Math.random()*6 |0];
