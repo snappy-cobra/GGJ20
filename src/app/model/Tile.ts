@@ -12,6 +12,7 @@ export enum TextureType {
     Water = 1,
     Harbor = 6,
     Boat = 7,
+    Fire = Y + 7,
     River = 14,
 
 
@@ -75,6 +76,14 @@ class Farm extends Tile     { constructor(){ super("farm", 1, TextureType.Farm);
 class Ocean extends Tile { constructor(){ super("ocean", 0, TextureType.Water); }}
 class Boat extends Tile { constructor(){ super("boat", 0, TextureType.Boat); }}
 
+class Fire extends Tile {
+    to_live: number;
+    constructor(){
+        super("fire", 0, TextureType.Fire); 
+        this.to_live = 2+Math.random()*5|0;
+    }
+}
+
 
 class Harbor extends Tile {constructor(){super("harbor", 1, TextureType.Harbor);}}
 
@@ -113,5 +122,6 @@ export var tiles = {
     Ocean,
     Harbor,
     River,
-    Boat
+    Boat,
+    Fire
 };

@@ -60,6 +60,20 @@ export class GameMap {
                     this.set_tile(neighbour, tile);
                     this.set_tile(pos, other);
                 }
+            } else if (tile instanceof tiles.Forest){
+                if (Math.random()< 0.00){
+                    this.set_tile(pos, new tiles.Fire());
+                }
+            } else if (tile instanceof tiles.Fire){
+                tile.to_live -= 1;
+                if (tile.to_live <= 0){
+                    this.set_tile(pos, new tiles.Grass());
+                }
+                let neighbour = pos.get_neighbours()[Math.random()*6 |0];
+                let other = this.get_tile(neighbour);
+                if (Math.random() < 1 && (other instanceof tiles.Forest || other instanceof tiles.Farm)){
+                    this.set_tile(neighbour, new tiles.Fire());
+                }
             }
         }
     }
