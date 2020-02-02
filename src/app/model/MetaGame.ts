@@ -1,6 +1,6 @@
 import {Game} from "./Game";
 
-let END_DELAY = 3000; // milliseconds
+let END_DELAY = 1000; // milliseconds
 
 export class MetaGame {
     cur_game: Game;

@@ -26,6 +26,8 @@ let introCloudShader : ShaderProgram;
 let gameWidth = 30;
 let gameHeight = 20;
 var metaGame : MetaGame = new MetaGame(gameWidth, gameHeight);
+var mouseX = 0;
+var mouseY = 0;
 
 enum GameState {
     MENU,
@@ -49,6 +51,7 @@ function main() {
       return;
     }
 
+    registerEventListener();
     start();
     requestAnimationFrame(renderLoop);
 }   
@@ -60,6 +63,7 @@ function resize() {
 }
 
 function gameOver() {
+    time = 3;
     gameState = GameState.GAMEOVER;
     document.getElementById("gameover").classList.remove("hidden");
 }
@@ -75,12 +79,13 @@ function renderLoop(timeMS : number) {
     oldTimeMS = timeMS;
     absoluteTime += deltaTime;
     if (gameState == GameState.PLAYING) time += deltaTime;
+    if (gameState == GameState.GAMEOVER) { time = Math.max(time - deltaTime, 0);  } 
     
     gl.clearColor(104.0/255.0, 182.0/255.0, 220.0/255.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.viewport(0, 0, canvas.width, canvas.height);
     
-    render((gameState == GameState.PLAYING)? time : 0.0);
+    render((gameState == GameState.PLAYING || gameState == GameState.GAMEOVER)? time : 0.0);
     if (gameState == GameState.PLAYING) update(deltaTime);
 
     requestAnimationFrame(renderLoop)
@@ -219,9 +224,7 @@ function render(time : number) {
         gl.uniform1f(cursorShader.unformLocation(gl, "u_time"), -999);
         gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
 
-        if (time <= 2.5) {
-            gl.uniform3f(defaultShader.unformLocation(gl, "u_force"), game.cursor.position.x, game.cursor.position.y, time);
-        }
+        gl.uniform3f(cursorShader.unformLocation(gl, "u_force"), game.cursor.position.x, game.cursor.position.y, time);
     }
 
     if (time < 10.0) { // INTRO done;
@@ -250,44 +253,43 @@ if (false) {
     gameState = GameState.PLAYING;
 }
 
-document.getElementById("start_button").addEventListener("click", () => {
-    music_player.play();
-    document.getElementById("main_menu").classList.add("hidden");
-    document.getElementById("lives").classList.remove("hidden");
-    gameState = GameState.PLAYING;
-});
 
-document.getElementById("restart_button").addEventListener("click", () => {
-    document.getElementById("gameover").classList.add("hidden");
-    document.getElementById("lives").classList.remove("hidden");
-
-    metaGame.new_world();
-    time = 0;
-
-    livesCount = 3;
-    for (let i=0; i<livesCount; i++) {
-        var node = document.createElement("div");
-        node.classList.add('live');
-        document.getElementById("lives").appendChild(node);
+function registerEventListener() {
+    document.getElementById("start_button").addEventListener("click", () => {
+        music_player.play();
+        document.getElementById("main_menu").classList.add("hidden");
+        document.getElementById("lives").classList.remove("hidden");
+        gameState = GameState.PLAYING;
+    });
+    
+    document.getElementById("restart_button").addEventListener("click", () => {
+        document.getElementById("gameover").classList.add("hidden");
+        document.getElementById("lives").classList.remove("hidden");
+    
+        metaGame.new_world();
+        time = 0;
+    
+        livesCount = 3;
+        for (let i=0; i<livesCount; i++) {
+            var node = document.createElement("div");
+            node.classList.add('live');
+            document.getElementById("lives").appendChild(node);
+        }
+        gameState = GameState.PLAYING;
+    });
+    
+    function mouseUpdate(e:MouseEvent) {
+        mouseX = e.clientX / canvas.width * gameWidth;
+        mouseY = gameHeight - e.clientY / canvas.height * gameHeight;
+    
+        metaGame.cur_game.cursor.position = new HexPos(
+            Math.floor(e.clientX / canvas.width * gameWidth - ((Math.floor(mouseY)%2 == 1)? 0.5 : 0.0)), 
+            Math.floor(mouseY)
+        ); 
     }
-    gameState = GameState.PLAYING;
-});
-
-
-var mouseX = 0;
-var mouseY = 0;
-
-function mouseUpdate(e:MouseEvent) {
-    mouseX = e.clientX / canvas.width * gameWidth;
-    mouseY = gameHeight - e.clientY / canvas.height * gameHeight;
-
-    metaGame.cur_game.cursor.position = new HexPos(
-        Math.floor(e.clientX / canvas.width * gameWidth - ((Math.floor(mouseY)%2 == 1)? 0.5 : 0.0)), 
-        Math.floor(mouseY)
-    ); 
+    
+    document.addEventListener('mousemove', (e: MouseEvent) => { mouseUpdate(e) });
+    
+    document.addEventListener('keydown', (e) => { metaGame.cur_game.cursor.on_input(e.code); });
+    document.addEventListener("click", (e) => {metaGame.cur_game.cursor.on_input("mouse");});
 }
-
-document.addEventListener('mousemove', (e: MouseEvent) => { mouseUpdate(e) });
-
-document.addEventListener('keydown', (e) => {metaGame.cur_game.cursor.on_input(e.code);});
-document.addEventListener("click", (e) => {metaGame.cur_game.cursor.on_input("mouse");});

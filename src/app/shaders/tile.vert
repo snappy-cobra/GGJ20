@@ -13,7 +13,7 @@ const float NUM_TILES = 8.0;
 const float zoom = 0.9;
 
 void main(void) {
-    // vec3 pos = a_pos + max(u_force.z - u_time, 0) * vec3(u_force.xy, 0);
+    // vec3 pos = a_pos + max(u_force.z, 0.0) * vec3(u_force.x, u_force.y, 0.0);
 
     gl_Position = MVP * vec4(a_pos, 1.0);
     float x = mod(u_tile/NUM_TILES, 1.0);
