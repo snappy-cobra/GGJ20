@@ -81,6 +81,9 @@ export class River{
         let cur = start;
         let prev_dir = null;
         for (let i=0; i<40; i++) {
+            if (!cur) {
+                return;
+            }
             for (let d of directions) {
                 let n = cur.move(d);
                 let tile = this.mapMaker.get_tile(n);
