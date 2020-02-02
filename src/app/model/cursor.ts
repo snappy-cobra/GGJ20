@@ -9,6 +9,7 @@ export function add_cursor(gameMap: GameMap) {
 export class Cursor {
     position: HexPos;
     gameMap: GameMap;
+    has_mountain: boolean = false;
 
     constructor(position: HexPos, gameMap: GameMap) {
         this.position = position;
@@ -24,6 +25,19 @@ export class Cursor {
         if (event.code == "KeyX") {this.position = this.position.move(Direction.BottomRight);}
         if (event.code == "KeyZ") {this.position = this.position.move(Direction.BottomLeft);}
         if (event.code == "KeyA") {this.position = this.position.move(Direction.Left);}
-        if (event.code == 'Enter'){this.gameMap.place_mountain(this.position);}
+        if (event.code == 'Enter'){this.onclick();}
+    }
+    
+    onclick(){
+        if (this.has_mountain){
+            if (this.gameMap.place_mountain(this.position)){
+                // success
+                this.has_mountain = false;
+            }
+        } else {
+            if (this.gameMap.grab_mountain(this.position)){
+                this.has_mountain = true;
+            }
+        }
     }
 }
