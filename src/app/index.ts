@@ -218,6 +218,10 @@ function render(time : number) {
         gl.uniformMatrix4fv(cursorShader.unformLocation(gl, "MVP"), false, getMVP(cursorShader, mouseX - 0.5, mouseY - 0.5, 0.002, 0.2));
         gl.uniform1f(cursorShader.unformLocation(gl, "u_time"), -999);
         gl.drawElements(gl.TRIANGLES, 3*6, gl.UNSIGNED_SHORT, 0);
+
+        if (time <= 2.5) {
+            gl.uniform3f(defaultShader.unformLocation(gl, "u_force"), game.cursor.position.x, game.cursor.position.y, time);
+        }
     }
 
     if (time < 10.0) { // INTRO done;

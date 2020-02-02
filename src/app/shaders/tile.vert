@@ -13,10 +13,9 @@ const float NUM_TILES = 8.0;
 const float zoom = 0.9;
 
 void main(void) {
-    u_force.xy
-    vec3 pos = a_pos + max(u_force.z - u_time, 0) * vec3(u_force.xy, 0);
+    // vec3 pos = a_pos + max(u_force.z - u_time, 0) * vec3(u_force.xy, 0);
 
-    gl_Position = MVP * vec4(pos, 1.0);
+    gl_Position = MVP * vec4(a_pos, 1.0);
     float x = mod(u_tile/NUM_TILES, 1.0);
     float y = floor(u_tile/NUM_TILES) / NUM_TILES;
     texcoord = (a_pos.xy * zoom * sqrt(3.0) + vec2(1.0)) *  vec2(0.5 / NUM_TILES) + vec2(x, 0);
