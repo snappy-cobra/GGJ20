@@ -86,7 +86,7 @@ class Fire extends Tile {
 }
 
 
-class Harbor extends Tile {constructor(){super("harbor", 1, TextureType.Harbor);}}
+class Harbor extends Tile {constructor(){super("harbor", 0.01, TextureType.Harbor);}}
 
 class River extends Tile {
     constructor(prev: Direction = null, next: Direction = null){

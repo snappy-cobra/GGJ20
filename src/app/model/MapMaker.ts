@@ -1,4 +1,4 @@
-import {GameMap} from "./GameMap";
+
 import {MountainRange} from "./MapMaker/MountainRange";
 import {Tile, tiles} from "./Tile";
 import {Forest} from "./MapMaker/Forest";
@@ -6,13 +6,14 @@ import {Farm} from "./MapMaker/Farm";
 import {Grass} from "./MapMaker/Grass";
 import {Road} from "./MapMaker/Road";
 import {River} from "./MapMaker/River";
+import {Map} from "./Map";
 
 enum Fase {
     mountain,
     forest
 }
 
-export class MapMaker extends GameMap{
+export class MapMaker extends Map{
     mountainRange: MountainRange;
     forest: Forest;
     farm: Farm;
@@ -25,6 +26,7 @@ export class MapMaker extends GameMap{
                 ground[x][y] = new tiles.Ocean();
             }
         }
+
         super(width, height, ground, null, null);
         new Grass(this, 5, 300);
         console.log("Builded Grass");
@@ -38,9 +40,5 @@ export class MapMaker extends GameMap{
         console.log("Builded Rivers");
         this.farm = new Farm(this, 2, 15);
         console.log("Builded Farms")
-    }
-
-    mapStep() {
-        //this.mountainRange.mountain_update();
     }
 }
