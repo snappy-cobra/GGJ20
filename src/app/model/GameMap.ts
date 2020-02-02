@@ -148,26 +148,17 @@ export class GameMap {
         if (place.equals(target)){
             return null;
         }
-        let best_cost = Infinity;
-        let best_dir = null
-        for (let dir of directions){
-            let neighbour = place.move(dir)
-            let tile = this.get_tile(neighbour)
-            if (!tile) continue;
-            let [cost, path] = this.shortest_path_cost(neighbour, target);
-            cost += 1/tile.accessibility;
-            if (cost < best_cost){
-                best_cost = cost;
-                best_dir = dir;
-            }
-        }
-        return best_dir;
+        let [cost, path] = this.shortest_path_cost(place, target);
+        if (cost == Infinity){
+            return null;
+        };
+        return path[0];
     }
     
-    shortest_path_cost(start: HexPos, end: HexPos): [number, HexPos[]]{
+    shortest_path_cost(start: HexPos, end: HexPos): [number, Direction[]]{
         // A*
         let visited = new Set();
-        let frontier = new Heapq<[number, number, HexPos, HexPos[]]>([], (a, b) => a[0] < b[0]);
+        let frontier = new Heapq<[number, number, HexPos, Direction[]]>([], (a, b) => a[0] < b[0]);
         frontier.push([start.distance_to(end), 0, start, []]);
         while (frontier.length()){
             let [estimate, cost, current, path] = frontier.pop();
@@ -176,12 +167,13 @@ export class GameMap {
             if (current.equals(end)){
                 return [cost, path];
             }
-            for (let neighbour of current.get_neighbours()){
+            for (let dir of directions){
+                let neighbour = current.move(dir);
                 let tile = this.get_tile(neighbour);
                 if (!tile) continue;
                 let newcost = cost + 1 / tile.accessibility;
                 if (newcost >= Infinity) continue;
-                let entry: [number, number, HexPos, HexPos[]] = [newcost + neighbour.distance_to(end), newcost, neighbour, path.concat([current])];
+                let entry: [number, number, HexPos, Direction[]] = [newcost + neighbour.distance_to(end), newcost, neighbour, path.concat([dir])];
                 frontier.push(entry);
             }
         }
