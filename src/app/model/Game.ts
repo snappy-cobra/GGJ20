@@ -3,21 +3,24 @@ import {GameMap} from "./GameMap";
 import {Direction, HexPos} from "./HexPos";
 import {Cursor} from "./cursor";
 import {MapMaker} from "./MapMaker";
+import {MetaGame} from "./MetaGame";
 
 const DELAY_FAST = 0.25;
 const DELAY_NORMAL = 1;
 
 export class Game {
 //     street: Street;
+    meta_game: MetaGame;
     map: GameMap;
     cursor: Cursor;
     mapMaker: MapMaker;
     delay: number;
     wait: number = 3;
 
-    constructor(width: number, height: number, street_start: HexPos, street_target: HexPos){
+    constructor(meta_game: MetaGame, width: number, height: number) {
+        this.meta_game = meta_game;
         this.mapMaker = new MapMaker(width, height);
-        this.map = new GameMap(width, height, this.mapMaker.ground, this.mapMaker.start_road, this.mapMaker.end_road);
+        this.map = new GameMap(this, width, height, this.mapMaker.ground, this.mapMaker.start_road, this.mapMaker.end_road);
         //this.map = new GameMap(width, height, this.mapMaker);
         this.cursor = new Cursor(new HexPos(10,10), this.map);
         document.addEventListener('keydown', this.speed_up.bind(this));
@@ -28,7 +31,7 @@ export class Game {
 
     update(deltaTime : number) {
         //this.street.grow(this.map, deltaTime);
-        this.mapMaker.mapStep();
+        // TODO: WAT DOET DIT: this.mapMaker.mapStep();
 //         this.street.grow(this.map, deltaTime);
         this.wait -= deltaTime;
         if (this.wait > 0){
@@ -51,7 +54,14 @@ export class Game {
         }
     }
 
+    level_won() {
+        this.meta_game.win_single_game()
+    }
 
+    level_lost() {
+        console.log("ITS LOSSST")
+        this.meta_game.lost_single_game()
+    }
 
     view() {
         // todo: change this back to map
