@@ -16,6 +16,7 @@ import introCloudVertexCode from './shaders/introcloud.vert'
 import introCloudFragmentCode from './shaders/introcloud.frag'
 import main_texture_path from '../images/texture.png'
 import { TextureType, Tile } from './model/Tile';
+import { MusicPlayer } from './audio/music_player';
 
 let defaultShader : ShaderProgram;
 let cursorShader : ShaderProgram;
@@ -30,6 +31,8 @@ enum GameState {
     GAMEOVER
 }
 var gameState: GameState = GameState.MENU;
+
+let music_player : MusicPlayer = new MusicPlayer();
 
 
 /****************************************************************************** Main */ 
@@ -229,6 +232,7 @@ if (false) {
 }
 
 document.getElementById("start_button").addEventListener("click", () => {
+    music_player.play();
     document.getElementById("main_menu").classList.add("hidden");
     document.getElementById("lives").classList.remove("hidden");
     gameState = GameState.PLAYING;

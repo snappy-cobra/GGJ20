@@ -35,6 +35,12 @@ module.exports = {
         ],
       },
       {
+        test: /\.(wav)$/,
+        use: [
+          'file-loader'
+        ],
+      },
+      {
         test: /\.(frag|vert)$/i,
         use: [
           {
