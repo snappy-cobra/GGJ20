@@ -10,7 +10,7 @@ export class GameMap {
     start_road: HexPos;
     end_road: HexPos;
     lives: number = 3;
-    finished: bool = false;
+    finished: boolean = false;
 
     constructor(width: number, height: number, ground: Tile[][], start_road: HexPos, end_road: HexPos){
         this.width = width;
@@ -19,7 +19,7 @@ export class GameMap {
         this.start_road = start_road;
         this.end_road = end_road;
         if (start_road){
-            this.set_tile(start_road, new tiles.StreetHead(end_road, Direction.Left));
+            this.set_tile(start_road, new tiles.StreetHead(end_road));
         }
     }
     
@@ -52,6 +52,27 @@ export class GameMap {
                     }
                     updated[nextpos.x][nextpos.y] = true;
                     this.set_tile(pos, new tiles.Street(tile.prev, next));
+                }
+            } else if (tile instanceof tiles.Boat){
+                let neighbour = pos.get_neighbours()[Math.random()*6 |0];
+                let other = this.get_tile(neighbour);
+                if (other instanceof tiles.Ocean){
+                    this.set_tile(neighbour, tile);
+                    this.set_tile(pos, other);
+                }
+            } else if (tile instanceof tiles.Forest){
+                if (Math.random()< 0.00){
+                    this.set_tile(pos, new tiles.Fire());
+                }
+            } else if (tile instanceof tiles.Fire){
+                tile.to_live -= 1;
+                if (tile.to_live <= 0){
+                    this.set_tile(pos, new tiles.Grass());
+                }
+                let neighbour = pos.get_neighbours()[Math.random()*6 |0];
+                let other = this.get_tile(neighbour);
+                if (Math.random() < 1 && (other instanceof tiles.Forest || other instanceof tiles.Farm)){
+                    this.set_tile(neighbour, new tiles.Fire());
                 }
             }
         }
