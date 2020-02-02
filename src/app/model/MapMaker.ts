@@ -18,7 +18,7 @@ export class MapMaker extends Map{
     forest: Forest;
     farm: Farm;
 
-    constructor(width: number, height: number) {
+    constructor(width: number, height: number, intensity: number) {
         let ground: Tile[][] = [];
         for (let x=0; x<width; ++x){
             ground[x] = [];
@@ -27,18 +27,32 @@ export class MapMaker extends Map{
             }
         }
 
+        let grass_start = 5;
+        let grass_num = 300-intensity*10;
+
+        let mountain_start = 4-Math.floor(intensity/8);
+        let mountain_num = 54-Math.floor(Math.sqrt(intensity+1))*4;
+
+        let forest_start = 8;
+        let forest_num = 70;
+
+        let rivers_num = 3;
+
+        let farm_start = 1 + Math.floor(intensity/2);
+        let farm_num = 13 + intensity*2;
+
         super(width, height, ground, null, null);
-        new Grass(this, 5, 300);
+        new Grass(this, grass_start, grass_num);
         console.log("Builded Grass");
         new Road(this);
         console.log("Builded Harbors");
-        this.mountainRange = new MountainRange(this, 4, 50);
+        this.mountainRange = new MountainRange(this, mountain_start, mountain_num);
         console.log("Builded Mountains");
-        this.forest = new Forest(this, 8, 70);
+        this.forest = new Forest(this, forest_start, forest_num);
         console.log("Builded Forest");
-        new River(this, 3, this.mountainRange.mountain_startpoints);
+        new River(this, rivers_num, this.mountainRange.mountain_startpoints);
         console.log("Builded Rivers");
-        this.farm = new Farm(this, 2, 15);
+        this.farm = new Farm(this, farm_start, farm_num);
         console.log("Builded Farms")
     }
 }
