@@ -61,7 +61,7 @@ export class GameMap {
                     this.set_tile(pos, other);
                 }
             } else if (tile instanceof tiles.Forest){
-                if (Math.random()< 0.005){
+                if (Math.random()< 0.00){
                     this.set_tile(pos, new tiles.Fire());
                 }
             } else if (tile instanceof tiles.Fire){
