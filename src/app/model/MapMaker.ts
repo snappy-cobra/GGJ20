@@ -26,17 +26,17 @@ export class MapMaker extends GameMap{
             }
         }
         super(width, height, ground, null, null);
-        new Grass(this,5, 300);
+        new Grass(this, 5, 300);
         console.log("Builded Grass");
         new Road(this);
         console.log("Builded Harbors");
-        this.mountainRange = new MountainRange(this, 4,50);
+        this.mountainRange = new MountainRange(this, 4, 50);
         console.log("Builded Mountains");
         this.forest = new Forest(this, 8, 70);
         console.log("Builded Forest");
-        new River(this, 2, this.mountainRange.mountain_startpoints);
+        new River(this, 3, this.mountainRange.mountain_startpoints);
         console.log("Builded Rivers");
-        this.farm = new Farm(this, 1, 15);
+        this.farm = new Farm(this, 2, 15);
         console.log("Builded Farms")
     }
 

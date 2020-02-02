@@ -1,7 +1,6 @@
-import {Direction, directions, HexPos} from "../HexPos";
+import {Direction, directions, HexPos, invert} from "../HexPos";
 import {MapMaker} from "../MapMaker";
-import {TextureType, tiles} from "../Tile";
-import {MountainRange} from "./MountainRange";
+import {tiles} from "../Tile";
 
 export class River{
     mapMaker: MapMaker;
@@ -24,7 +23,7 @@ export class River{
     }
 
     set_river(pos: HexPos, in_dir: Direction, out_dir: Direction) {
-        this.mapMaker.set_tile(pos, new tiles.River(in_dir, out_dir));
+        this.mapMaker.set_tile(pos, new tiles.River(out_dir, in_dir));
     }
 
     create_river(starter_pos: HexPos) {
@@ -92,7 +91,7 @@ export class River{
             let dir = this.mapMaker.next_dir(cur, end);
             this.set_river(cur, prev_dir, dir);
             cur = cur.move(dir);
-            prev_dir = dir;
+            prev_dir = invert(dir);
         }
     }
 }

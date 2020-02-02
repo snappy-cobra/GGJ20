@@ -21,6 +21,14 @@ export enum TextureType {
     Street_DA = Street_AD,  Street_DB = Street_BD,  Street_DC = Street_CD,  Street_DD = 4*Y+3,      Street_DE = 4*Y+4,      Street_DF = 4*Y+5, 
     Street_EA = Street_AE,  Street_EB = Street_BE,  Street_EC = Street_CE,  Street_ED = Street_DE,  Street_EE = 5*Y+4,      Street_EF = 5*Y+5, 
     Street_FA = Street_AF,  Street_FB = Street_BF,  Street_FC = Street_CF,  Street_FD = Street_DF,  Street_FE = Street_EF,  Street_FF = 6*Y+5, 
+
+    River_AA = 4*Y+2,     River_AB = 4*Y+1,     River_AC = 4*Y+0,     River_AD = 7*Y+2,     River_AE = 6*Y+2,     River_AF = 5*Y+2, 
+    River_BA = River_AB,  River_BB = 3*Y+1,     River_BC = 3*Y+0,     River_BD = 7*Y+1,     River_BE = 6*Y+1,     River_BF = 5*Y+1, 
+    River_CA = River_AC,  River_CB = River_BC,  River_CC = 2*Y+0,     River_CD = 7*Y+0,     River_CE = 6*Y+0,     River_CF = 5*Y+0, 
+    River_DA = River_AD,  River_DB = River_BD,  River_DC = River_CD,  River_DD = 7*Y+5,     River_DE = 7*Y+4,     River_DF = 7*Y+3, 
+    River_EA = River_AE,  River_EB = River_BE,  River_EC = River_CE,  River_ED = River_DE,  River_EE = 6*Y+4,     River_EF = 6*Y+3, 
+    River_FA = River_AF,  River_FB = River_BF,  River_FC = River_CF,  River_FD = River_DF,  River_FE = River_EF,  River_FF = 5*Y+3, 
+
 }
 
 export class Tile {
