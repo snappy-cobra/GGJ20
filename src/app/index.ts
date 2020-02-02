@@ -16,14 +16,16 @@ import introCloudVertexCode from './shaders/introcloud.vert'
 import introCloudFragmentCode from './shaders/introcloud.frag'
 import main_texture_path from '../images/texture.png'
 import { TextureType, Tile } from './model/Tile';
-import { Direction, HexPos } from './model/HexPos';
+import { MusicPlayer } from './audio/music_player';
+import {MetaGame} from "./model/MetaGame";
+import { HexPos } from './model/HexPos';
 
 let defaultShader : ShaderProgram;
 let cursorShader : ShaderProgram;
 let introCloudShader : ShaderProgram;
 let gameWidth = 30;
 let gameHeight = 20;
-var game : Game = new Game(gameWidth, gameHeight, null, null);
+var metaGame : MetaGame = new MetaGame(gameWidth, gameHeight);
 
 enum GameState {
     MENU,
@@ -31,6 +33,8 @@ enum GameState {
     GAMEOVER
 }
 var gameState: GameState = GameState.MENU;
+
+let music_player : MusicPlayer = new MusicPlayer();
 
 
 /****************************************************************************** Main */ 
@@ -139,14 +143,14 @@ function glInit() {
 /******************************************************************************  Update */ 
 
 function update(deltaTime : number) {
-    if (game.map.lives < livesCount) {
+    if (metaGame.lives < livesCount) {
         var livesDom = document.getElementById("lives");
         livesCount -= 1;
         livesDom.removeChild(livesDom.children[livesCount]);
 
         if (livesCount <= 0) { gameOver(); }
     }
-    game.update(deltaTime);
+    metaGame.update(deltaTime);
 }
 
 /******************************************************************************  Render */ 
@@ -179,6 +183,7 @@ function drawHex(x : number, y : number, z : number, tile : Tile) {
 
 var bgTile : Tile = new Tile("bg", 0, TextureType.Water);
 function render(time : number) {
+    let game = metaGame.cur_game;
 
     defaultShader.use(gl);
     gl.uniform1f(defaultShader.unformLocation(gl, "u_time"), time);
@@ -243,6 +248,7 @@ if (false) {
 }
 
 document.getElementById("start_button").addEventListener("click", () => {
+    music_player.play();
     document.getElementById("main_menu").classList.add("hidden");
     document.getElementById("lives").classList.remove("hidden");
     gameState = GameState.PLAYING;
@@ -252,7 +258,7 @@ document.getElementById("restart_button").addEventListener("click", () => {
     document.getElementById("gameover").classList.add("hidden");
     document.getElementById("lives").classList.remove("hidden");
 
-    game = new Game(gameWidth, gameHeight, null, null);
+    metaGame.new_world();
     time = 0;
 
     livesCount = 3;
@@ -272,8 +278,7 @@ function mouseUpdate(e:MouseEvent) {
     mouseX = e.clientX / canvas.width * gameWidth;
     mouseY = gameHeight - e.clientY / canvas.height * gameHeight;
 
-
-    game.cursor.position = new HexPos(
+    metaGame.cur_game.cursor.position = new HexPos(
         Math.floor(e.clientX / canvas.width * gameWidth - ((Math.floor(mouseY)%2 == 1)? 0.5 : 0.0)), 
         Math.floor(mouseY)
     ); 
