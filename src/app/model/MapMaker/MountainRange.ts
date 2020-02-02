@@ -44,7 +44,7 @@ export class MountainRange {
     }
 
     found_location(hexPos: HexPos) {
-        if (!this.mapMaker.on_map(hexPos)) {
+        if (!this.mapMaker.on_map(hexPos) || !this.placable(hexPos)) {
             this.new_walking_tile();
             return
         }

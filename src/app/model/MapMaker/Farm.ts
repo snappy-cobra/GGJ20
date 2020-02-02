@@ -40,9 +40,14 @@ export class Farm {
     }
 
     random_farm_tile() {
+        let counter = 0;
         let hexPos;
         do {
             hexPos = this.somewhere_center_pos();
+            counter++;
+            if (counter > 1000) {
+                throw Error("could not find location for farm land");
+            }
         } while (!this.placable(hexPos));
         return hexPos
     }

@@ -63,8 +63,16 @@ export class MapMaker extends Map{
 
 export function make_map(width: number, height: number, intensity: number) {
     let mapMaker: MapMaker;
+    let succes: boolean;
     do {
-        mapMaker = new MapMaker(width, height, intensity)
-    } while (!mapMaker.shortest_path_cost(mapMaker.start_road, mapMaker.end_road));
+        try {
+            mapMaker = new MapMaker(width, height, intensity)
+            succes = true
+        } catch (e) {
+            if(e instanceof Error) {
+                succes = false
+            }
+        }
+    } while (!succes || (mapMaker.shortest_path_cost(mapMaker.start_road, mapMaker.end_road)[0] == Infinity));
     return mapMaker;
 }
