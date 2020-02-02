@@ -1,5 +1,7 @@
 # GGJ20
 
+PLAY THE GAME HERE --> https://snappy-cobra.github.io/GGJ20/
+
 This repository contains the sources to the [Global Game Jam](http://globalgamejam.org) in Groningen, 31 January to 2 February 2020.
 
 ## :briefcase: Development
