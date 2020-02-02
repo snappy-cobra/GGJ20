@@ -7,7 +7,6 @@ import {Game} from "./Game";
 
 export class GameMap extends Map{
     game: Game;
-    finished: boolean = false;
 
     constructor(game: Game, width: number, height: number, ground: Tile[][], start_road: HexPos, end_road: HexPos){
         super(width, height, ground, start_road, end_road);
@@ -75,19 +74,30 @@ export class GameMap extends Map{
     place_mountain(place: HexPos) {
         let tile = this.get_tile(place);
         if (tile == undefined) {
-            return
+            return false;
         }
         if (tile instanceof tiles.Mountain || tile instanceof tiles.Harbor || tile instanceof tiles.Street || tile instanceof tiles.StreetHead) {
-            return
+            return false;
         }
         this.set_tile(place, new tiles.Mountain());
+        return true;
+    }
+    
+    grab_mountain(place: HexPos){
+        
+        let tile = this.get_tile(place);
+        if (tile instanceof tiles.Mountain) {
+            this.set_tile(place, new tiles.Grass());
+            return true;
+        }
+        return false;
     }
 
-    set_tile(place: HexPos, tile: Tile){
-        if (this.ground[place.x][place.y] instanceof tiles.Farm){
+    set_tile(place: HexPos, tile: Tile) {
+        if (this.ground[place.x][place.y] instanceof tiles.Farm) {
             this.game.level_lost();
         }
-        super.set_tile(place, tile)
+        super.set_tile(place, tile);
     }
 
     view(){
@@ -98,26 +108,17 @@ export class GameMap extends Map{
         if (place.equals(target)){
             return null;
         }
-        let best_cost = Infinity;
-        let best_dir = null;
-        for (let dir of directions){
-            let neighbour = place.move(dir);
-            let tile = this.get_tile(neighbour);
-            if (!tile) continue;
-            let [cost, path] = this.shortest_path_cost(neighbour, target);
-            cost += 1/tile.accessibility;
-            if (cost < best_cost){
-                best_cost = cost;
-                best_dir = dir;
-            }
+        let [cost, path] = this.shortest_path_cost(place, target);
+        if (cost == Infinity){
+            return null;
         }
-        return best_dir;
+        return path[0];
     }
-
-    shortest_path_cost(start: HexPos, end: HexPos): [number, HexPos[]]{
+    
+    shortest_path_cost(start: HexPos, end: HexPos): [number, Direction[]]{
         // A*
         let visited = new Set();
-        let frontier = new Heapq<[number, number, HexPos, HexPos[]]>([], (a, b) => a[0] < b[0]);
+        let frontier = new Heapq<[number, number, HexPos, Direction[]]>([], (a, b) => a[0] < b[0]);
         frontier.push([start.distance_to(end), 0, start, []]);
         while (frontier.length()){
             let [estimate, cost, current, path] = frontier.pop();
@@ -126,12 +127,13 @@ export class GameMap extends Map{
             if (current.equals(end)){
                 return [cost, path];
             }
-            for (let neighbour of current.get_neighbours()){
+            for (let dir of directions){
+                let neighbour = current.move(dir);
                 let tile = this.get_tile(neighbour);
                 if (!tile) continue;
                 let newcost = cost + 1 / tile.accessibility;
                 if (newcost >= Infinity) continue;
-                let entry: [number, number, HexPos, HexPos[]] = [newcost + neighbour.distance_to(end), newcost, neighbour, path.concat([current])];
+                let entry: [number, number, HexPos, Direction[]] = [newcost + neighbour.distance_to(end), newcost, neighbour, path.concat([dir])];
                 frontier.push(entry);
             }
         }
