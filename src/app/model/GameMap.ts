@@ -1,15 +1,17 @@
 
 import {HexPos, Direction, directions, invert} from "./HexPos";
 import {tiles, Tile} from "./Tile";
-import { Heapq } from "ts-heapq";
 import {Map} from "./Map";
 import {Game} from "./Game";
 
 export class GameMap extends Map{
     game: Game;
+    dynamism: number;
+    
 
-    constructor(game: Game, width: number, height: number, ground: Tile[][], start_road: HexPos, end_road: HexPos){
+    constructor(game: Game, width: number, height: number, ground: Tile[][], start_road: HexPos, end_road: HexPos, dynamism: number = 0){
         super(width, height, ground, start_road, end_road);
+        this.dynamism = dynamism;
         this.game = game;
         if (start_road){
             this.set_tile(start_road, new tiles.StreetHead(end_road));
@@ -56,7 +58,7 @@ export class GameMap extends Map{
                     this.set_tile(pos, other);
                 }
             } else if (tile instanceof tiles.Forest){
-                if (Math.random()< 0.00){
+                if (Math.random()< 0.005*this.dynamism){
                     this.set_tile(pos, new tiles.Fire());
                 }
             } else if (tile instanceof tiles.Fire){
@@ -66,8 +68,13 @@ export class GameMap extends Map{
                 }
                 let neighbour = pos.get_neighbours()[Math.random()*6 |0];
                 let other = this.get_tile(neighbour);
-                if (Math.random() < 1 && (other instanceof tiles.Forest || other instanceof tiles.Farm)){
+                if (Math.random() < 0.5 && (other instanceof tiles.Forest || other instanceof tiles.Farm)){
                     this.set_tile(neighbour, new tiles.Fire());
+                }
+            } else if (tile instanceof tiles.Grass){
+                let forests = pos.get_neighbours().filter(p=>this.get_tile(p) instanceof tiles.Forest).length;
+                if (Math.random() < (0.0005 + 0.01 * forests) * this.dynamism){
+                    this.set_tile(pos, new tiles.Forest());
                 }
             }
         }
@@ -89,7 +96,7 @@ export class GameMap extends Map{
         
         let tile = this.get_tile(place);
         if (tile instanceof tiles.Mountain) {
-            this.set_tile(place, new tiles.Grass());
+            this.set_tile(place, new tiles.Crushed());
             return true;
         }
         return false;
@@ -115,31 +122,6 @@ export class GameMap extends Map{
             return null;
         }
         return path[0];
-    }
-    
-    shortest_path_cost(start: HexPos, end: HexPos): [number, Direction[]]{
-        // A*
-        let visited = new Set();
-        let frontier = new Heapq<[number, number, HexPos, Direction[]]>([], (a, b) => a[0] < b[0]);
-        frontier.push([start.distance_to(end), 0, start, []]);
-        while (frontier.length()){
-            let [estimate, cost, current, path] = frontier.pop();
-            if (visited.has(current.hash())) continue;
-            visited.add(current.hash());
-            if (current.equals(end)){
-                return [cost, path];
-            }
-            for (let dir of directions){
-                let neighbour = current.move(dir);
-                let tile = this.get_tile(neighbour);
-                if (!tile) continue;
-                let newcost = cost + 1 / tile.accessibility;
-                if (newcost >= Infinity) continue;
-                let entry: [number, number, HexPos, Direction[]] = [newcost + neighbour.distance_to(end), newcost, neighbour, path.concat([dir])];
-                frontier.push(entry);
-            }
-        }
-        return [Infinity, []];
     }
 }
 

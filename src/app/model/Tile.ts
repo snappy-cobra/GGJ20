@@ -14,6 +14,7 @@ export enum TextureType {
     Boat = 7,
     Fire = Y + 7,
     River = 14,
+    Crushed = 15,
 
 
     Street_AA = 1*Y+0,      Street_AB = 1*Y+1,      Street_AC = 1*Y+2,      Street_AD = 1*Y+3,      Street_AE = 1*Y+4,      Street_AF = 1*Y+5, 
@@ -73,6 +74,7 @@ class Street extends Tile {
 class Mountain extends Tile { constructor(){ super("mountain", 0, TextureType.Mountain); }}
 class Forest extends Tile   { constructor(){ super("forest", 0.5, TextureType.Forest); }}
 class Grass extends Tile    { constructor(){ super("grass", 1, TextureType.Grass); }}
+class Crushed extends Tile { constructor(){super("crushed", 1, TextureType.Crushed);}}
 class Farm extends Tile     { constructor(){ super("farm", 1, TextureType.Farm); }}
 class Ocean extends Tile { constructor(){ super("ocean", 0, TextureType.Water); }}
 class Boat extends Tile { constructor(){ super("boat", 0, TextureType.Boat); }}
@@ -104,7 +106,7 @@ class River extends Tile {
 
 class StreetHead extends Tile {
     target: HexPos;
-    prev: Direction
+    prev: Direction;
     constructor(target: HexPos, prev: Direction = null){
         let tex = (prev)? (<any>TextureType)["Street_"+(<string>prev)+(<string>prev)] : TextureType.Harbor;
         super("street", 0, tex);
@@ -124,5 +126,6 @@ export var tiles = {
     Harbor,
     River,
     Boat,
-    Fire
+    Fire,
+    Crushed
 };

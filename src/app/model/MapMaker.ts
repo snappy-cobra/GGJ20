@@ -53,6 +53,18 @@ export class MapMaker extends Map{
         new River(this, rivers_num, this.mountainRange.mountain_startpoints);
         console.log("Builded Rivers");
         this.farm = new Farm(this, farm_start, farm_num);
-        console.log("Builded Farms")
+        console.log("Builded Farms");
+
+        if (!this.shortest_path_cost(this.start_road, this.end_road)) {
+            console.log("Invalid map, generating new one");
+        }
     }
+}
+
+export function make_map(width: number, height: number, intensity: number) {
+    let mapMaker: MapMaker;
+    do {
+        mapMaker = new MapMaker(width, height, intensity)
+    } while (!mapMaker.shortest_path_cost(mapMaker.start_road, mapMaker.end_road));
+    return mapMaker;
 }
