@@ -29,6 +29,7 @@ export enum TextureType {
     River_DA = River_AD,  River_DB = River_BD,  River_DC = River_CD,  River_DD = 7*Y+5,     River_DE = 7*Y+4,     River_DF = 7*Y+3, 
     River_EA = River_AE,  River_EB = River_BE,  River_EC = River_CE,  River_ED = River_DE,  River_EE = 6*Y+4,     River_EF = 6*Y+3, 
     River_FA = River_AF,  River_FB = River_BF,  River_FC = River_CF,  River_FD = River_DF,  River_FE = River_EF,  River_FF = 5*Y+3, 
+    River_CROSSINS = 14
 
 }
 
@@ -85,7 +86,7 @@ class Fire extends Tile {
 }
 
 
-class Harbor extends Tile {constructor(){super("harbor", 1, TextureType.Harbor);}}
+class Harbor extends Tile {constructor(){super("harbor", 0.01, TextureType.Harbor);}}
 
 class River extends Tile {
     constructor(prev: Direction = null, next: Direction = null){

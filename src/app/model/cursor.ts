@@ -9,21 +9,36 @@ export function add_cursor(gameMap: GameMap) {
 export class Cursor {
     position: HexPos;
     gameMap: GameMap;
+    has_mountain: boolean;
 
     constructor(position: HexPos, gameMap: GameMap) {
         this.position = position;
         this.gameMap = gameMap;
-
-        document.addEventListener('keydown', this.key_down_function.bind(this));
+        this.has_mountain = false;
     }
 
-    key_down_function(event: KeyboardEvent) {
-        if (event.code == "KeyW") {this.position = this.position.move(Direction.TopLeft);}
-        if (event.code == "KeyE") {this.position = this.position.move(Direction.TopRight);}
-        if (event.code == "KeyD") {this.position = this.position.move(Direction.Right);}
-        if (event.code == "KeyX") {this.position = this.position.move(Direction.BottomRight);}
-        if (event.code == "KeyZ") {this.position = this.position.move(Direction.BottomLeft);}
-        if (event.code == "KeyA") {this.position = this.position.move(Direction.Left);}
-        if (event.code == 'Enter'){this.gameMap.place_mountain(this.position);}
+    on_input (code: string) {
+        if (code == "KeyW") {this.position = this.position.move(Direction.TopLeft);}
+        if (code == "KeyE") {this.position = this.position.move(Direction.TopRight);}
+        if (code == "KeyD") {this.position = this.position.move(Direction.Right);}
+        if (code == "KeyX") {this.position = this.position.move(Direction.BottomRight);}
+        if (code == "KeyZ") {this.position = this.position.move(Direction.BottomLeft);}
+        if (code == "KeyA") {this.position = this.position.move(Direction.Left);}
+        if (code == 'Enter'){this.onclick();}
+        if (code == "mouse"){this.onclick();}
+    }
+        
+    onclick(){
+        if (this.has_mountain){
+            if (this.gameMap.place_mountain(this.position)){
+                // success
+                this.has_mountain = false;
+            }
+        } else {
+            if (this.gameMap.grab_mountain(this.position)){
+                this.has_mountain = true;
+            }
+        }
     }
 }
+    

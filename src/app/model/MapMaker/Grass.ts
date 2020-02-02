@@ -8,11 +8,11 @@ export class Grass {
     max_grass_number: number;
     max_tries = 100;
 
-    constructor(mapMaker: MapMaker, start_forest_number:number, max_forest_number: number) {
+    constructor(mapMaker: MapMaker, start_grass_number:number, max_grass_number: number) {
         this.mapMaker = mapMaker;
         this.cur_grass_number = 0;
-        this.max_grass_number = max_forest_number;
-        this.grass_init(start_forest_number);
+        this.max_grass_number = max_grass_number;
+        this.grass_init(start_grass_number);
         this.generate_grass();
     }
 
