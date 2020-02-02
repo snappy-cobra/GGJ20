@@ -92,6 +92,9 @@ export class River{
                 }
             }
             let dir = this.mapMaker.next_dir(cur, end);
+            if (dir == undefined) {
+                return;
+            }
             this.set_river(cur, prev_dir, dir);
             cur = cur.move(dir);
             prev_dir = invert(dir);

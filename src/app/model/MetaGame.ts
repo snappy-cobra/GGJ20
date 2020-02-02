@@ -16,11 +16,11 @@ export class MetaGame {
         this.lives = 3;
         this.score = 0;
         this.paused = false;
-        this.cur_game = new Game(this, width, height);
+        this.cur_game = new Game(this, width, height, this.score);
     }
 
     new_game() {
-        this.cur_game = new Game(this, this.width, this.height)
+        this.cur_game = new Game(this, this.width, this.height, this.score)
     }
 
     win_single_game() {

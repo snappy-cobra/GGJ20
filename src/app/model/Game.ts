@@ -17,9 +17,9 @@ export class Game {
     delay: number;
     wait: number = 3;
 
-    constructor(meta_game: MetaGame, width: number, height: number) {
+    constructor(meta_game: MetaGame, width: number, height: number, intensity: number) {
         this.meta_game = meta_game;
-        this.mapMaker = new MapMaker(width, height);
+        this.mapMaker = new MapMaker(width, height, intensity);
         this.map = new GameMap(this, width, height, this.mapMaker.ground, this.mapMaker.start_road, this.mapMaker.end_road);
         //this.map = new GameMap(width, height, this.mapMaker);
         this.cursor = new Cursor(new HexPos(10,10), this.map);
