@@ -58,7 +58,7 @@ export class GameMap extends Map{
                     this.set_tile(pos, other);
                 }
             } else if (tile instanceof tiles.Forest){
-                if (Math.random()< 0.005*this.dynamism){
+                if (Math.random()< 0.005*this.dynamism && !pos.get_neighbours().filter(p=>this.get_tile(p) instanceof tiles.Farm).length){
                     this.set_tile(pos, new tiles.Fire());
                 }
             } else if (tile instanceof tiles.Fire){
@@ -68,7 +68,7 @@ export class GameMap extends Map{
                 }
                 let neighbour = pos.get_neighbours()[Math.random()*6 |0];
                 let other = this.get_tile(neighbour);
-                if (Math.random() < 0.5 * this.dynamism && (other instanceof tiles.Forest || other instanceof tiles.Farm)){
+                if (tile.to_live <= 3  && Math.random() < 0.5 * this.dynamism && (other instanceof tiles.Forest || other instanceof tiles.Farm)){
                     this.set_tile(neighbour, new tiles.Fire());
                 }
             } else if (tile instanceof tiles.Grass){
