@@ -47,7 +47,9 @@ export class Tile {
 class Street extends Tile {
     constructor(prev: Direction = null, next: Direction = null){
         let tex;
-        if (!next){
+        if (!prev){
+            tex = TextureType.Harbor;
+        } else if (!next){
             var str = "Street_"+(<string>prev)+(<string>prev);
             tex = (<any>TextureType)[str];
         } else {
@@ -66,11 +68,7 @@ class Ocean extends Tile { constructor(){ super("ocean", 0, TextureType.Water); 
 class Boat extends Tile { constructor(){ super("boat", 0, TextureType.Boat); }}
 
 
-class Harbor extends Tile {
-    constructor(){
-        super("harbor", 1, TextureType.Harbor);
-    }
-}
+class Harbor extends Tile {constructor(){super("harbor", 1, TextureType.Harbor);}}
 
 class River extends Tile {
     constructor(prev: Direction = null, next: Direction = null){
@@ -90,7 +88,7 @@ class StreetHead extends Tile {
     target: HexPos;
     prev: Direction
     constructor(target: HexPos, prev: Direction = null){
-        let tex = (prev)? (<any>TextureType)["Street_"+(<string>prev)+(<string>prev)] : TextureType.Street;
+        let tex = (prev)? (<any>TextureType)["Street_"+(<string>prev)+(<string>prev)] : TextureType.Harbor;
         super("street", 0, tex);
         this.target = target;
         this.prev = prev;

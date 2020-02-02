@@ -19,7 +19,7 @@ export class GameMap {
         this.start_road = start_road;
         this.end_road = end_road;
         if (start_road){
-            this.set_tile(start_road, new tiles.StreetHead(end_road, Direction.Left));
+            this.set_tile(start_road, new tiles.StreetHead(end_road));
         }
     }
     
