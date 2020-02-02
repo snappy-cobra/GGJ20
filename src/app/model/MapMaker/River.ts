@@ -19,7 +19,7 @@ export class River{
         if (tile == undefined) {
             return false;
         }
-        return !(tile instanceof tiles.Mountain || tile instanceof tiles.River);
+        return !(tile instanceof tiles.Mountain || tile instanceof tiles.River || tile instanceof tiles.Harbor);
     }
 
     set_river(pos: HexPos, in_dir: Direction, out_dir: Direction) {

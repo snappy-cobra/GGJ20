@@ -2,7 +2,7 @@ import {Street} from "./Street";
 import {GameMap} from "./GameMap";
 import {Direction, HexPos} from "./HexPos";
 import {Cursor} from "./cursor";
-import {MapMaker} from "./MapMaker";
+import {make_map, MapMaker} from "./MapMaker";
 import {MetaGame} from "./MetaGame";
 
 const DELAY_FAST = 0.25;
@@ -19,7 +19,7 @@ export class Game {
 
     constructor(meta_game: MetaGame, width: number, height: number, intensity: number) {
         this.meta_game = meta_game;
-        this.mapMaker = new MapMaker(width, height, intensity);
+        this.mapMaker = make_map(width, height, intensity);
         this.map = new GameMap(this, width, height, this.mapMaker.ground, this.mapMaker.start_road, this.mapMaker.end_road, (intensity < 2)? 0 : (intensity < 4)? 0.5 : 1);
         //this.map = new GameMap(width, height, this.mapMaker);
         this.cursor = new Cursor(new HexPos(10,10), this.map);
