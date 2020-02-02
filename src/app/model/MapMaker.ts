@@ -36,7 +36,7 @@ export class MapMaker extends Map{
         let forest_start = 8;
         let forest_num = 70;
 
-        let rivers_num = 3;
+        let rivers_num = 2 + Math.floor(Math.random()*3);
 
         let farm_start = 1 + Math.floor(intensity/2);
         let farm_num = 13 + intensity*2;
