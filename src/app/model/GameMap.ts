@@ -7,12 +7,15 @@ import {Game} from "./Game";
 
 export class GameMap extends Map{
     game: Game;
+    dynamism: number;
+    
 
-    constructor(game: Game, width: number, height: number, ground: Tile[][], start_road: HexPos, end_road: HexPos){
+    constructor(game: Game, width: number, height: number, ground: Tile[][], start_road: HexPos, end_road: HexPos, dynamism: number = 0){
         super(width, height, ground, start_road, end_road);
+        this.dynamism = dynamism;
         this.game = game;
         if (start_road){
-//             this.set_tile(start_road, new tiles.StreetHead(end_road));
+            this.set_tile(start_road, new tiles.StreetHead(end_road));
         }
     }
 
@@ -56,7 +59,7 @@ export class GameMap extends Map{
                     this.set_tile(pos, other);
                 }
             } else if (tile instanceof tiles.Forest){
-                if (Math.random()< 0.005){
+                if (Math.random()< 0.005*this.dynamism){
                     this.set_tile(pos, new tiles.Fire());
                 }
             } else if (tile instanceof tiles.Fire){
@@ -71,7 +74,7 @@ export class GameMap extends Map{
                 }
             } else if (tile instanceof tiles.Grass){
                 let forests = pos.get_neighbours().filter(p=>this.get_tile(p) instanceof tiles.Forest).length;
-                if (Math.random() < 0.0005 + 0.01 * forests){
+                if (Math.random() < (0.0005 + 0.01 * forests) * this.dynamism){
                     this.set_tile(pos, new tiles.Forest());
                 }
             }
