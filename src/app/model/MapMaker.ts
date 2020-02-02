@@ -66,7 +66,7 @@ export function make_map(width: number, height: number, intensity: number) {
     let succes: boolean;
     do {
         try {
-            mapMaker = new MapMaker(width, height, intensity)
+            mapMaker = new MapMaker(width, height, intensity);
             succes = true
         } catch (e) {
             if(e instanceof Error) {
