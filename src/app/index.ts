@@ -288,3 +288,6 @@ function mouseUpdate(e:MouseEvent) {
 }
 
 document.addEventListener('mousemove', (e: MouseEvent) => { mouseUpdate(e) });
+
+document.addEventListener('keydown', (e) => {metaGame.cur_game.cursor.on_input(e.code);});
+document.addEventListener("click", (e) => {metaGame.cur_game.cursor.on_input("mouse");});
