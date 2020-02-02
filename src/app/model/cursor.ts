@@ -24,6 +24,6 @@ export class Cursor {
         if (event.code == "KeyX") {this.position = this.position.move(Direction.BottomRight);}
         if (event.code == "KeyZ") {this.position = this.position.move(Direction.BottomLeft);}
         if (event.code == "KeyA") {this.position = this.position.move(Direction.Left);}
-        if (event.code == 'Enter'){this.gameMap.set_tile(this.position, new tiles.Mountain());}
+        if (event.code == 'Enter'){this.gameMap.place_mountain(this.position);}
     }
 }

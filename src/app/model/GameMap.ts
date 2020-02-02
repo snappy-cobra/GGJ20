@@ -75,6 +75,17 @@ export class GameMap {
         return (this.ground[place.x] || [])[place.y] // Yes, I know...
     }
 
+    place_mountain(place: HexPos) {
+        let tile = this.get_tile(place);
+        if (tile == undefined) {
+            return
+        }
+        if (tile instanceof tiles.Mountain || tile instanceof tiles.Harbor || tile instanceof tiles.Street || tile instanceof tiles.StreetHead) {
+            return
+        }
+        this.set_tile(place, new tiles.Mountain());
+    }
+
     set_tile(place: HexPos, tile: Tile){
         if (this.ground[place.x][place.y] instanceof tiles.Farm){
             this.lives -= 1;
