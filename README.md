@@ -1,5 +1,7 @@
 # GGJ20
 
+PLAY THE GAME HERE --> https://snappy-cobra.github.io/GGJ20/
+
 This repository contains the sources to the [Global Game Jam](http://globalgamejam.org) in Groningen, 31 January to 2 February 2020.
 
 ## :briefcase: Development
@@ -29,6 +31,12 @@ Please do not commit broken code to develop to the best of your ability, you wil
 Commits should be descriptive about the changes, it helps you find stuff you lost (or track down bugs you missed).
 
 As a side note, be sure to only push source and assets to this repository, keep the camp cleaner than you left it ;).
+
+## Building
+Building and testing is achieved through simple commands. Before you do anything however, make sure you have `npm` installed. Then run `npm install` in this repository and you should be fine.
+
+- **Development server** : `npm run start`
+- **Building** : `npm run build`
 
 ## Authors
 - [Timo Strating](https://github.com/timostrating)
